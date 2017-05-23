@@ -59,6 +59,7 @@ class PlexDVRAPI_Setup(Screen):
 			self["menu_path_compressed"] = StaticText("")
 		Screen.setTitle(self, title)
 
+		self["InfoScrollLabel"] = ScrollLabel()
 		self["actions"] = ActionMap(['ColorActions','OkCancelActions', 'DirectionActions'],
 									{
 									"cancel": self.close,
@@ -91,7 +92,6 @@ class PlexDVRAPI_Setup(Screen):
 		self["key_yellow"].hide()
 		self["key_blue"] = Button(_("About"))
 
-		self["InfoScrollLabel"] = ScrollLabel()
 		self.onLayoutFinish.append(self.populate)
 
 	def about(self):
