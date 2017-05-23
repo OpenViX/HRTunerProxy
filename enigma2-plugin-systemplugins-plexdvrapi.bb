@@ -1,16 +1,15 @@
 SUMMARY = "Setup Enigma2 for link with Plex DVR API"
 DESCRIPTION = "Setup Enigma2 for link with Plex DVR API"
 MAINTAINER = "OpenViX"
-PACKAGE_ARCH = "${MACHINE_ARCH}"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=A23A74B3F4CAF9616230789D94217ACB"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=a23a74b3f4caf9616230789d94217acb"
 
 inherit autotools-brokensep gitpkgv pythonnative
 
 SRCREV = "${AUTOREV}"
-PV = "0.65+git${SRCPV}"
-PKGV = "0.65+git${GITPKGV}"
-PR = "r0"
+PV = "1.0+git${SRCPV}"
+PKGV = "1.0+git${GITPKGV}"
+PR = "r2"
 
 SRC_URI = "git://github.com/OpenViX/PlexDVRAPI.git;protocol=git"
 
@@ -25,6 +24,10 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "enigma2 lighttpd"
 RDEPENDS_${PN} = "lighttpd"
+
+do_compile() {
+    python -O -m compileall ${S}
+}
 
 python populate_packages_prepend() {
     enigma2_plugindir = bb.data.expand('${libdir}/enigma2/python/Plugins', d)
