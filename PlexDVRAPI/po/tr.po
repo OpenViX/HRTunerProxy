@@ -1,0 +1,71 @@
+# Turkish translations for enigma2-openvix-plugins package.
+# Copyright (C) 2017 THE enigma2-openvix-plugins'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the enigma2-openvix-plugins package.
+# Automatically generated, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: enigma2-openvix-plugins 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-24 19:38+0100\n"
+"PO-Revision-Date: 2017-05-24 19:38+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "About"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid ""
+"Do you really want to reset?,\n"
+" doing so will cause the DVR in plex to be none fuctional,\n"
+"you will have to remove and re-add the DVR."
+msgstr ""
+
+msgid "Files created, you should be able to add this STB to Plex DVR."
+msgstr ""
+
+msgid ""
+"No IP address found, please make sure you are connected to your LAN via "
+"ethernet, wifi is not supported at this time.\n"
+"\n"
+"Press OK to close"
+msgstr ""
+
+msgid ""
+"Please note: A 2 Tuner minimum requirement is required for this plugin to "
+"function.\n"
+"\n"
+"Press OK to close"
+msgstr ""
+
+msgid ""
+"Please note: To use the DVR feature in Plex, you need to be a Plex Pass "
+"user.\n"
+"For more information about Plex Pass see https://www.plex.tv/features/plex-"
+"pass\n"
+"\n"
+"Press OK to contine"
+msgstr ""
+
+msgid "Plex DVR"
+msgstr ""
+
+msgid "Plex DVR API for Enigma2"
+msgstr ""
+
+msgid "Reset DVR"
+msgstr ""
+
+msgid "Update"
+msgstr ""
