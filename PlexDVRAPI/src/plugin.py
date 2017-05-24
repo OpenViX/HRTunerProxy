@@ -135,7 +135,7 @@ class PlexDVRAPI_Setup(Screen):
 			print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
 			print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','\n')
 
-			if not path.exists('/www/%s/discover.json' % tunerfolders[type]) or getIP() == '0.0.0.0' or self.discover[type]["TunerCount"] < 1:
+			if not path.exists('/www/%s/discover.json' % tunerfolders[type]) or getIP() == '0.0.0.0' or self.discover[type]["TunerCount"] < 2:
 				self["key_red"].hide()
 				self["key_green"].hide()
 				self["key_yellow"].hide()
@@ -143,7 +143,7 @@ class PlexDVRAPI_Setup(Screen):
 				if getIP() == '0.0.0.0':
 					self["InfoScrollLabel"].setText(_('No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to close'))
 					self["closeaction"].setEnabled(True)
-				elif self.discover[type]["TunerCount"] < 1:
+				elif self.discover[type]["TunerCount"] < 2:
 					self["InfoScrollLabel"].setText(_('Please note: A 2 Tuner minimum requirement is required for this plugin to function.\n\nPress OK to close'))
 					self["closeaction"].setEnabled(True)
 				else:
