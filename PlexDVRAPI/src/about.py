@@ -57,5 +57,4 @@ class PlexDVRAPI_About(Screen):
 		credit += "- FidoFuz (helped us with JSON tags)\n\n"
 		credit += "Translation credits:\n"
 		credit += "- patrickf95 (German)"
-		credit += "- PiGeonCZ (Czech)" 
 		self["about"].setText(credit)
