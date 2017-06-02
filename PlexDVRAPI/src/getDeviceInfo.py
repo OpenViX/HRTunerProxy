@@ -10,7 +10,7 @@ from Components.NimManager import nimmanager
 try:
 	from boxbranding import getMachineName, getDriverDate, getBoxType, getMachineBrand, getImageDistro
 	brandingmodule = True
-import:
+except:
 	from enigma import getBoxType, getEnigmaVersionString
 	brandingmodule = False
 
