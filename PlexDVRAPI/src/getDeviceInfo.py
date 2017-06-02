@@ -7,7 +7,13 @@ from sys import modules
 from Components.About import about
 from Components.NimManager import nimmanager
 
-from boxbranding import getMachineName, getDriverDate, getBoxType, getMachineBrand, getImageDistro
+try:
+	from boxbranding import getMachineName, getDriverDate, getBoxType, getMachineBrand, getImageDistro
+	brandingmodule = True
+import:
+	from enigma import getBoxType, getEnigmaVersionString
+	brandingmodule = False
+
 from getLineup import getlineup
 from . import tunertypes, tunerports, tunerfolders, getIP, device_uuids
 
@@ -36,10 +42,16 @@ class getDeviceInfo:
 			discover[dvb_type] = {}
 			deviceauth = generator(24, charset['auth'])
 			deviceid = generator(8, charset['id'])
-			discover[dvb_type]['FriendlyName']='%s %s' % (getMachineBrand(), getMachineName())
-			discover[dvb_type]['ModelNumber']='%s' % getBoxType()
-			discover[dvb_type]['FirmwareName']='%s' % getImageDistro()
-			discover[dvb_type]['FirmwareVersion']='%s' % getDriverDate()
+			if brandingmodule:
+				discover[dvb_type]['FriendlyName']='%s %s' % (getMachineBrand(), getMachineName())
+				discover[dvb_type]['ModelNumber']='%s' % getBoxType()
+				discover[dvb_type]['FirmwareName']='%s' % getImageDistro()
+				discover[dvb_type]['FirmwareVersion']='%s' % getDriverDate()
+			else:
+				discover[dvb_type]['FriendlyName']='%s' % _('Enigma2 STB')
+				discover[dvb_type]['ModelNumber']='%s' % getBoxType()
+				discover[dvb_type]['FirmwareName']='%s' % _('Enigma2')
+				discover[dvb_type]['FirmwareVersion']='%s' % getEnigmaVersionString()
 			discover[dvb_type]['DeviceID']='%s' % deviceid
 			discover[dvb_type]['DeviceAuth']='%s' % deviceauth
 			discover[dvb_type]['BaseURL']='%s' % ip_port

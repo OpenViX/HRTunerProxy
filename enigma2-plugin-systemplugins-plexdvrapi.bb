@@ -9,7 +9,7 @@ inherit autotools-brokensep gitpkgv pythonnative
 SRCREV = "${AUTOREV}"
 PV = "1.1+git${SRCPV}"
 PKGV = "1.1+git${GITPKGV}"
-PR = "r5"
+PR = "r6"
 
 SRC_URI = "git://github.com/OpenViX/PlexDVRAPI.git;protocol=git"
 
@@ -22,8 +22,11 @@ EXTRA_OECONF = " \
 
 S = "${WORKDIR}/git"
 
-DEPENDS = "enigma2 lighttpd oe-alliance-branding"
-RDEPENDS_${PN} = "lighttpd oe-alliance-branding"
+DEPENDS = "enigma2 lighttpd"
+RDEPENDS_${PN} = "lighttpd"
+
+RECOMMENDS = "oe-alliance-branding"
+RRECOMMENDS_${PN} = "oe-alliance-branding"
 
 do_compile() {
     python -O -m compileall ${S}

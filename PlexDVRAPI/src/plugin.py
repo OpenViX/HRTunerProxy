@@ -20,8 +20,6 @@ from getDeviceInfo import getdeviceinfo
 from getLineupStatus import getlineupstatus
 # from ssdp import SSDPServer
 
-from boxbranding import getMachineBrand, getMachineName, getDriverDate
-
 class PlexDVRAPI_Setup(Screen):
 	skin="""
 	<screen position="center,center" size="600,500">
