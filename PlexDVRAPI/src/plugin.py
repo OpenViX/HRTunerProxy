@@ -1,4 +1,4 @@
-# import threading
+import threading
 import string
 import random
 import json
@@ -19,6 +19,8 @@ from getLineup import getlineup
 from getDeviceInfo import getdeviceinfo
 from getLineupStatus import getlineupstatus
 # from ssdp import SSDPServer
+from server import server
+
 
 class PlexDVRAPI_Setup(Screen):
 	skin="""
@@ -171,38 +173,46 @@ class PlexDVRAPI_Setup(Screen):
 			if self.discover[type]["TunerCount"] > 1 and self.discover[type]['NumChannels'] > 0:
 				print '[Plex DVR API] Creating JSON files for %s' % type
 				getdeviceinfo.write_discover(writefile='/www/%s/discover.json' % tunerfolders[type], dvbtype=type)
-				# getdeviceinfo.write_device_xml(writefile='/www/%s/device.xml' % tunerfolders[type], dvbtype=type)
+				getdeviceinfo.write_device_xml(writefile='/www/%s/device.xml' % tunerfolders[type], dvbtype=type)
 				getlineupstatus.write_lineupstatus(writefile='/www/%s/lineup_status.json' % tunerfolders[type], dvbtype=type)
 				getlineup.write_lineup(writefile='/www/%s/lineup.json' % tunerfolders[type], ipinput=getIP(), dvbtype=type)
-		self.session.openWithCallback(self.populate, MessageBox,text = _("Files created, you should be able to add this STB to Plex DVR."), type = MessageBox.TYPE_INFO, timeout=10)
-		# self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please reboot and then you should be able to add this STB to Plex DVR.\nDo you want to reboot now ?"), type = MessageBox.TYPE_YESNO)
+		self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please reboot and then you should be able to add this STB to Plex DVR.\nDo you want to reboot now ?"), type = MessageBox.TYPE_YESNO)
 
-	# def rebootconfirm(self, answer):
-	# 	if answer is not None and answer:
-	# 		from enigma import quitMainloop
-	# 		quitMainloop(2)
+	def rebootconfirm(self, answer):
+		if answer is not None and answer:
+			from enigma import quitMainloop
+			quitMainloop(2)
 
-# def start(dvbtype):
-# 	print '[Plex DVR API] Starting SSDP for %s' % dvbtype
+# def startssdp(dvbtype):
 # 	discover = getdeviceinfo.deviceinfo(dvbtype)
 # 	device_uuid = discover[dvbtype]['DeviceUUID']
-# 	print 'device_uuid:',device_uuid
+# 	print '[Plex DVR API] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
 # 	local_ip_address = getIP()
 # 	ssdp = SSDPServer()
 # 	ssdp.register('local',
-# 	              'uuid:{}::upnp:rootdevice'.format(device_uuid),
-# 	              'upnp:rootdevice',
-# 	              'http://{}:{}/device.xml'.format(local_ip_address,tunerports[dvbtype]))
-# 	thread = threading.Thread(target=ssdp.run, args=())
-# 	thread.daemon = True                            # Daemonize thread
-# 	thread.start()
+# 				  'uuid:{}::upnp:rootdevice'.format(device_uuid),
+# 				  'upnp:rootdevice',
+# 				  'http://{}:{}/device.xml'.format(local_ip_address,tunerports[dvbtype]))
+# 	thread_ssdp = threading.Thread(target=ssdp.run, args=())
+# 	thread_ssdp.daemon = True # Daemonize thread
+# 	thread_ssdp.start()
 
-# def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
-# 	if reason == 0:
-# 		for type in tunerTypes:
-# 			discover = getdeviceinfo.deviceinfo(type)
-# 			if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0 and path.exists('/www/%s/device.xml' % tunerfolders[type]):
-# 				start(type)
+def starthttpserver(dvbtype):
+	print '[Plex DVR API] Starting HTTPServer for %s' % dvbtype
+	thread_http = threading.Thread(target=server.run, args=(dvbtype,))
+	thread_http.daemon = True # Daemonize thread
+	thread_http.start()
+
+
+def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
+	if reason == 0:
+		for type in tunerTypes:
+			discover = getdeviceinfo.deviceinfo(type)
+			if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0:
+				if path.exists('/www/%s/discover.json' % tunerfolders[type]):
+					starthttpserver(type)
+				# if path.exists('/www/%s/device.xml' % tunerfolders[type]):
+				# 	startssdp(type)
 
 def PlexDVRAPI_SetupMain(session, **kwargs):
 	session.open(PlexDVRAPI_Setup)
@@ -213,8 +223,6 @@ def startPlexDVRAPI_Setup(menuid):
 	return [( _("Plex DVR"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
 
 def Plugins(**kwargs):
-	return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon="plugin.png", where = PluginDescriptor.WHERE_PLUGINMENU, needsRestart = True, fnc=PlexDVRAPI_SetupMain),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU, needsRestart = True, fnc=startPlexDVRAPI_Setup)]
-	# return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
-	# 		PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon="plugin.png", where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
-	# 		PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
+	return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon="plugin.png", where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
+			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]

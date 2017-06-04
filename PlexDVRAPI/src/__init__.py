@@ -31,6 +31,13 @@ tunerfolders = {
 	'multi' : 'multi'
 	}
 
+portfolders = {
+	6081 : '/www/cable',
+	6082 : '/www/antenna',
+	6083 : '/www/satellite',
+	6084 : '/www/multi'
+	}
+
 device_uuids = {}
 for type in tunerTypes:
 	device_uuids[type] = str(uuid.uuid4())
