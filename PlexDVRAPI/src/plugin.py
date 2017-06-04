@@ -147,8 +147,10 @@ class PlexDVRAPI_Setup(Screen):
 					self["InfoScrollLabel"].setText(_('No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to close'))
 					self["closeaction"].setEnabled(True)
 				elif self.discover[type]["TunerCount"] < 2:
-					self["InfoScrollLabel"].setText(_('Please note: A 2 Tuner minimum requirement is required for this plugin to function.\n\nPress OK to close'))
-					self["closeaction"].setEnabled(True)
+					self["InfoScrollLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n\nPress OK to contine'))
+					self["okaction"].setEnabled(True)
+					self["key_green"].setText(_("Create"))
+					self["key_yellow"].setText("")
 				else:
 					self["InfoScrollLabel"].setText(_('Please note: To use the DVR feature in Plex, you need to be a Plex Pass user.\nFor more information about Plex Pass see https://www.plex.tv/features/plex-pass\n\nPress OK to contine'))
 					self["okaction"].setEnabled(True)
