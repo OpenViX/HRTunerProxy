@@ -3,7 +3,6 @@ import gettext
 import socket
 import fcntl
 import struct
-import uuid
 
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
@@ -37,10 +36,6 @@ portfolders = {
 	6083 : '/www/satellite',
 	6084 : '/www/multi'
 	}
-
-device_uuids = {}
-for type in tunerTypes:
-	device_uuids[type] = str(uuid.uuid4())
 
 def _ifinfo(sock, addr, ifname):
 	iface = struct.pack('256s', ifname[:15])

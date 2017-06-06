@@ -18,7 +18,7 @@ from about import PlexDVRAPI_About
 from getLineup import getlineup
 from getDeviceInfo import getdeviceinfo
 from getLineupStatus import getlineupstatus
-# from ssdp import SSDPServer
+from ssdp import SSDPServer
 from server import server
 
 
@@ -185,19 +185,19 @@ class PlexDVRAPI_Setup(Screen):
 			from enigma import quitMainloop
 			quitMainloop(2)
 
-# def startssdp(dvbtype):
-# 	discover = getdeviceinfo.deviceinfo(dvbtype)
-# 	device_uuid = discover[dvbtype]['DeviceUUID']
-# 	print '[Plex DVR API] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
-# 	local_ip_address = getIP()
-# 	ssdp = SSDPServer()
-# 	ssdp.register('local',
-# 				  'uuid:{}::upnp:rootdevice'.format(device_uuid),
-# 				  'upnp:rootdevice',
-# 				  'http://{}:{}/device.xml'.format(local_ip_address,tunerports[dvbtype]))
-# 	thread_ssdp = threading.Thread(target=ssdp.run, args=())
-# 	thread_ssdp.daemon = True # Daemonize thread
-# 	thread_ssdp.start()
+def startssdp(dvbtype):
+	discover = getdeviceinfo.deviceinfo(dvbtype)
+	device_uuid = discover[dvbtype]['DeviceUUID']
+	print '[Plex DVR API] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
+	local_ip_address = getIP()
+	ssdp = SSDPServer()
+	ssdp.register('local',
+				  'uuid:{}::upnp:rootdevice'.format(device_uuid),
+				  'upnp:rootdevice',
+				  'http://{}:{}/device.xml'.format(local_ip_address,tunerports[dvbtype]))
+	thread_ssdp = threading.Thread(target=ssdp.run, args=())
+	thread_ssdp.daemon = True # Daemonize thread
+	thread_ssdp.start()
 
 def starthttpserver(dvbtype):
 	print '[Plex DVR API] Starting HTTPServer for %s' % dvbtype
@@ -213,8 +213,8 @@ def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
 			if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0:
 				if path.exists('/www/%s/discover.json' % tunerfolders[type]):
 					starthttpserver(type)
-				# if path.exists('/www/%s/device.xml' % tunerfolders[type]):
-				# 	startssdp(type)
+				if path.exists('/www/%s/device.xml' % tunerfolders[type]):
+					startssdp(type)
 
 def PlexDVRAPI_SetupMain(session, **kwargs):
 	session.open(PlexDVRAPI_Setup)

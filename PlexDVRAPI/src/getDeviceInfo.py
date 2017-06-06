@@ -1,6 +1,7 @@
 import string
 import random
 import json
+import uuid
 from os import path, mkdir
 from sys import modules
 
@@ -15,7 +16,7 @@ except:
 	brandingmodule = False
 
 from getLineup import getlineup
-from . import tunertypes, tunerports, tunerfolders, getIP, device_uuids
+from . import tunertypes, tunerports, tunerfolders, getIP
 
 discover = {}
 noofchannels = {}
@@ -35,9 +36,15 @@ class getDeviceInfo:
 	def discoverJSON(self, dvb_type):
 		ip = getIP()
 		ip_port = 'http://%s:%s' % (ip, tunerports[dvb_type])
-		if path.exists('/www/%s/discover.json' % tunerfolders[dvb_type]):
+		device_uuid = str(uuid.uuid4())
+		if path.exists('/www/%s/discover.json' % tunerfolders[dvb_type]) and path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
 			with open('/www/%s/discover.json' % tunerfolders[dvb_type]) as data_file:
 				discover[dvb_type] = json.load(data_file)
+		elif path.exists('/www/%s/discover.json' % tunerfolders[dvb_type]) and not path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
+			with open('/www/%s/discover.json' % tunerfolders[dvb_type]) as data_file:
+				discover[dvb_type] = json.load(data_file)
+				discover[dvb_type]['DeviceUUID']='%s' % device_uuid
+				print 'device_uuids_1:',device_uuid
 		else:
 			discover[dvb_type] = {}
 			deviceauth = generator(24, charset['auth'])
@@ -58,7 +65,8 @@ class getDeviceInfo:
 			discover[dvb_type]['LineupURL']='%s/lineup.json' % ip_port
 			discover[dvb_type]['TunerCount']=len(nimmanager.getNimListOfType(dvb_type)) if dvb_type != "multi" else len(nimmanager.nimList())
 			discover[dvb_type]['NumChannels']=getlineup.noofchannels(dvb_type)
-			discover[dvb_type]['DeviceUUID']='%s' % device_uuids[dvb_type]
+			discover[dvb_type]['DeviceUUID']='%s' % device_uuid
+			print 'device_uuids_2:',device_uuid
 		return discover
 
 def deviceinfo(dvbtype):
@@ -66,7 +74,7 @@ def deviceinfo(dvbtype):
 	output = device_info.discoverJSON(dvb_type=dvbtype)
 	return output
 
-def write_device_xml(writefile = "/tmp/device.xml", dvbtype="DVB-S"):
+def write_device_xml(writefile, dvbtype):
 	device_info = getDeviceInfo()
 	discover = device_info.discoverJSON(dvb_type=dvbtype)
 	if not path.exists('/www/%s' % tunerfolders[dvbtype]):
@@ -79,7 +87,7 @@ def write_device_xml(writefile = "/tmp/device.xml", dvbtype="DVB-S"):
     </specVersion>
     <URLBase>{base_url}</URLBase>
     <device>
-        <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
+        <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
         <friendlyName>{friendly_name}</friendlyName>
         <manufacturer>{manufacturer}</manufacturer>
         <modelName>{model_name}</modelName>
