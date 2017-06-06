@@ -34,8 +34,6 @@ def write_lineupstatus(writefile = "/tmp/lineup_status.json", dvbtype="DVB-S"):
 	output = lineup_status.lineupstatusJSON(dvb_type=dvbtype)
 	if not path.exists('/www/%s' % tunerfolders[dvbtype]):
 		mkdir('/www/%s' % tunerfolders[dvbtype])
-	if not path.exists('/www/%s/auto' % tunerfolders[dvbtype]):
-		mkdir('/www/%s/auto' % tunerfolders[dvbtype])
 	try:
 		with open(writefile, 'w') as outfile:
 			json.dump(output[dvbtype], outfile)

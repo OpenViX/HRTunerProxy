@@ -139,8 +139,6 @@ def write_lineup(writefile = "/tmp/lineup.json", ipinput="0.0.0.0", dvbtype="DVB
 	output = channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
 	if not path.exists('/www/%s' % tunerfolders[dvbtype].lower()):
 		mkdir('/www/%s' % tunerfolders[dvbtype].lower())
-	if not path.exists('/www/%s/auto' % tunerfolders[dvbtype].lower()):
-		mkdir('/www/%s/auto' % tunerfolders[dvbtype].lower())
 	try:
 		with open(writefile, 'w') as outfile:
 			json.dump(output, outfile)
