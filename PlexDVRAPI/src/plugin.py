@@ -130,7 +130,7 @@ class PlexDVRAPI_Setup(Screen):
 			TunerCount[type] = 'TunerCount: %s\n' % str(self.discover[type]["TunerCount"])
 			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title()
 			NoOfChannels[type] = 'Channels: %s\n\n' % str(self.discover[type]['NumChannels'])
-			if self.discover[type]["TunerCount"] > 1 and self.discover[type]['NumChannels'] > 0 and type != "multi":
+			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0 and type != "multi":
 				self.label.append(BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 			print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
 			print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
