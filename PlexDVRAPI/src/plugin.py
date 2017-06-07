@@ -172,7 +172,7 @@ class PlexDVRAPI_Setup(Screen):
 
 	def save(self):
 		for type in tunerTypes:
-			if self.discover[type]["TunerCount"] > 1 and self.discover[type]['NumChannels'] > 0:
+			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0:
 				print '[Plex DVR API] Creating JSON files for %s' % type
 				getdeviceinfo.write_discover(writefile='/www/%s/discover.json' % tunerfolders[type], dvbtype=type)
 				getdeviceinfo.write_device_xml(writefile='/www/%s/device.xml' % tunerfolders[type], dvbtype=type)
