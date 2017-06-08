@@ -60,6 +60,7 @@ class PlexDVRAPI_Setup(Screen):
 				self["menu_path_compressed"] = StaticText("")
 		else:
 			title =  _("Plex DVR API for Enigma2")
+			self.menu_path = ""
 		Screen.setTitle(self, title)
 
 		self["InfoScrollLabel"] = ScrollLabel()
