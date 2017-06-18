@@ -2,7 +2,7 @@ import threading
 import string
 import random
 import json
-from os import path, remove
+from os import path, remove, mkdir
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
@@ -95,6 +95,9 @@ class PlexDVRAPI_Setup(Screen):
 		self["key_yellow"] = Button()
 		self["key_yellow"].hide()
 		self["key_blue"] = Button(_("About"))
+
+		if not path.exists('/www':
+			mkdir('/www')
 
 		self.onLayoutFinish.append(self.populate)
 
