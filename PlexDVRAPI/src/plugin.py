@@ -96,7 +96,7 @@ class PlexDVRAPI_Setup(Screen):
 		self["key_yellow"].hide()
 		self["key_blue"] = Button(_("About"))
 
-		if not path.exists('/www':
+		if not path.exists('/www'):
 			mkdir('/www')
 
 		self.onLayoutFinish.append(self.populate)
