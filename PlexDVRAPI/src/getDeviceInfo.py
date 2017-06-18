@@ -12,8 +12,15 @@ try:
 	from boxbranding import getMachineName, getDriverDate, getBoxType, getMachineBrand, getImageDistro
 	brandingmodule = True
 except:
-	from enigma import getBoxType, getEnigmaVersionString
 	brandingmodule = False
+	try:
+		from enigma import getBoxType, getEnigmaVersionString
+	except:
+		def getBoxType():
+			return 'STB'
+
+		def getEnigmaVersionString():
+			return '000000'
 
 from getLineup import getlineup
 from . import tunertypes, tunerports, tunerfolders, getIP
@@ -66,7 +73,6 @@ class getDeviceInfo:
 			discover[dvb_type]['TunerCount']=len(nimmanager.getNimListOfType(dvb_type)) if dvb_type != "multi" else len(nimmanager.nimList())
 			discover[dvb_type]['NumChannels']=getlineup.noofchannels(dvb_type)
 			discover[dvb_type]['DeviceUUID']='%s' % device_uuid
-			print 'device_uuids_2:',device_uuid
 		return discover
 
 def deviceinfo(dvbtype):
