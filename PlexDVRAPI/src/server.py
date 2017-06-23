@@ -17,28 +17,19 @@ class RootedHTTPServer(HTTPServer):
 
 class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 	def do_GET(self):
-		print("[Plex DVR API] ----- Request Start ----->")
 		try:
-			print '[Plex DVR API] PARSING PORT'
 			for x in str(self.headers).split('\r\n'):
-				print '[Plex DVR API] X:',x
 				if x.startswith('Host:'):
 					host = x
 					break
-			print '[Plex DVR API] HOST1:',host.split(':')
-			print '[Plex DVR API] HOST2:',host.split(':')[2]
 			self.port = int(host.split(':')[2])
 		except:
 			print '[Plex DVR API] USING DEFAULT PORT'
 			self.port = 6081
-		print '[Plex DVR API] DEBUG1:',self.port
 		self.base_path = portfolders[self.port]
-		print '[Plex DVR API] DEBUG2:',self.base_path
-		print("[Plex DVR API] <----- Request End -----")
 
 		if self.path == '/':
 			self.path  = '/device.xml'
-		print '[Plex DVR API] PATH:',self.path
 		try:
 			sendReply = False
 			if self.path.endswith(".html"):
