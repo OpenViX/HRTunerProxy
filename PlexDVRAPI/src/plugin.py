@@ -15,6 +15,7 @@ from Screens.MessageBox import MessageBox
 
 from . import _, tunerTypes, tunerfolders, tunerports, getIP
 from about import PlexDVRAPI_About
+from enigma import getDesktop
 from getLineup import getlineup
 from getDeviceInfo import getdeviceinfo
 from getLineupStatus import getlineupstatus
@@ -231,9 +232,14 @@ def PlexDVRAPI_SetupMain(session, **kwargs):
 def startPlexDVRAPI_Setup(menuid):
 	if menuid != "system":
 		return []
-	return [( _("Plex DVR"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
+	return [( _("PlexDVR"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
 
 def Plugins(**kwargs):
+	screenwidth = getDesktop(0).size().width()
+	if screenwidth and screenwidth == 1920:
+		iconpic="plugin-hd.png"
+	else:
+		iconpic="plugin.png"
 	return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon="plugin.png", where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
+			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
 			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
