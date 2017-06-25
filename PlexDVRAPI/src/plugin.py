@@ -134,13 +134,18 @@ class PlexDVRAPI_Setup(Screen):
 			TunerCount[type] = 'TunerCount: %s\n' % str(self.discover[type]["TunerCount"])
 			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title()
 			NoOfChannels[type] = 'Channels: %s\n\n' % str(self.discover[type]['NumChannels'])
-			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0 and type != "multi":
-				self.label.append(BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
+
 			print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
 			print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
 			print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
 			print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','\n')
+			print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+
+			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0 and type != "multi":
+				self.label.append(BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
+			else:
+				print '[Plex DVR API] skipping tuner %s' % type
+				continue
 
 			if not path.exists('/www/%s/discover.json' % tunerfolders[type]) or getIP() == '0.0.0.0' or self.discover[type]["TunerCount"] < 2:
 				self["key_red"].hide()
