@@ -3,12 +3,15 @@ import string
 import random
 import json
 from os import path, remove, mkdir
+from shutil import rmtree
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
-from Components.config import config
-from Components.ScrollLabel import ScrollLabel
+from Components.config import config, configfile, ConfigSubsection, ConfigSelection, getConfigListEntry
+from Components.ConfigList import ConfigListScreen
+from Components.Label import Label
 from Components.Sources.StaticText import StaticText
+
 from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
@@ -22,22 +25,55 @@ from getLineupStatus import getlineupstatus
 from ssdp import SSDPServer
 from server import server
 
+BaseURL = {}
+FriendlyName = {}
+TunerCount = {}
+Source = {}
+NoOfChannels = {}
+choicelist = []
+for type in tunerTypes:
+	discover = getdeviceinfo.deviceinfo(type)
+	lineupstatus = getlineupstatus.lineupstatus(type)
+	BaseURL[type] = 'BaseURL: %s\n' % str(discover[type]["BaseURL"])
+	FriendlyName[type] = 'FriendlyName: %s\n' % str(discover[type]["FriendlyName"])
+	TunerCount[type] = 'TunerCount: %s\n' % str(discover[type]["TunerCount"])
+	Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title()
+	NoOfChannels[type] = 'Channels: %s\n\n' % str(discover[type]['NumChannels'])
 
-class PlexDVRAPI_Setup(Screen):
+	print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
+	print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
+	print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
+	print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
+	print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+
+	if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0:
+		choicelist.append((type, str(tunerfolders[type]).title()))
+config.plexdvrapi = ConfigSubsection()
+config.plexdvrapi.type = ConfigSelection(choices = choicelist)
+print '[Plex DVR API] Using Tuner: %s' % str(config.plexdvrapi.type.value)
+
+tunerTypes = []
+for type in config.plexdvrapi.type.choices.choices:
+	tunerTypes.append(type[0])
+
+class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	skin="""
-	<screen position="center,center" size="600,500">
-		<widget name="InfoScrollLabel" position="10,10" size="580,430" font="Regular;22"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="0,460" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/green.png" position="150,460" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="300,460" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/blue.png" position="450,460" size="140,40" alphatest="on"/>
-		<widget name="key_red" position="0,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
-		<widget name="key_green" position="150,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
-		<widget name="key_yellow" position="300,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
-		<widget name="key_blue" position="450,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
+	<screen position="center,center" size="600,300">
+		<widget name="config" position="10,10" size="580,30" scrollbarMode="showOnDemand" />
+		<widget name="TunerInfoLabel" position="10,45" size="580,185" font="Regular;22"/>
+		<widget name="HintLabel" position="10,175" size="580,75" font="Regular;22" valign="bottom"/>
+		<ePixmap pixmap="skin_default/buttons/red.png" position="0,260" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="skin_default/buttons/green.png" position="150,260" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="skin_default/buttons/yellow.png" position="300,260" size="140,40" alphatest="on"/>
+		<ePixmap pixmap="skin_default/buttons/blue.png" position="450,260" size="140,40" alphatest="on"/>
+		<widget name="key_red" position="0,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
+		<widget name="key_green" position="150,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
+		<widget name="key_yellow" position="300,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
+		<widget name="key_blue" position="450,260" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
 	</screen>"""
 
 	def __init__(self, session, menu_path=""):
+		instance = None
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
 			screentitle =  _("Plex DVR API for Enigma2")
@@ -64,28 +100,38 @@ class PlexDVRAPI_Setup(Screen):
 			self.menu_path = ""
 		Screen.setTitle(self, title)
 
-		self["InfoScrollLabel"] = ScrollLabel()
+		self.savedval = config.plexdvrapi.type.value
+
+		self.list = []
+		self.list.append(getConfigListEntry(_('Tuner type to use.'), config.plexdvrapi.type))
+
+		ConfigListScreen.__init__(self, self.list)
+		self["config"].list = self.list
+		self["config"].l.setList(self.list)
+
+
+		self["TunerInfoLabel"] = Label()
+		self["HintLabel"] = Label()
 		self["actions"] = ActionMap(['ColorActions','OkCancelActions', 'DirectionActions'],
 									{
-									"cancel": self.close,
-									"red": self.close,
-									"green": self.save,
+									"cancel": self.keyCancel,
+									"red": self.keyCancel,
+									"green": self.keySave,
 									"yellow": self.cleanfiles,
-									"blue": self.about,
-									"up": self["InfoScrollLabel"].pageUp,
-									"down": self["InfoScrollLabel"].pageDown,
+									"blue": self.about
 									}, -2)
 		self["actions"].setEnabled(False)
 
 		self["okaction"] = ActionMap(['OkCancelActions'],
 									{
 									"ok": self.ok,
+									"cancel": self.keyCancel,
 									}, -2)
 		self["okaction"].setEnabled(False)
 
 		self["closeaction"] = ActionMap(['OkCancelActions'],
 									{
-									"ok": self.close,
+									"ok": self.keyCancel,
 									}, -2)
 		self["closeaction"].setEnabled(False)
 
@@ -100,100 +146,116 @@ class PlexDVRAPI_Setup(Screen):
 		if not path.exists('/www'):
 			mkdir('/www')
 
+		assert PlexDVRAPI_Setup.instance is None, "class InfoBar is a singleton class and just one instance of this class is allowed!"
+		PlexDVRAPI_Setup.instance = self
+
 		self.onLayoutFinish.append(self.populate)
+		self.onClose.append(self.__onClose)
+
+	def __onClose(self):
+		PlexDVRAPI_Setup.instance = None
 
 	def about(self):
 		self.session.open(PlexDVRAPI_About, self.menu_path)
 
-	def cleanfiles(self):
-		self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to reset?,\n doing so will cause the DVR in plex to be none fuctional,\nyou will have to remove and re-add the DVR."), type = MessageBox.TYPE_YESNO)
-
-	def cleanconfirm(self, answer):
-		if answer is not None and answer:
-			for type in tunerTypes:
-				if path.exists('/www/%s/discover.json' % tunerfolders[type]):
-					remove('/www/%s/discover.json' % tunerfolders[type])
-				if path.exists('/www/%s/lineup_status.json' % tunerfolders[type]):
-					remove('/www/%s/lineup_status.json' % tunerfolders[type])
-				if path.exists('/www/%s/lineup.json' % tunerfolders[type]):
-					remove('/www/%s/lineup.json' % tunerfolders[type])
-			self.populate()
-
 	def populate(self, answer=None):
-		BaseURL = {}
-		FriendlyName = {}
-		TunerCount = {}
-		Source = {}
-		NoOfChannels = {}
-		self.label = []
+		setup_exists = False
+		self["key_red"].hide()
+		self["key_green"].hide()
+		self["key_yellow"].hide()
+		self["key_blue"].hide()
 
-		for type in tunerTypes:
-			self.discover = getdeviceinfo.deviceinfo(type)
-			self.lineupstatus = getlineupstatus.lineupstatus(type)
-			BaseURL[type] = 'BaseURL: %s\n' % str(self.discover[type]["BaseURL"])
-			FriendlyName[type] = 'FriendlyName: %s\n' % str(self.discover[type]["FriendlyName"])
-			TunerCount[type] = 'TunerCount: %s\n' % str(self.discover[type]["TunerCount"])
-			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title()
-			NoOfChannels[type] = 'Channels: %s\n\n' % str(self.discover[type]['NumChannels'])
+		if getIP() == '0.0.0.0':
+			self["HintLabel"].hide()
+			self["TunerInfoLabel"].setText(_('No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to close'))
+			self["closeaction"].setEnabled(True)
 
-			print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+		elif self["config"].getCurrent() is not None:
+			type = self["config"].getCurrent()[1].value
+			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 
-			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0 and type != "multi":
-				self.label.append(BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
-			else:
-				print '[Plex DVR API] skipping tuner %s' % type
-				continue
+			for types in tunerTypes:
+				if path.exists('/www/%s/discover.json' % tunerfolders[types]):
+					setup_exists = True
 
-			if not path.exists('/www/%s/discover.json' % tunerfolders[type]) or getIP() == '0.0.0.0' or self.discover[type]["TunerCount"] < 2:
-				self["key_red"].hide()
-				self["key_green"].hide()
-				self["key_yellow"].hide()
-				self["key_blue"].hide()
-				if getIP() == '0.0.0.0':
-					self["InfoScrollLabel"].setText(_('No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to close'))
-					self["closeaction"].setEnabled(True)
-				elif self.discover[type]["TunerCount"] < 2:
-					self["InfoScrollLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n\nPress OK to continue'))
+			if not path.exists('/www/%s/discover.json' % tunerfolders[type]):
+				if discover[type]["TunerCount"] < 2:
+					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n\nPress OK to continue'))
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Create"))
 					self["key_yellow"].setText("")
 				else:
-					self["InfoScrollLabel"].setText(_('Please note: To use the DVR feature in Plex, you need to be a Plex Pass user.\nFor more information about Plex Pass see https://www.plex.tv/features/plex-pass\n\nPress OK to continue'))
+					if not setup_exists:
+						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
+					else:
+						self["TunerInfoLabel"].setText(_('Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?'))
+					self["HintLabel"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to create your configuration files.'))
+					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to create your configuration files.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Create"))
 					self["key_yellow"].setText("")
 			else:
+				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to update your configuration files.')
 				self["key_green"].setText(_('Update'))
-				self["key_yellow"].setText(_("Reset DVR"))
+				self["key_yellow"].setText("Remove")
 				self.ok()
+
+	def cleanfiles(self):
+		self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none fuctional."), type = MessageBox.TYPE_YESNO)
+
+	def cleanconfirm(self, answer):
+		if answer is not None and answer and self["config"].getCurrent() is not None:
+			type = self["config"].getCurrent()[1].value
+			print '[Plex DVR API] Deleting files for %s' % type
+			rmtree('/www/%s' % tunerfolders[type])
+			self.populate()
 
 	def ok(self):
 		self["okaction"].setEnabled(False)
 		self["actions"].setEnabled(True)
-		self["InfoScrollLabel"].setText(''.join(self.label))
+		self["TunerInfoLabel"].setText(self.label)
+		self["HintLabel"].setText(self.hinttext)
 		self["key_red"].show()
 		self["key_green"].show()
 		self["key_yellow"].show()
 		self["key_blue"].show()
+		self["HintLabel"].show()
 
-	def save(self):
-		for type in tunerTypes:
-			if self.discover[type]["TunerCount"] > 0 and self.discover[type]['NumChannels'] > 0:
-				print '[Plex DVR API] Creating JSON files for %s' % type
-				getdeviceinfo.write_discover(writefile='/www/%s/discover.json' % tunerfolders[type], dvbtype=type)
+
+	def keySave(self):
+		if self.savedval != config.plexdvrapi.type.value and path.exists('/www/%s/device.xml' % tunerfolders[self.savedval]):
+			self.session.openWithCallback(self.saveconfirm, MessageBox,text = _("It seems you have already setup on another tuner, As Plex Server can only support one tuner type, to use this additional tuner type you will need to setup a 2nd Plex Server, do you want to continue creating the files?"), type = MessageBox.TYPE_YESNO)
+		else:
+			self.saveconfirm(True)
+
+	def saveconfirm(self, answer):
+		if answer is not None and answer and self["config"].getCurrent() is not None:
+			type = self["config"].getCurrent()[1].value
+			print '[Plex DVR API] Creating JSON files for %s' % type
+			if not path.exists('/www/%s/device.xml' % tunerfolders[self.savedval]):
 				getdeviceinfo.write_device_xml(writefile='/www/%s/device.xml' % tunerfolders[type], dvbtype=type)
-				getlineupstatus.write_lineupstatus(writefile='/www/%s/lineup_status.json' % tunerfolders[type], dvbtype=type)
-				getlineup.write_lineup(writefile='/www/%s/lineup.json' % tunerfolders[type], ipinput=getIP(), dvbtype=type)
-		self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please reboot and then you should be able to add this STB to Plex DVR.\nDo you want to reboot now ?"), type = MessageBox.TYPE_YESNO)
+				config.plexdvrapi.type.save()
+				configfile.save()
+			getdeviceinfo.write_discover(writefile='/www/%s/discover.json' % tunerfolders[type], dvbtype=type)
+			getlineupstatus.write_lineupstatus(writefile='/www/%s/lineup_status.json' % tunerfolders[type], dvbtype=type)
+			getlineup.write_lineup(writefile='/www/%s/lineup.json' % tunerfolders[type], ipinput=getIP(), dvbtype=type)
+			self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please restart enigma2 and then you should be able to add this STB to Plex DVR.\nDo you want to do this now ?"), type = MessageBox.TYPE_YESNO)
 
 	def rebootconfirm(self, answer):
 		if answer is not None and answer:
 			from enigma import quitMainloop
-			quitMainloop(2)
+			quitMainloop(3)
+
+	def keyCancel(self):
+		if self["config"].isChanged():
+			for x in self["config"].list:
+				x[1].cancel()
+		self.close()
+
+def updateTunerInfo(value):
+		PlexDVRAPI_Setup.instance.populate()
+if not config.plexdvrapi.type.notifiers:
+	config.plexdvrapi.type.addNotifier(updateTunerInfo, initial_call = False)
 
 def startssdp(dvbtype):
 	discover = getdeviceinfo.deviceinfo(dvbtype)
@@ -219,12 +281,10 @@ def starthttpserver(dvbtype):
 def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
 	if reason == 0:
 		for type in tunerTypes:
-			discover = getdeviceinfo.deviceinfo(type)
-			if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0:
-				if path.exists('/www/%s/discover.json' % tunerfolders[type]):
-					starthttpserver(type)
-				if path.exists('/www/%s/device.xml' % tunerfolders[type]):
-					startssdp(type)
+			if path.exists('/www/%s/discover.json' % tunerfolders[type]):
+				starthttpserver(type)
+			if path.exists('/www/%s/device.xml' % tunerfolders[type]):
+				startssdp(type)
 
 def PlexDVRAPI_SetupMain(session, **kwargs):
 	session.open(PlexDVRAPI_Setup)

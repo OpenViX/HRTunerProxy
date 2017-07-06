@@ -51,7 +51,6 @@ class getDeviceInfo:
 			with open('/www/%s/discover.json' % tunerfolders[dvb_type]) as data_file:
 				discover[dvb_type] = json.load(data_file)
 				discover[dvb_type]['DeviceUUID']='%s' % device_uuid
-				print 'device_uuids_1:',device_uuid
 		else:
 			discover[dvb_type] = {}
 			deviceauth = generator(24, charset['auth'])
