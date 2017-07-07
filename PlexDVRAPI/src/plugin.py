@@ -201,7 +201,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 				self.ok()
 
 	def cleanfiles(self):
-		self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none fuctional."), type = MessageBox.TYPE_YESNO)
+		self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none functional."), type = MessageBox.TYPE_YESNO)
 
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:

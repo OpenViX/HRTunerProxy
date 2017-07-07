@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2-openvix-plugins 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-24 19:38+0100\n"
+"POT-Creation-Date: 2017-07-06 12:43+0100\n"
 "PO-Revision-Date: 2017-05-24 19:38+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,53 +17,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Acerca"
+msgid "About"
 msgstr ""
 
-msgid "Cerrar"
+msgid "Close"
 msgstr ""
 
-msgid "Crear"
+msgid "Create"
+msgstr ""
+
+msgid "Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none functional."
+msgstr ""
+
+msgid "Enigma2"
+msgstr ""
+
+msgid "Enigma2 STB"
 msgstr ""
 
 msgid ""
-"¿Quieres restablecer a fábrica la configuración?,\n"
-" haciendo esto causará que DVR en Plex no sea funcional y \n"
-"tendrá que quitar y añadir de nuevo el DVR." 
+"Files created, Please restart enigma2 and then you should be able to add this STB to Plex DVR.\n"
+"Do you want to do this now ?"
 msgstr ""
 
-msgid "Ficheros creados, ya puedes agregar este deco a Plex DVR."
+msgid "It seems you have already setup on another tuner, As Plex Server can only support one tuner type, to use this additional tuner type you will need to setup a 2nd Plex Server, do you want to continue creating the files?"
 msgstr ""
 
 msgid ""
-"No se encontró la dirección ip de red, por favor asegurate que la red está conectada vía cable de red,"
-"la conexión por wifi de momento no está soportada.\n"
+"No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n"
 "\n"
-"Pulsa OK para cerrar"
+"Press OK to close"
+msgstr ""
+
+msgid "Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?"
+msgstr ""
+
+msgid "Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass"
+msgstr ""
+
+msgid "Plex DVR API for Enigma2"
+msgstr ""
+
+msgid "PlexDVR"
 msgstr ""
 
 msgid ""
-"Tenga en cuenta: Que para que funcione este plugin se requiere mínito 2 sintonizadores.\n"
-"\n"
-"Pulsa OK para cerrar"
+"Press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to create your configuration files."
 msgstr ""
 
 msgid ""
-"Tenga en cuenta: Que para usar DVR en Plex, necesitas ser usuario con Pless Pass.\n"
-"Para mayor información sobre Plex Pass visita https://www.plex.tv/features/plex-"
-"pass\n"
+"Press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to update your configuration files."
+msgstr ""
+
+msgid ""
+"Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to create your configuration files."
+msgstr ""
+
+msgid "Tuner type to use."
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid ""
+"WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n"
 "\n"
-"Pulsa OK para continuar"
-msgstr ""
-
-msgid "Plex DVR"
-msgstr ""
-
-msgid "Plex DVR API para Enigma2"
-msgstr ""
-
-msgid "Resetear DVR"
-msgstr ""
-
-msgid "Actualizar"
+"Press OK to continue"
 msgstr ""
