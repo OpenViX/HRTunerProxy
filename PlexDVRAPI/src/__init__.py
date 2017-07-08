@@ -30,13 +30,6 @@ tunerfolders = {
 	'multi' : 'multi'
 	}
 
-portfolders = {
-	6081 : '/www/cable',
-	6082 : '/www/antenna',
-	6083 : '/www/satellite',
-	6084 : '/www/multi'
-	}
-
 porttypes = {
 	6081 : 'DVB-C',
 	6082 : 'DVB-T',

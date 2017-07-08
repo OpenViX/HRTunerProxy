@@ -8,7 +8,7 @@ from sys import modules
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from BaseHTTPServer import HTTPServer
 
-from . import getIP, portfolders, tunerports, porttypes
+from . import getIP, tunerports, porttypes
 from getLineup import getlineup
 from getLineupStatus import getlineupstatus
 from getDeviceInfo import getdeviceinfo
@@ -17,8 +17,6 @@ from getDeviceInfo import getdeviceinfo
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
 		HTTPServer.__init__(self, *args, **kwargs)
-		# self.RequestHandlerClass.base_path = base_path
-
 
 class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 	def do_GET(self):
@@ -31,72 +29,44 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 		except:
 			print '[Plex DVR API] USING DEFAULT PORT'
 			self.port = 6081
-		self.base_path = portfolders[self.port]
 		tunertype = porttypes[self.port]
 
 		if self.path == '/':
 			self.path  = '/device.xml'
-		try:
-			sendReply = False
-			if self.path.endswith(".html"):
-				mimeType = 'text/html'
-				sendReply = True
-			elif self.path.endswith(".json"):
-				mimeType = 'application/javascript'
-				sendReply = True
-			elif self.path.endswith(".xml"):
-				mimeType = 'application/xml'
-				sendReply = True
-			elif self.path.endswith(".ico"):
-				mimeType = 'image/x-icon'
-				sendReply = True
 
-			if self.path.endswith("lineup_status.json"):
-				self.send_response(200)
-				self.send_header('Content-type', mimeType)
-				self.end_headers()
-				self.wfile.write(json.dumps(getlineupstatus.lineupstatus(tunertype)))
-			elif self.path.endswith("lineup.json"):
-				self.send_response(200)
-				self.send_header('Content-type', mimeType)
-				self.end_headers()
-				self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype)))
-			elif self.path.endswith("discover.json"):
-				self.send_response(200)
-				self.send_header('Content-type', mimeType)
-				self.end_headers()
-				self.wfile.write(json.dumps(getdeviceinfo.discoverdata(tunertype)))
-			elif self.path.endswith("device.xml"):
-				self.send_response(200)
-				self.send_header('Content-type', mimeType)
-				self.end_headers()
-				self.wfile.write(getdeviceinfo.devicedata(tunertype))
+		if self.path.endswith(".html"):
+			mimeType = 'text/html'
+		elif self.path.endswith(".json"):
+			mimeType = 'application/javascript'
+		elif self.path.endswith(".xml"):
+			mimeType = 'application/xml'
+		elif self.path.endswith(".ico"):
+			mimeType = 'image/x-icon'
 
-			elif sendReply == True:
-				f = open(self.base_path + os.sep + self.path)
-				self.send_response(200)
-				self.send_header('Content-type', mimeType)
-				self.end_headers()
-				self.wfile.write(f.read())
-				f.close()
-			else:
-				print '[Plex DVR API] file type not coded:',self.path
-			return
-		except IOError:
+		if self.path.endswith("lineup_status.json"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write(json.dumps(getlineupstatus.lineupstatus(tunertype)))
+		elif self.path.endswith("lineup.json"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype)))
+		elif self.path.endswith("discover.json"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write(json.dumps(getdeviceinfo.discoverdata(tunertype)))
+		elif self.path.endswith("device.xml"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write(getdeviceinfo.devicedata(tunertype))
+		else:
 			self.send_error(404,'[Plex DVR API] File not found!')
-
-	def translate_path(self, path):
-		path = posixpath.normpath(urllib.unquote(path))
-		words = path.split('/')
-		words = filter(None, words)
-		path = self.base_path
-		for word in words:
-			drive, word = os.path.splitdrive(word)
-			head, word = os.path.split(word)
-			if word in (os.curdir, os.pardir):
-				continue
-			path = os.path.join(path, word)
-		return path
+			print '[Plex DVR API] file type not coded:',self.path
+			return
 
 def run(dvbtype):
 	ipaddress = getIP()
@@ -107,7 +77,7 @@ def startserver(ip_address='', port=''):
 	server_address = (ip_address, int(port))
 	httpd = RootedHTTPServer(server_address, RootedHTTPRequestHandler)
 	sa = httpd.socket.getsockname()
-	print "[Plex DVR API] Serving HTTP on %s port %s basefolder %s" % (str(sa[0]),str(sa[1]), portfolders[int(port)])
+	print "[Plex DVR API] Serving HTTP on %s port %s" % (str(sa[0]),str(sa[1]))
 	httpd.serve_forever()
 
 
