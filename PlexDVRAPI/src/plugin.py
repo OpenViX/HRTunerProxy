@@ -128,9 +128,14 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 									{
 									"cancel": self.keyCancel,
 									"red": self.keyCancel,
-									"green": self.keySave,
 									"yellow": self.cleanfiles,
 									"blue": self.about
+									}, -2)
+		self["actions"].setEnabled(False)
+
+		self["saveactions"] = ActionMap(['ColorActions','OkCancelActions', 'DirectionActions'],
+									{
+									"green": self.keySave,
 									}, -2)
 		self["actions"].setEnabled(False)
 
@@ -169,6 +174,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 	def populate(self, answer=None):
 		setup_exists = False
+		self["saveactions"].setEnabled(False)
 		self["key_red"].hide()
 		self["key_green"].hide()
 		self["key_yellow"].hide()
@@ -184,7 +190,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 
 			for types in tunerTypes:
-				if path.exists('/etc/enigma2/%s.discover' % type):
+				if path.exists('/etc/enigma2/%s.discover' % types):
 					setup_exists = True
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
@@ -198,14 +204,15 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
 					else:
 						self["TunerInfoLabel"].setText(_('Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?'))
-					self["HintLabel"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to create your configuration files.'))
+					self["HintLabel"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to create your configuration files.')
 					self["okaction"].setEnabled(True)
+					self["saveactions"].setEnabled(True)
 					self["key_green"].setText(_("Create"))
 					self["key_yellow"].setText("")
 			else:
-				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.\nPress GREEN button to update your configuration files.')
-				self["key_green"].setText(_('Update'))
+				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+				self["key_green"].setText("")
 				self["key_yellow"].setText("Remove")
 				self.ok()
 
