@@ -216,7 +216,10 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
 			type = self["config"].getCurrent()[1].value
 			print '[Plex DVR API] Deleting files for %s' % type
-			rmtree('/www/%s' % tunerfolders[type])
+			if path.exists('/etc/enigma2/%s.discover' % type):
+				remove('/etc/enigma2/%s.discover' % type)
+			if path.exists('/etc/enigma2/%s.device' % type):
+				remove('/etc/enigma2/%s.device' % type)
 			self.populate()
 
 	def ok(self):
