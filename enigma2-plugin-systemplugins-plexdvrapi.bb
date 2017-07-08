@@ -7,9 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a23a74b3f4caf9616230789d94217acb"
 inherit autotools-brokensep gitpkgv pythonnative
 
 SRCREV = "${AUTOREV}"
-PV = "1.2+git${SRCPV}"
-PKGV = "1.2+git${GITPKGV}"
-PR = "r2"
+PV = "2.0+git${SRCPV}"
+PKGV = "2.0+git${GITPKGV}"
+PR = "r0"
 
 SRC_URI = "git://github.com/OpenViX/PlexDVRAPI.git;protocol=git"
 
@@ -24,6 +24,10 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "enigma2"
 
+RDEPENDS_${PN} = " \
+    python-argparse \
+    "
+
 do_compile() {
     python -O -m compileall ${S}
 }
@@ -36,16 +40,4 @@ python populate_packages_prepend() {
     do_split_packages(d, enigma2_plugindir, '^(\w+/\w+)/.*\.a$', 'enigma2-plugin-%s-staticdev', '%s (static development)', recursive=True, match_path=True, prepend=True)
     do_split_packages(d, enigma2_plugindir, '^(\w+/\w+)/(.*/)?\.debug/.*$', 'enigma2-plugin-%s-dbg', '%s (debug)', recursive=True, match_path=True, prepend=True)
     do_split_packages(d, enigma2_plugindir, '^(\w+/\w+)/.*\/.*\.po$', 'enigma2-plugin-%s-po', '%s (translations)', recursive=True, match_path=True, prepend=True)
-}
-
-pkg_postinst_${PN} () {
-if [ ! -d /www ]; then
-    mkdir /www
-fi
-}
-
-pkg_postrm_${PN} () {
-if [ -d /www ]; then
-    rm -rf /www
-fi
 }
