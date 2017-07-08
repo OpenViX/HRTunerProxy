@@ -2,11 +2,16 @@ import posixpath
 import argparse
 import urllib
 import os
+import json
 
-from . import getIP, portfolders, tunerports
 from sys import modules
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from BaseHTTPServer import HTTPServer
+
+from . import getIP, portfolders, tunerports, porttypes
+from getLineup import getlineup
+from getLineupStatus import getlineupstatus
+from getDeviceInfo import getdeviceinfo
 
 
 class RootedHTTPServer(HTTPServer):
@@ -27,6 +32,7 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 			print '[Plex DVR API] USING DEFAULT PORT'
 			self.port = 6081
 		self.base_path = portfolders[self.port]
+		tunertype = porttypes[self.port]
 
 		if self.path == '/':
 			self.path  = '/device.xml'
@@ -45,7 +51,28 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 				mimeType = 'image/x-icon'
 				sendReply = True
 
-			if sendReply == True:
+			if self.path.endswith("lineup_status.json"):
+				self.send_response(200)
+				self.send_header('Content-type', mimeType)
+				self.end_headers()
+				self.wfile.write(json.dumps(getlineupstatus.lineupstatus(tunertype)))
+			elif self.path.endswith("lineup.json"):
+				self.send_response(200)
+				self.send_header('Content-type', mimeType)
+				self.end_headers()
+				self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype)))
+			elif self.path.endswith("discover.json"):
+				self.send_response(200)
+				self.send_header('Content-type', mimeType)
+				self.end_headers()
+				self.wfile.write(json.dumps(getdeviceinfo.discoverdata(tunertype)))
+			elif self.path.endswith("device.xml"):
+				self.send_response(200)
+				self.send_header('Content-type', mimeType)
+				self.end_headers()
+				self.wfile.write(getdeviceinfo.devicedata(tunertype))
+
+			elif sendReply == True:
 				f = open(self.base_path + os.sep + self.path)
 				self.send_response(200)
 				self.send_header('Content-type', mimeType)

@@ -37,6 +37,12 @@ portfolders = {
 	6084 : '/www/multi'
 	}
 
+porttypes = {
+	6081 : 'DVB-C',
+	6082 : 'DVB-T',
+	6083 : 'DVB-S'
+	}
+
 def _ifinfo(sock, addr, ifname):
 	iface = struct.pack('256s', ifname[:15])
 	info  = fcntl.ioctl(sock.fileno(), addr, iface)

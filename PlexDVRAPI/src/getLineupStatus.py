@@ -13,15 +13,11 @@ class getLineupStatus:
 		pass
 
 	def lineupstatusJSON(self, dvb_type):
-		if path.exists('/www/%s/lineup_status.json' % tunerfolders[dvb_type]):
-			with open('/www/%s/lineup_status.json' % tunerfolders[dvb_type]) as data_file:
-				lineup_status[dvb_type] = json.load(data_file)
-		else:
-			lineup_status[dvb_type] = {}
-			lineup_status[dvb_type]['ScanInProgess']=0
-			lineup_status[dvb_type]['ScanPossible']=0
-			lineup_status[dvb_type]['Source']='%s' % tunertypes[dvb_type]
-			lineup_status[dvb_type]['SourceList']=["%s" % tunertypes[dvb_type]]
+		lineup_status = {}
+		lineup_status['ScanInProgess']=0
+		lineup_status['ScanPossible']=0
+		lineup_status['Source']='%s' % tunertypes[dvb_type]
+		lineup_status['SourceList']=["%s" % tunertypes[dvb_type]]
 		return lineup_status
 
 def lineupstatus(dvbtype):
@@ -29,17 +25,5 @@ def lineupstatus(dvbtype):
 	output = lineup_status.lineupstatusJSON(dvb_type=dvbtype)
 	return output
 
-def write_lineupstatus(writefile = "/tmp/lineup_status.json", dvbtype="DVB-S"):
-	lineup_status = getLineupStatus()
-	output = lineup_status.lineupstatusJSON(dvb_type=dvbtype)
-	if not path.exists('/www/%s' % tunerfolders[dvbtype]):
-		mkdir('/www/%s' % tunerfolders[dvbtype])
-	try:
-		with open(writefile, 'w') as outfile:
-			json.dump(output[dvbtype], outfile)
-		outfile.close()
-	except Exception, e:
-		print "Error opening %s for writing" % writefile
-		return
 
 getlineupstatus = modules[__name__]

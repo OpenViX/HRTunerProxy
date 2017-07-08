@@ -14,6 +14,7 @@ class getLineup:
 		self.tv_index = "bouquets.tv"
 		self.channelNames = {} # key SID:TSID:ONID:NAMESPACE in hex
 		self.bouquets_filenames = []
+		self.bouquets_hidden = {}
 		self.channel_numbers_names_and_refs = []
 		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
 		self.read_services()
@@ -63,6 +64,10 @@ class getLineup:
 			if result is None:
 				continue
 			self.bouquets_filenames.append(result.group(1))
+			if "#SERVICE 1:519:" in result.group(0):
+				self.bouquets_hidden[result.group(1)] = True
+			else:
+				self.bouquets_hidden[result.group(1)] = False
 
 	def read_tv_bouquets(self):
 		channel_number = 0
@@ -88,6 +93,9 @@ class getLineup:
 					if service_ref_split[1] == "64":
 						continue
 					if service_ref_split[1] == "832":
+						channel_number += 1
+						continue
+					if self.bouquets_hidden[filename] == True:
 						channel_number += 1
 						continue
 					channel_number += 1
@@ -129,22 +137,11 @@ class getLineup:
 				self.lineup.append(self.data_tmp)
 		return self.lineup
 
-def noofchannels(dvbtype):
-	channel_numbers = getLineup()
-	output = channel_numbers.createJSON(dvb_type=dvbtype)
-	return len(output)
+def noofchannels(dvb_type):
+	return len(lineupdata(dvbtype=dvb_type))
 
-def write_lineup(writefile = "/tmp/lineup.json", ipinput="0.0.0.0", dvbtype="DVB-S"):
+def lineupdata(ipinput='0.0.0.0', dvbtype=''):
 	channel_numbers = getLineup()
-	output = channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
-	if not path.exists('/www/%s' % tunerfolders[dvbtype].lower()):
-		mkdir('/www/%s' % tunerfolders[dvbtype].lower())
-	try:
-		with open(writefile, 'w') as outfile:
-			json.dump(output, outfile)
-		outfile.close()
-	except Exception, e:
-		print "Error opening %s for writing" % writefile
-		return
+	return channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
 
 getlineup = modules[__name__]

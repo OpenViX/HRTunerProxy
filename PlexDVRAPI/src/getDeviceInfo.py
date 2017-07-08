@@ -25,9 +25,6 @@ except:
 from getLineup import getlineup
 from . import tunertypes, tunerports, tunerfolders, getIP
 
-discover = {}
-noofchannels = {}
-
 charset = {
 	"auth": string.ascii_letters + string.digits,
 	"id": string.ascii_uppercase + string.digits,
@@ -44,47 +41,66 @@ class getDeviceInfo:
 		ip = getIP()
 		ip_port = 'http://%s:%s' % (ip, tunerports[dvb_type])
 		device_uuid = str(uuid.uuid4())
-		if path.exists('/www/%s/discover.json' % tunerfolders[dvb_type]) and path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
-			with open('/www/%s/discover.json' % tunerfolders[dvb_type]) as data_file:
-				discover[dvb_type] = json.load(data_file)
-		elif path.exists('/www/%s/discover.json' % tunerfolders[dvb_type]) and not path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
-			with open('/www/%s/discover.json' % tunerfolders[dvb_type]) as data_file:
-				discover[dvb_type] = json.load(data_file)
-				discover[dvb_type]['DeviceUUID']='%s' % device_uuid
+		if path.exists('/etc/enigma2/%s.discover' % dvb_type):
+		 	if path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
+				with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
+					discover = json.load(data_file)
+			else:
+				with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
+					discover = json.load(data_file)
+					discover['DeviceUUID']='%s' % device_uuid
+			discover.pop('NumChannels', None)
 		else:
-			discover[dvb_type] = {}
+			discover = {}
 			deviceauth = generator(24, charset['auth'])
 			deviceid = generator(8, charset['id'])
 			if brandingmodule:
-				discover[dvb_type]['FriendlyName']='%s %s' % (getMachineBrand(), getMachineName())
-				discover[dvb_type]['ModelNumber']='%s' % getBoxType()
-				discover[dvb_type]['FirmwareName']='%s' % getImageDistro()
-				discover[dvb_type]['FirmwareVersion']='%s' % getDriverDate()
+				discover['FriendlyName']='%s %s' % (getMachineBrand(), getMachineName())
+				discover['Manufacturer']='%s' % getMachineBrand()
+				discover['ModelNumber']='%s' % getBoxType()
+				discover['FirmwareName']='%s' % getImageDistro()
+				discover['FirmwareVersion']='%s' % getDriverDate()
 			else:
-				discover[dvb_type]['FriendlyName']='%s' % _('Enigma2 STB')
-				discover[dvb_type]['ModelNumber']='%s' % getBoxType()
-				discover[dvb_type]['FirmwareName']='%s' % _('Enigma2')
-				discover[dvb_type]['FirmwareVersion']='%s' % getEnigmaVersionString()
-			discover[dvb_type]['DeviceID']='%s' % deviceid
-			discover[dvb_type]['DeviceAuth']='%s' % deviceauth
-			discover[dvb_type]['BaseURL']='%s' % ip_port
-			discover[dvb_type]['LineupURL']='%s/lineup.json' % ip_port
-			discover[dvb_type]['TunerCount']=len(nimmanager.getNimListOfType(dvb_type)) if dvb_type != "multi" else len(nimmanager.nimList())
-			discover[dvb_type]['NumChannels']=getlineup.noofchannels(dvb_type)
-			discover[dvb_type]['DeviceUUID']='%s' % device_uuid
+				discover['FriendlyName']='%s' % _('Enigma2 STB')
+				discover['Manufacturer']='%s' % _('Enigma2')
+				discover['ModelNumber']='%s' % getBoxType()
+				discover['FirmwareName']='%s' % _('Enigma2')
+				discover['FirmwareVersion']='%s' % getEnigmaVersionString()
+			discover['DeviceID']='%s' % deviceid
+			discover['DeviceAuth']='%s' % deviceauth
+			discover['DeviceUUID']='%s' % device_uuid
+
+		discover['BaseURL']='%s' % ip_port
+		discover['LineupURL']='%s/lineup.json' % ip_port
+		discover['TunerCount']=tunercount(dvb_type)
 		return discover
 
-def deviceinfo(dvbtype):
+def tunercount(dvbtype):
+	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype != "multi" else len(nimmanager.nimList())
+
+def discoverdata(dvbtype):
 	device_info = getDeviceInfo()
 	output = device_info.discoverJSON(dvb_type=dvbtype)
 	return output
 
-def write_device_xml(writefile, dvbtype):
-	device_info = getDeviceInfo()
-	discover = device_info.discoverJSON(dvb_type=dvbtype)
-	if not path.exists('/www/%s' % tunerfolders[dvbtype]):
-		mkdir('/www/%s' % tunerfolders[dvbtype])
+def write_discover(dvbtype="DVB-S"):
+	data = discoverdata(dvbtype=dvbtype)
+	try:
+		with open('/etc/enigma2/%s.discover' % dvbtype, 'w') as outfile:
+			json.dump(data, outfile)
+		outfile.close()
+	except Exception, e:
+		print "Error opening %s for writing" % writefile
+		return
 
+def devicedata(dvbtype):
+	datafile = open('/etc/enigma2/%s.device' % dvbtype,'r')
+	xmldoc = datafile.read()
+	datafile.close()
+	return xmldoc
+
+def write_device_xml(dvbtype):
+	discover = discoverdata(dvbtype=dvbtype)
 	xml = """<root xmlns="urn:schemas-upnp-org:device-1-0">
     <specVersion>
         <major>1</major>
@@ -101,30 +117,16 @@ def write_device_xml(writefile, dvbtype):
         <UDN>uuid:{uuid}</UDN>
     </device>
 </root>"""
-
-	xmlfile = xml.format(base_url=discover[dvbtype]['BaseURL'],
-                      friendly_name=discover[dvbtype]['FriendlyName'],
-                      manufacturer="Silicondust",
-                      model_name=discover[dvbtype]['ModelNumber'].upper(),
-                      model_number=discover[dvbtype]['ModelNumber'].lower(),
+	xmlfile = xml.format(base_url=discover['BaseURL'],
+                      friendly_name=discover['FriendlyName'],
+                      manufacturer=discover['Manufacturer'],
+                      model_name=discover['ModelNumber'].upper(),
+                      model_number=discover['ModelNumber'].lower(),
                       serial_number="",
-                      uuid=discover[dvbtype]['DeviceUUID'])
+                      uuid=discover['DeviceUUID'])
 
-	with open(writefile, 'w') as outfile:
+	with open('/etc/enigma2/%s.device' % dvbtype, 'w') as outfile:
 		outfile.writelines(xmlfile)
 	outfile.close()
-
-def write_discover(writefile = "/tmp/discover.json", dvbtype="DVB-S"):
-	device_info = getDeviceInfo()
-	output = device_info.discoverJSON(dvb_type=dvbtype)
-	if not path.exists('/www/%s' % tunerfolders[dvbtype]):
-		mkdir('/www/%s' % tunerfolders[dvbtype])
-	try:
-		with open(writefile, 'w') as outfile:
-			json.dump(output[dvbtype], outfile)
-		outfile.close()
-	except Exception, e:
-		print "Error opening %s for writing" % writefile
-		return
 
 getdeviceinfo = modules[__name__]

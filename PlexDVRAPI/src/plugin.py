@@ -2,7 +2,7 @@ import threading
 import string
 import random
 import json
-from os import path, remove, mkdir
+from os import path, remove, mkdir, rename, listdir, rmdir
 from shutil import rmtree
 
 from Components.ActionMap import ActionMap
@@ -21,7 +21,6 @@ from about import PlexDVRAPI_About
 from enigma import getDesktop
 from getLineup import getlineup
 from getDeviceInfo import getdeviceinfo
-from getLineupStatus import getlineupstatus
 from ssdp import SSDPServer
 from server import server
 
@@ -32,21 +31,31 @@ Source = {}
 NoOfChannels = {}
 choicelist = []
 for type in tunerTypes:
-	discover = getdeviceinfo.deviceinfo(type)
-	lineupstatus = getlineupstatus.lineupstatus(type)
-	BaseURL[type] = 'BaseURL: %s\n' % str(discover[type]["BaseURL"])
-	FriendlyName[type] = 'FriendlyName: %s\n' % str(discover[type]["FriendlyName"])
-	TunerCount[type] = 'TunerCount: %s\n' % str(discover[type]["TunerCount"])
+	if path.exists('/www/%s/lineup_status.json' % tunerfolders[type]):
+		remove('/www/%s/lineup_status.json' % tunerfolders[type])
+	if path.exists('/www/%s/lineup.json' % tunerfolders[type]):
+		remove('/www/%s/lineup.json' % tunerfolders[type])
+	if path.exists('/www/%s/discover.json' % tunerfolders[type]):
+		rename('/www/%s/discover.json' % tunerfolders[type], '/etc/enigma2/%s.discover' % type)
+	if path.exists('/www/%s/device.xml' % tunerfolders[type]):
+		rename('/www/%s/device.xml' % tunerfolders[type], '/etc/enigma2/%s.device' % type)
+	if path.exists('/www/%s' % tunerfolders[type]) and not listdir('/www/%s' % tunerfolders[type]):
+		rmdir('/www/%s' % tunerfolders[type])
+
+	discover = getdeviceinfo.discoverdata(type)
+	BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
+	FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
+	TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type))
 	Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title()
-	NoOfChannels[type] = 'Channels: %s\n\n' % str(discover[type]['NumChannels'])
+	NoOfChannels[type] = 'Channels: %s\n\n' % str(getlineup.noofchannels(type))
 
-	print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
-	print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
-	print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
-	print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
-	print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+	print '[Plex DVR API] %s' % str(discover["BaseURL"])
+	print '[Plex DVR API] %s' % str(discover["FriendlyName"])
+	print '[Plex DVR API] %s' % str(tunerfolders[type]).title()
+	print '[Plex DVR API] %s' % str(getdeviceinfo.tunercount(type))
+	print '[Plex DVR API] %s' % str(getlineup.noofchannels(type))
 
-	if discover[type]["TunerCount"] > 0 and discover[type]['NumChannels'] > 0:
+	if getdeviceinfo.tunercount(type) > 0 and getlineup.noofchannels(type) > 0:
 		choicelist.append((type, str(tunerfolders[type]).title()))
 config.plexdvrapi = ConfigSubsection()
 config.plexdvrapi.type = ConfigSelection(choices = choicelist)
@@ -55,6 +64,9 @@ print '[Plex DVR API] Using Tuner: %s' % str(config.plexdvrapi.type.value)
 tunerTypes = []
 for type in config.plexdvrapi.type.choices.choices:
 	tunerTypes.append(type[0])
+
+if path.exists('/www') and not listdir('/www'):
+	rmdir('/www')
 
 class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	skin="""
@@ -143,9 +155,6 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["key_yellow"].hide()
 		self["key_blue"] = Button(_("About"))
 
-		if not path.exists('/www'):
-			mkdir('/www')
-
 		assert PlexDVRAPI_Setup.instance is None, "class InfoBar is a singleton class and just one instance of this class is allowed!"
 		PlexDVRAPI_Setup.instance = self
 
@@ -175,11 +184,11 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 
 			for types in tunerTypes:
-				if path.exists('/www/%s/discover.json' % tunerfolders[types]):
+				if path.exists('/etc/enigma2/%s.discover' % type):
 					setup_exists = True
 
-			if not path.exists('/www/%s/discover.json' % tunerfolders[type]):
-				if discover[type]["TunerCount"] < 2:
+			if not path.exists('/etc/enigma2/%s.discover' % type):
+				if getdeviceinfo.tunercount(type) < 2:
 					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n\nPress OK to continue'))
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Create"))
@@ -223,7 +232,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 
 	def keySave(self):
-		if self.savedval != config.plexdvrapi.type.value and path.exists('/www/%s/device.xml' % tunerfolders[self.savedval]):
+		if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
 			self.session.openWithCallback(self.saveconfirm, MessageBox,text = _("It seems you have already setup on another tuner, As Plex Server can only support one tuner type, to use this additional tuner type you will need to setup a 2nd Plex Server, do you want to continue creating the files?"), type = MessageBox.TYPE_YESNO)
 		else:
 			self.saveconfirm(True)
@@ -232,13 +241,11 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
 			type = self["config"].getCurrent()[1].value
 			print '[Plex DVR API] Creating JSON files for %s' % type
-			if not path.exists('/www/%s/device.xml' % tunerfolders[self.savedval]):
-				getdeviceinfo.write_device_xml(writefile='/www/%s/device.xml' % tunerfolders[type], dvbtype=type)
+			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
+				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.plexdvrapi.type.save()
 				configfile.save()
-			getdeviceinfo.write_discover(writefile='/www/%s/discover.json' % tunerfolders[type], dvbtype=type)
-			getlineupstatus.write_lineupstatus(writefile='/www/%s/lineup_status.json' % tunerfolders[type], dvbtype=type)
-			getlineup.write_lineup(writefile='/www/%s/lineup.json' % tunerfolders[type], ipinput=getIP(), dvbtype=type)
+			getdeviceinfo.write_discover(dvbtype=type)
 			self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please restart enigma2 and then you should be able to add this STB to Plex DVR.\nDo you want to do this now ?"), type = MessageBox.TYPE_YESNO)
 
 	def rebootconfirm(self, answer):
@@ -258,8 +265,8 @@ if not config.plexdvrapi.type.notifiers:
 	config.plexdvrapi.type.addNotifier(updateTunerInfo, initial_call = False)
 
 def startssdp(dvbtype):
-	discover = getdeviceinfo.deviceinfo(dvbtype)
-	device_uuid = discover[dvbtype]['DeviceUUID']
+	discover = getdeviceinfo.discoverdata(dvbtype)
+	device_uuid = discover['DeviceUUID']
 	print '[Plex DVR API] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
 	local_ip_address = getIP()
 	ssdp = SSDPServer()
@@ -281,9 +288,9 @@ def starthttpserver(dvbtype):
 def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
 	if reason == 0:
 		for type in tunerTypes:
-			if path.exists('/www/%s/discover.json' % tunerfolders[type]):
+			if path.exists('/etc/enigma2/%s.discover' % type):
 				starthttpserver(type)
-			if path.exists('/www/%s/device.xml' % tunerfolders[type]):
+			if path.exists('/etc/enigma2/%s.device' % type):
 				startssdp(type)
 
 def PlexDVRAPI_SetupMain(session, **kwargs):
