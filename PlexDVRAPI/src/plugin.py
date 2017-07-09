@@ -195,7 +195,9 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				if getdeviceinfo.tunercount(type) < 2:
-					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n\nPress OK to continue'))
+					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.'))
+					self["HintLabel"].setText(_('Press OK to continue setting up this tuner.'))
+					self.hinttext = _('Press GREEN button to create your configuration files.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Create"))
 					self["key_yellow"].setText("")
