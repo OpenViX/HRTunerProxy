@@ -3,6 +3,8 @@ import json
 from os import path, mkdir
 from sys import modules
 
+from enigma import eServiceReference
+
 from . import tunerfolders
 
 class getLineup:
@@ -14,7 +16,7 @@ class getLineup:
 		self.tv_index = "bouquets.tv"
 		self.channelNames = {} # key SID:TSID:ONID:NAMESPACE in hex
 		self.bouquets_filenames = []
-		self.bouquets_hidden = {}
+		self.bouquets_flags = {}
 		self.channel_numbers_names_and_refs = []
 		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
 		self.read_services()
@@ -64,10 +66,13 @@ class getLineup:
 			if result is None:
 				continue
 			self.bouquets_filenames.append(result.group(1))
-			if "#SERVICE 1:519:" in result.group(0):
-				self.bouquets_hidden[result.group(1)] = True
-			else:
-				self.bouquets_hidden[result.group(1)] = False
+			bouquet_flags = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
+			if result.group(0).startswith("#SERVICE "):
+				service_ref = result.group(0)[9:].strip()
+				service_ref_split = service_ref.split(":")
+				if len(service_ref_split) > 9:
+					bouquet_flags = int(service_ref_split[1])
+			self.bouquets_flags[result.group(1)] = bouquet_flags
 
 	def read_tv_bouquets(self):
 		channel_number = 0
@@ -90,15 +95,26 @@ class getLineup:
 					if len(service_ref_split) < 10:
 						print "[Plex DVR API] [read_tv_bouquets] Error in %s" % filename
 						continue
-					if service_ref_split[1] == "64":
+					service_flags = int(service_ref_split[1])
+					if service_flags == (eServiceReference.mustDescent|eServiceReference.canDescent|eServiceReference.isGroup): # alternatives (134)
+						alternative = self.alternatives(row)
+						if alternative is None: # something must be wrong with alternatives group
+							channel_number += 1
+							continue
+						service_ref = alternative["service_ref"]
+						service_ref_split = alternative["service_ref_split"]
+						service_flags = alternative["service_flags"]
+					if service_flags == eServiceReference.isMarker: # standard marker (64), skip
 						continue
-					if service_ref_split[1] == "832":
-						channel_number += 1
+					channel_number += 1 # everything below this point increments the channel number
+					if (service_flags & eServiceReference.isNumberedMarker):
 						continue
-					if self.bouquets_hidden[filename] == True:
-						channel_number += 1
+					if (self.bouquets_flags[filename] & eServiceReference.isInvisible): # invisible bouquet
 						continue
-					channel_number += 1
+					if int(service_ref_split[0], 16) != 1: # not a regular service. Might be IPTV.
+						continue
+					if service_flags != 0: # not a normal service that can be fed directly into the "play"-handler.
+						continue
 					if int(service_ref_split[2], 16) not in self.video_allowed_types:
 						continue
 					if service_ref in self.refs_added and not self.duplicates:
@@ -119,6 +135,31 @@ class getLineup:
 		if (namespace / (16**4)) == 0xEEEE:
 			return "DVB-T"
 		return "DVB-S"
+
+	def alternatives(self, service_line):
+		result = re.match("^.*FROM BOUQUET \"(.+)\" ORDER BY.*$", service_line)
+		if result is not None:
+			try:
+				alternative = open(self.path + result.group(1), "r")
+			except Exception, e:
+				return
+			content = alternative.read()
+			alternative.close()
+
+			for row in content.split("\n"):
+				if row.startswith("#SERVICE "):
+					if "http" in row:
+						continue
+					service_ref = row[9:].strip()
+					service_ref_split = service_ref.split(":")
+					if len(service_ref_split) < 10:
+						print "[Plex DVR API] [alternatives] Error in %s" % result.group(1)
+						continue
+					if int(service_ref_split[0], 16) != 1: # not a regular service. Might be IPTV.
+						continue
+					service_flags = int(service_ref_split[1])
+					if service_flags == 0: # normal service that can be fed directly into the "play"-handler.
+						return {"service_ref": service_ref, "service_ref_split": service_ref_split, "service_flags": service_flags}
 
 	def output(self):
 		return self.channel_numbers_names_and_refs
