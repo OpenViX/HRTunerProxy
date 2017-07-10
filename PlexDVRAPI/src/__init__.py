@@ -7,7 +7,7 @@ import struct
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
 
-tunerTypes = ('DVB-C', 'DVB-T', 'DVB-S')
+tunerTypes = ('DVB-C', 'DVB-T', 'DVB-S', 'multi')
 
 tunertypes = {
 	'DVB-C' : 'Cable',
@@ -33,7 +33,8 @@ tunerfolders = {
 porttypes = {
 	6081 : 'DVB-C',
 	6082 : 'DVB-T',
-	6083 : 'DVB-S'
+	6083 : 'DVB-S',
+	6084 : 'multi'
 	}
 
 def _ifinfo(sock, addr, ifname):
