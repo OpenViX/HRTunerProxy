@@ -4,11 +4,12 @@ from os import path, mkdir
 from sys import modules
 
 from enigma import eServiceReference
+from Components.config import config
 
 from . import tunerfolders
 
 class getLineup:
-	def __init__(self, duplicates = False):
+	def __init__(self, duplicates = False, single_bouquet = 'all'):
 		self.duplicates = duplicates
 		self.refs_added = []
 		self.path = "/etc/enigma2/"
@@ -17,10 +18,15 @@ class getLineup:
 		self.channelNames = {} # key SID:TSID:ONID:NAMESPACE in hex
 		self.bouquets_filenames = []
 		self.bouquets_flags = {}
+		self.bouquets_names = [] # contains tuple pairs, e.g. [(filename1, bouquet_name1), (filename1, bouquet_name1)]
 		self.channel_numbers_names_and_refs = []
 		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
 		self.read_services()
-		self.read_tv_index()
+		if single_bouquet != 'all':
+			self.bouquets_filenames.append(single_bouquet)
+			self.bouquets_flags[single_bouquet] = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
+		else:
+			self.read_tv_index()
 		self.read_tv_bouquets()
 
 	def read_services(self):
@@ -77,6 +83,7 @@ class getLineup:
 	def read_tv_bouquets(self):
 		channel_number = 0
 		for filename in self.bouquets_filenames:
+			name = ''
 			try:
 				bouquet = open(self.path + filename, "r")
 			except Exception, e:
@@ -86,7 +93,11 @@ class getLineup:
 			bouquet.close()
 
 			for row in content.split("\n"):
-				if row.startswith("#SERVICE "):
+				if name == '' and row.startswith("#NAME "):
+					if not (self.bouquets_flags[filename] & eServiceReference.isInvisible): # not invisible bouquet
+						name = row.strip()[6:]
+						self.bouquets_names.append((filename, name))
+				elif row.startswith("#SERVICE "):
 					if "http" in row:
 						channel_number += 1
 						continue
@@ -178,11 +189,18 @@ class getLineup:
 				self.lineup.append(self.data_tmp)
 		return self.lineup
 
+	def getBouquetsList(self):
+		return self.bouquets_names
+
 def noofchannels(dvb_type):
 	return len(lineupdata(dvbtype=dvb_type))
 
 def lineupdata(ipinput='0.0.0.0', dvbtype=''):
-	channel_numbers = getLineup()
+	channel_numbers = getLineup(single_bouquet=config.plexdvrapi.bouquets_list.value)
 	return channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
+
+def getBouquetsList():
+	lineup = getLineup()
+	return lineup.getBouquetsList()
 
 getlineup = modules[__name__]
