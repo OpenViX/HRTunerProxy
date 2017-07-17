@@ -12,6 +12,10 @@ class getLineup:
 	def __init__(self, duplicates = False, single_bouquet = 'all'):
 		self.duplicates = duplicates
 		self.refs_added = []
+		if hasattr(eServiceReference, 'isInvisible'):
+			self.isInvisible = eServiceReference.isInvisible
+		else:
+			self.isInvisible = 512
 		self.path = "/etc/enigma2/"
 		self.db = "lamedb"
 		self.tv_index = "bouquets.tv"
@@ -94,7 +98,7 @@ class getLineup:
 
 			for row in content.split("\n"):
 				if name == '' and row.startswith("#NAME "):
-					if not (self.bouquets_flags[filename] & eServiceReference.isInvisible): # not invisible bouquet
+					if not (self.bouquets_flags[filename] & self.isInvisible): # not invisible bouquet
 						name = row.strip()[6:]
 						self.bouquets_names.append((filename, name))
 				elif row.startswith("#SERVICE "):
@@ -120,7 +124,7 @@ class getLineup:
 					channel_number += 1 # everything below this point increments the channel number
 					if (service_flags & eServiceReference.isNumberedMarker):
 						continue
-					if (self.bouquets_flags[filename] & eServiceReference.isInvisible): # invisible bouquet
+					if (self.bouquets_flags[filename] & self.isInvisible): # invisible bouquet
 						continue
 					if int(service_ref_split[0], 16) != 1: # not a regular service. Might be IPTV.
 						continue
