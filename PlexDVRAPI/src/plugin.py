@@ -190,9 +190,12 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["key_yellow"].hide()
 		self["key_blue"].hide()
 
-		if getIP() == '0.0.0.0':
+		if getIP() == '0.0.0.0' or not config.plexdvrapi.type.value:
+			if getIP() == '0.0.0.0':
+				self["TunerInfoLabel"].setText(_('WARNING: No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to exit.'))
+			else:
+				self["TunerInfoLabel"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan or run ABM.\n\nPress OK to exit.'))
 			self["HintLabel"].hide()
-			self["TunerInfoLabel"].setText(_('No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to close'))
 			self["closeaction"].setEnabled(True)
 
 		elif self["config"].getCurrent() is not None:
