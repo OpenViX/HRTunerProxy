@@ -288,7 +288,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			configfile.save()
 			getdeviceinfo.write_discover(dvbtype=type)
 			if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
-				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to Plex Server.\n\nDo you want to do this now?"), type = MessageBox.TYPE_YESNO)
+				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to Plex Server.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 			else:
 				self.close()
 
