@@ -128,8 +128,8 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 		self.onChangedEntry = [ ]
 		self.list = []
-		self.list.append(getConfigListEntry(_('Tuner type to use.'), config.plexdvrapi.type))
-		self.list.append(getConfigListEntry(_('Bouquet to use.'), config.plexdvrapi.bouquets_list))
+		self.list.append(getConfigListEntry(_('Tuner type to use'), config.plexdvrapi.type))
+		self.list.append(getConfigListEntry(_('Bouquet to use'), config.plexdvrapi.bouquets_list))
 		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.populate)
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
@@ -192,9 +192,9 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 		if getIP() == '0.0.0.0' or not config.plexdvrapi.type.value:
 			if getIP() == '0.0.0.0':
-				self["TunerInfoLabel"].setText(_('WARNING: No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n\nPress OK to exit.'))
+				self["TunerInfoLabel"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet as Wi-Fi is not supported at this time.\n\nPress OK to exit.'))
 			else:
-				self["TunerInfoLabel"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan or run ABM.\n\nPress OK to exit.'))
+				self["TunerInfoLabel"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan.\n\nPress OK to exit.'))
 			self["HintLabel"].hide()
 			self["closeaction"].setEnabled(True)
 
@@ -210,33 +210,33 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				if getdeviceinfo.tunercount(type) < 2:
-					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.'))
+					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in Standby your Plex Server recordings WILL fail.'))
 					self["HintLabel"].setText(_('Press OK to continue setting up this tuner.'))
-					self.hinttext = _('Press GREEN button to save your configuration files.')
+					self.hinttext = _('Press GREEN to save your configuration files.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Save"))
 					self["key_yellow"].setText("")
 				else:
 					if not setup_exists:
-						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
+						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex Server you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
 					else:
-						self["TunerInfoLabel"].setText(_('Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?'))
-					if currentconfig == _('Tuner type to use.'):
+						self["TunerInfoLabel"].setText(_('Please note: To use another tuner type you need to setup/have another Plex Server. Are you sure you want to continue?'))
+					if currentconfig == _('Tuner type to use'):
 						self["HintLabel"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 					else:
 						self["HintLabel"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-					self.hinttext = self.hinttext + '\n'+_('Press GREEN button to save your configuration.')
+					self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Save"))
 					self["key_yellow"].setText("")
 			else:
-				if currentconfig == _('Tuner type to use.'):
+				if currentconfig == _('Tuner type to use'):
 					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 				else:
 					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-				self.hinttext = self.hinttext + '\n'+_('Press GREEN button to save your configuration.')
+				self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
 				self["key_green"].setText(_("Save"))
 				self["key_yellow"].setText(_("Delete"))
 				self.ok()
@@ -244,7 +244,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	def cleanfiles(self):
 		type = config.plexdvrapi.type.value
 		if path.exists('/etc/enigma2/%s.discover' % type):
-			self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none functional."), type = MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type? Doing so will cause the DVR in plex to be none functional."), type = MessageBox.TYPE_YESNO)
 
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
@@ -254,7 +254,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 				remove('/etc/enigma2/%s.discover' % type)
 			if path.exists('/etc/enigma2/%s.device' % type):
 				remove('/etc/enigma2/%s.device' % type)
-			self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files deleted, Please restart enigma2.\nDo you want to do this now ?"), type = MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files deleted. Please restart enigma2.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 
 	def ok(self):
 		self["okaction"].setEnabled(False)
@@ -270,7 +270,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 	def keySave(self):
 		if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
-			self.session.openWithCallback(self.saveconfirm, MessageBox,text = _("It seems you have already setup on another tuner, As Plex Server can only support one tuner type, to use this additional tuner type you will need to setup a 2nd Plex Server, do you want to continue creating the files?"), type = MessageBox.TYPE_YESNO)
+			self.session.openWithCallback(self.saveconfirm, MessageBox,text = _("It seems you have already set up another tuner. Plex Server can only support one tuner type. To use this additional tuner type you will need to setup another Plex Server. Do you want to continue creating the files?"), type = MessageBox.TYPE_YESNO)
 		else:
 			self.saveconfirm(True)
 
@@ -288,7 +288,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			configfile.save()
 			getdeviceinfo.write_discover(dvbtype=type)
 			if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
-				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created, Please restart enigma2 and then you should be able to add this STB to Plex DVR.\nDo you want to do this now ?"), type = MessageBox.TYPE_YESNO)
+				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to Plex Server.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 			else:
 				self.close()
 
@@ -349,7 +349,7 @@ def PlexDVRAPI_SetupMain(session, **kwargs):
 def startPlexDVRAPI_Setup(menuid):
 	if menuid != "system":
 		return []
-	return [( _("PlexDVR"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
+	return [( _("Plex DVR API"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
 
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()
@@ -357,6 +357,6 @@ def Plugins(**kwargs):
 		iconpic="plugin-hd.png"
 	else:
 		iconpic="plugin.png"
-	return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
+	return [PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
+			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
