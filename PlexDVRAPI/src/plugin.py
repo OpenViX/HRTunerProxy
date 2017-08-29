@@ -10,6 +10,7 @@ from Components.Button import Button
 from Components.config import config, configfile, ConfigSubsection, ConfigSelection, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
+from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
 
 from Plugins.Plugin import PluginDescriptor
@@ -85,10 +86,10 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		<widget name="config" position="10,10" size="580,50" scrollbarMode="showOnDemand" />
 		<widget name="TunerInfoLabel" position="10,70" size="580,185" font="Regular;22"/>
 		<widget name="HintLabel" position="10,200" size="580,75" font="Regular;22" valign="bottom"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="0,285" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/green.png" position="150,285" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/yellow.png" position="300,285" size="140,40" alphatest="on"/>
-		<ePixmap pixmap="skin_default/buttons/blue.png" position="450,285" size="140,40" alphatest="on"/>
+		<widget name="button_red" pixmap="buttons/red.png" position="0,285" size="140,40" alphatest="on"/>
+		<widget name="button_green" pixmap="buttons/green.png" position="150,285" size="140,40" alphatest="on"/>
+		<widget name="button_yellow" pixmap="buttons/yellow.png" position="300,285" size="140,40" alphatest="on"/>
+		<widget name="button_blue" pixmap="buttons/blue.png" position="450,285" size="140,40" alphatest="on"/>
 		<widget name="key_red" position="0,285" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
 		<widget name="key_green" position="150,285" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
 		<widget name="key_yellow" position="300,285" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
@@ -163,11 +164,18 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 		self["key_red"] = Button(_("Close"))
 		self["key_red"].hide()
+		self["button_red"] = Pixmap()
+		self["button_red"].hide()
 		self["key_green"] = Button()
 		self["key_green"].hide()
+		self["button_green"] = Pixmap()
+		self["button_green"].hide()
 		self["key_yellow"] = Button()
 		self["key_yellow"].hide()
+		self["button_yellow"] = Pixmap()
+		self["button_yellow"].hide()
 		self["key_blue"] = Button(_("About"))
+		self["button_blue"] = Pixmap()
 
 		assert PlexDVRAPI_Setup.instance is None, "class InfoBar is a singleton class and just one instance of this class is allowed!"
 		PlexDVRAPI_Setup.instance = self
@@ -191,6 +199,10 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["key_green"].hide()
 		self["key_yellow"].hide()
 		self["key_blue"].hide()
+		self["button_red"].hide()
+		self["button_green"].hide()
+		self["button_yellow"].hide()
+		self["button_blue"].hide()
 
 		if getIP() == '0.0.0.0' or not config.plexdvrapi.type.value:
 			if getIP() == '0.0.0.0':
@@ -268,6 +280,11 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["key_yellow"].show()
 		self["key_blue"].show()
 		self["HintLabel"].show()
+
+		self["button_red"].show()
+		self["button_green"].show()
+		self["button_yellow"].show()
+		self["button_blue"].show()
 
 
 	def keySave(self):
