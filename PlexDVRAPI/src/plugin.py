@@ -43,6 +43,8 @@ def TunerInfoDebug():
 		print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
 
 def TunerInfo():
+	global choicelist
+	choicelist = []
 	for type in tunerTypes:
 		if path.exists('/www/%s/lineup_status.json' % tunerfolders[type]):
 			remove('/www/%s/lineup_status.json' % tunerfolders[type])
