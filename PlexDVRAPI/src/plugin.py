@@ -224,7 +224,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				if getdeviceinfo.tunercount(type) < 2:
-					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.'))
+					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in Standby your Plex Server recordings WILL fail.'))
 					self["description"].setText(_('Press OK to continue setting up this tuner.'))
 					self.hinttext = _('Press GREEN to save your configuration files.')
 					self["okaction"].setEnabled(True)
@@ -234,8 +234,8 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 					if not setup_exists:
 						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex Server you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
 					else:
-						self["TunerInfoLabel"].setText(_('Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?'))
-					if currentconfig == _('Tuner type to use.'):
+						self["TunerInfoLabel"].setText(_('Please note: To use another tuner type you need to setup/have another Plex Server. Are you sure you want to continue?'))
+					if currentconfig == _('Tuner type to use'):
 						self["description"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 					else:
