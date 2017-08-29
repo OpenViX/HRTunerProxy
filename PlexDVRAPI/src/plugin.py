@@ -212,7 +212,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 				if getdeviceinfo.tunercount(type) < 2:
 					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.'))
 					self["HintLabel"].setText(_('Press OK to continue setting up this tuner.'))
-					self.hinttext = _('Press GREEN button to save your configuration files.')
+					self.hinttext = _('Press GREEN to save your configuration files.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Save"))
 					self["key_yellow"].setText("")
@@ -227,7 +227,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 					else:
 						self["HintLabel"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-					self.hinttext = self.hinttext + '\n'+_('Press GREEN button to save your configuration.')
+					self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Save"))
 					self["key_yellow"].setText("")
@@ -236,7 +236,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 				else:
 					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-				self.hinttext = self.hinttext + '\n'+_('Press GREEN button to save your configuration.')
+				self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
 				self["key_green"].setText(_("Save"))
 				self["key_yellow"].setText(_("Delete"))
 				self.ok()
@@ -349,7 +349,7 @@ def PlexDVRAPI_SetupMain(session, **kwargs):
 def startPlexDVRAPI_Setup(menuid):
 	if menuid != "system":
 		return []
-	return [( _("PlexDVR"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
+	return [( _("Plex DVR API"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
 
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()
@@ -357,6 +357,6 @@ def Plugins(**kwargs):
 		iconpic="plugin-hd.png"
 	else:
 		iconpic="plugin.png"
-	return [PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
-			PluginDescriptor(name = "Plex DVR API for Enigma2",description = "Setup Enigma2 for link with Plex DVR API", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
+	return [PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with Plex DVR", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with Plex DVR", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
+			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with Plex DVR", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
