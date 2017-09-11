@@ -9,7 +9,7 @@ from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
 
-PLUGIN_VERSION = '2.1'
+PLUGIN_VERSION = '2.2'
 
 class PlexDVRAPI_About(Screen):
 	skin="""
