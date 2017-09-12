@@ -84,7 +84,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	skin="""
 	<screen position="center,center" size="600,325">
 		<widget name="config" position="10,10" size="580,50" scrollbarMode="showOnDemand" />
-		<widget name="TunerInfoLabel" position="10,70" size="580,185" font="Regular;22"/>
+		<widget name="information" position="10,70" size="580,185" font="Regular;22"/>
 		<widget name="description" position="10,200" size="580,75" font="Regular;22" valign="bottom"/>
 		<widget name="button_red" pixmap="skin_default/buttons/red.png" position="0,285" size="140,40" alphatest="on"/>
 		<widget name="button_green" pixmap="skin_default/buttons/green.png" position="150,285" size="140,40" alphatest="on"/>
@@ -137,7 +137,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
-		self["TunerInfoLabel"] = Label()
+		self["information"] = Label()
 		self["description"] = Label()
 		self["actions"] = ActionMap(['ColorActions','OkCancelActions', 'DirectionActions'],
 									{
@@ -206,9 +206,9 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 		if getIP() == '0.0.0.0' or not config.plexdvrapi.type.value:
 			if getIP() == '0.0.0.0':
-				self["TunerInfoLabel"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet as Wi-Fi is not supported at this time.\n\nPress OK to exit.'))
+				self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet as Wi-Fi is not supported at this time.\n\nPress OK to exit.'))
 			else:
-				self["TunerInfoLabel"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan or run ABM.\n\nPress OK to exit.'))
+				self["information"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan or run ABM.\n\nPress OK to exit.'))
 			self["description"].hide()
 			self["closeaction"].setEnabled(True)
 
@@ -224,7 +224,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				if getdeviceinfo.tunercount(type) < 2:
-					self["TunerInfoLabel"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in Standby your Plex Server recordings WILL fail.'))
+					self["information"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in Standby your Plex Server recordings WILL fail.'))
 					self["description"].setText(_('Press OK to continue setting up this tuner.'))
 					self.hinttext = _('Press GREEN to save your configuration files.')
 					self["okaction"].setEnabled(True)
@@ -232,9 +232,9 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 					self["key_yellow"].setText("")
 				else:
 					if not setup_exists:
-						self["TunerInfoLabel"].setText(_('Please note: To use the DVR feature in Plex Server you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
+						self["information"].setText(_('Please note: To use the DVR feature in Plex Server you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
 					else:
-						self["TunerInfoLabel"].setText(_('Please note: To use another tuner type you need to setup/have another Plex Server. Are you sure you want to continue?'))
+						self["information"].setText(_('Please note: To use another tuner type you need to setup/have another Plex Server. Are you sure you want to continue?'))
 					if currentconfig == _('Tuner type to use'):
 						self["description"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
@@ -273,7 +273,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	def ok(self):
 		self["okaction"].setEnabled(False)
 		self["actions"].setEnabled(True)
-		self["TunerInfoLabel"].setText(self.label)
+		self["information"].setText(self.label)
 		self["description"].setText(self.hinttext)
 		self["description"].show()
 
