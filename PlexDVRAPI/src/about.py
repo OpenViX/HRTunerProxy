@@ -22,7 +22,7 @@ class PlexDVRAPI_About(Screen):
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
-			screentitle =  _("About Plex DRV API")
+			screentitle =  _("About Plex DVR API")
 			if config.usage.show_menupath.value == 'large':
 				menu_path += screentitle
 				title = menu_path
@@ -34,7 +34,7 @@ class PlexDVRAPI_About(Screen):
 				title = screentitle
 				self["menu_path_compressed"] = StaticText("")
 		else:
-			title =  _("About Plex DRV API")
+			title =  _("About Plex DVR API")
 		Screen.setTitle(self, title)
 
 		self["about"] = Label()
