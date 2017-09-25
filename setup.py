@@ -8,6 +8,6 @@ setup (name = 'enigma2-plugin-systemplugins-plexdvrapi',
        package_dir = {pkg: 'plugin'},
        packages = [pkg],
        package_data = {pkg: 
-           ['plugin.png', 'plugin-hd.png', 'locale/*/LC_MESSAGES/*.mo']},
+           ['plugin.png', 'plugin-hd.png', 'locale/*/LC_MESSAGES/*.mo', 'locale/*/LC_MESSAGES/*.po']},
        cmdclass = setup_translate.cmdclass, # for translation
       )
