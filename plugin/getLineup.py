@@ -1,12 +1,11 @@
 import re
 import json
+from urllib import unquote
 from os import path, mkdir
 from sys import modules
 
 from enigma import eServiceReference
 from Components.config import config
-
-from . import tunerfolders
 
 class getLineup:
 	def __init__(self, duplicates = False, single_bouquet = 'all'):
@@ -26,7 +25,7 @@ class getLineup:
 		self.channelNames = {} # key SID:TSID:ONID:NAMESPACE in hex
 		self.bouquets_filenames = []
 		self.bouquets_flags = {}
-		self.bouquets_names = [] # contains tuple pairs, e.g. [(filename1, bouquet_name1), (filename1, bouquet_name1)]
+		self.bouquets_names = [] # contains tuple pairs, e.g. [(filename1, bouquet_name1), (filename2, bouquet_name2)]
 		self.channel_numbers_names_and_refs = []
 		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
 		self.read_services()
@@ -100,15 +99,18 @@ class getLineup:
 			content = bouquet.read()
 			bouquet.close()
 
-			for row in content.split("\n"):
+			content_split = content.split("\n")
+			content_len = len(content_split)
+			for idx in range(content_len):
+				row = content_split[idx]
+				channel_name = ''
 				if name == '' and row.startswith("#NAME "):
 					if not (self.bouquets_flags[filename] & self.isInvisible): # not invisible bouquet
 						name = row.strip()[6:]
 						self.bouquets_names.append((filename, name))
 				elif row.startswith("#SERVICE "):
-					if "http" in row:
-						channel_number += 1
-						continue
+					if content_len > (idx + 1) and content_split[idx + 1].startswith("#DESCRIPTION "): # check if channel name exists in bouquets file
+						channel_name = content_split[idx + 1].strip()[13:]
 					service_ref = row[9:].strip()
 					service_ref_split = service_ref.split(":")
 					if len(service_ref_split) < 10:
@@ -130,7 +132,7 @@ class getLineup:
 						continue
 					if (self.bouquets_flags[filename] & self.isInvisible): # invisible bouquet (512)
 						continue
-					if int(service_ref_split[0], 16) != 1: # not a regular service. Might be IPTV.
+					if int(service_ref_split[0]) != 1: # not a regular service. Might be IPTV.
 						continue
 					if service_flags != 0: # not a normal service that can be fed directly into the "play"-handler.
 						continue
@@ -138,20 +140,28 @@ class getLineup:
 						continue
 					if service_ref in self.refs_added and not self.duplicates:
 						continue
-					self.refs_added.append(service_ref)
+					if "http" not in row: # not http stream
+						self.refs_added.append(service_ref)
 					sid = int(service_ref_split[3], 16)
 					tsid = int(service_ref_split[4], 16)
 					onid = int(service_ref_split[5], 16)
 					namespace = int(service_ref_split[6], 16)
 					key = "%x:%x:%x:%x" % (sid, tsid, onid, namespace)
-					if key not in self.channelNames:
+					if key not in self.channelNames and ("http" not in row or ("http" in row and channel_name == "")):
 						continue
-					self.channel_numbers_names_and_refs.append((str(channel_number), self.channelNames[key], service_ref, self.tunerType(namespace)))
+					if channel_name == "":
+						channel_name = self.channelNames[key]
+					if len(service_ref_split) > 10 and "http" in service_ref_split[10]: # http stream
+						http_link = unquote(service_ref_split[10].strip())
+						self.channel_numbers_names_and_refs.append((str(channel_number), channel_name, http_link, "iptv"))
+						continue
+					service_ref_clean = ':'.join(service_ref_split[:10]) + ":"
+					self.channel_numbers_names_and_refs.append((str(channel_number), channel_name, service_ref_clean, self.tunerType(namespace)))
 
 	def tunerType(self, namespace):
-		if (namespace / (16**4)) == 0xFFFF:
+		if (namespace >> 16) == 0xFFFF:
 			return "DVB-C"
-		if (namespace / (16**4)) == 0xEEEE:
+		if (namespace >> 16) == 0xEEEE:
 			return "DVB-T"
 		return "DVB-S"
 
@@ -193,7 +203,10 @@ class getLineup:
 				self.data_tmp = {}
 				self.data_tmp['GuideNumber']='%s' % c_n_r[0]
 				self.data_tmp['GuideName']='%s' % c_n_r[1]
-				self.data_tmp['URL']='http://%s:%d/%s' % (ip, port, c_n_r[2])
+				if "http" in c_n_r[2]:
+					self.data_tmp['URL'] = c_n_r[2]
+				else:
+					self.data_tmp['URL']='http://%s:%d/%s' % (ip, port, c_n_r[2])
 				self.lineup.append(self.data_tmp)
 		return self.lineup
 

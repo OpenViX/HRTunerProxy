@@ -75,7 +75,7 @@ class getDeviceInfo:
 		return discover
 
 def tunercount(dvbtype):
-	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype != "multi" else len(nimmanager.nimList())
+	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype not in ('multi','iptv') else len(nimmanager.nimList())
 
 def discoverdata(dvbtype):
 	device_info = getDeviceInfo()

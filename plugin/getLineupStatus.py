@@ -4,7 +4,7 @@ import json
 from os import path, mkdir
 from sys import modules
 
-from . import tunerTypes, tunertypes, tunerfolders
+from . import tunerTypes, tunertypes
 
 lineup_status = {}
 
