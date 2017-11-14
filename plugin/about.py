@@ -11,15 +11,15 @@ from Components.Sources.StaticText import StaticText
 from os import path
 
 def getVersion():
-	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/PlexDVRAPI/PLUGIN_VERSION"):
-		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/PlexDVRAPI/PLUGIN_VERSION")
+	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
+		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
 		PLUGIN_VERSION = f.read().replace('\n','')
 		f.close()
 	else:
 		PLUGIN_VERSION = _('unknown')
 	return PLUGIN_VERSION
 
-class PlexDVRAPI_About(Screen):
+class HRTunerProxy_About(Screen):
 	skin="""
 	<screen position="center,center" size="500,500">
 		<widget name="about" position="10,10" size="480,430" font="Regular;22"/>
@@ -30,7 +30,7 @@ class PlexDVRAPI_About(Screen):
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
-			screentitle =  _("About Plex DVR API")
+			screentitle =  _("About HR-Tuner Proxy")
 			if config.usage.show_menupath.value == 'large':
 				menu_path += screentitle
 				title = menu_path
@@ -42,7 +42,7 @@ class PlexDVRAPI_About(Screen):
 				title = screentitle
 				self["menu_path_compressed"] = StaticText("")
 		else:
-			title =  _("About Plex DVR API")
+			title =  _("About HR-Tuner Proxy")
 		Screen.setTitle(self, title)
 
 		self["about"] = Label()
@@ -55,7 +55,7 @@ class PlexDVRAPI_About(Screen):
 
 		self["key_red"] = Button(_("Close"))
 
-		credit = _("Plex DVR API for Enigma2 v%s (c) 2017 \n") % getVersion()
+		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2017 \n") % getVersion()
 		credit += "Andrew Blackburn & Rowland Huevos\n"
 		credit += "http://github.com/openvix\n\n"
 		credit += _("Application credits:\n")

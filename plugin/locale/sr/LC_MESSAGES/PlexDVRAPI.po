@@ -55,7 +55,7 @@ msgstr ""
 msgid "Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass"
 msgstr ""
 
-msgid "Plex DVR API for Enigma2"
+msgid "HR-Tuner Proxy for Enigma2"
 msgstr ""
 
 msgid "PlexDVR"

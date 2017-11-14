@@ -18,7 +18,7 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
 from . import _, tunerTypes, tunerfolders, tunerports, getIP
-from about import PlexDVRAPI_About
+from about import HRTunerProxy_About
 from enigma import getDesktop
 from getLineup import getlineup, getBouquetsList
 from getDeviceInfo import getdeviceinfo
@@ -38,18 +38,18 @@ choicelist = []
 
 def TunerInfoDebug(type=None):
 	if type:
-		print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
-		print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
-		print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
-		print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
-		print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+		print '[HRTunerProxy] %s' % str(BaseURL[type]).replace('\n','')
+		print '[HRTunerProxy] %s' % str(FriendlyName[type]).replace('\n','')
+		print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
+		print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
+		print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
 	else:
 		for type in tunerTypes:
-			print '[Plex DVR API] %s' % str(BaseURL[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(FriendlyName[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(Source[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(TunerCount[type]).replace('\n','')
-			print '[Plex DVR API] %s' % str(NoOfChannels[type]).replace('\n\n','')
+			print '[HRTunerProxy] %s' % str(BaseURL[type]).replace('\n','')
+			print '[HRTunerProxy] %s' % str(FriendlyName[type]).replace('\n','')
+			print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
+			print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
+			print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
 
 def TunerInfo():
 	global choicelist
@@ -79,7 +79,7 @@ def TunerInfo():
 TunerInfo()
 TunerInfoDebug()
 config.plexdvrapi.type = ConfigSelection(choices = choicelist)
-print '[Plex DVR API] Using Tuner: %s' % str(config.plexdvrapi.type.value)
+print '[HRTunerProxy] Using Tuner: %s' % str(config.plexdvrapi.type.value)
 
 tunerTypes = []
 for type in config.plexdvrapi.type.choices.choices:
@@ -88,7 +88,7 @@ for type in config.plexdvrapi.type.choices.choices:
 if path.exists('/www') and not listdir('/www'):
 	rmdir('/www')
 
-class PlexDVRAPI_Setup(ConfigListScreen, Screen):
+class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	skin="""
 	<screen position="center,center" size="600,350">
 		<widget name="config" position="10,10" size="580,75" scrollbarMode="showOnDemand" />
@@ -108,7 +108,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		instance = None
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
-			screentitle =  _("Plex DVR API for Enigma2")
+			screentitle =  _("HR-Tuner Proxy for Enigma2")
 			self.menu_path = menu_path
 			if config.usage.show_menupath.value == 'large':
 				self.menu_path += screentitle
@@ -128,7 +128,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 				title = screentitle
 				self["menu_path_compressed"] = StaticText("")
 		else:
-			title =  _("Plex DVR API for Enigma2")
+			title =  _("HR-Tuner Proxy for Enigma2")
 			self.menu_path = ""
 		Screen.setTitle(self, title)
 		TunerInfo()
@@ -181,17 +181,17 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 		self["key_blue"] = Button(_("About"))
 		self["button_blue"] = Pixmap()
 
-		assert PlexDVRAPI_Setup.instance is None, "class is a singleton class and just one instance of this class is allowed!"
-		PlexDVRAPI_Setup.instance = self
+		assert HRTunerProxy_Setup.instance is None, "class is a singleton class and just one instance of this class is allowed!"
+		HRTunerProxy_Setup.instance = self
 
 		self.onLayoutFinish.append(self.populate)
 		self.onClose.append(self.__onClose)
 
 	def __onClose(self):
-		PlexDVRAPI_Setup.instance = None
+		HRTunerProxy_Setup.instance = None
 
 	def about(self):
-		self.session.open(PlexDVRAPI_About, self.menu_path)
+		self.session.open(HRTunerProxy_About, self.menu_path)
 
 	def createmenu(self):
 		self.list = []
@@ -280,7 +280,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
 			type = config.plexdvrapi.type.value
-			print '[Plex DVR API] Deleting files for %s' % type
+			print '[HRTunerProxy] Deleting files for %s' % type
 			if path.exists('/etc/enigma2/%s.discover' % type):
 				remove('/etc/enigma2/%s.discover' % type)
 			if path.exists('/etc/enigma2/%s.device' % type):
@@ -317,7 +317,7 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			newsetup = False
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				newsetup = True
-			print '[Plex DVR API] Creating files for %s' % type
+			print '[HRTunerProxy] Creating files for %s' % type
 			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
 				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.plexdvrapi.type.save()
@@ -348,14 +348,14 @@ class PlexDVRAPI_Setup(ConfigListScreen, Screen):
 			self.close()
 
 def updateTunerInfo(value):
-		PlexDVRAPI_Setup.instance.populate()
+		HRTunerProxy_Setup.instance.populate()
 if not config.plexdvrapi.type.notifiers:
 	config.plexdvrapi.type.addNotifier(updateTunerInfo, initial_call = False)
 
 def startssdp(dvbtype):
 	discover = getdeviceinfo.discoverdata(dvbtype)
 	device_uuid = discover['DeviceUUID']
-	print '[Plex DVR API] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
+	print '[HRTunerProxy] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
 	local_ip_address = getIP()
 	ssdp = SSDPServer()
 	ssdp.register('local',
@@ -367,12 +367,12 @@ def startssdp(dvbtype):
 	thread_ssdp.start()
 
 def starthttpserver(dvbtype):
-	print '[Plex DVR API] Starting HTTPServer for %s' % dvbtype
+	print '[HRTunerProxy] Starting HTTPServer for %s' % dvbtype
 	thread_http = threading.Thread(target=server.run, args=(dvbtype,))
 	thread_http.daemon = True # Daemonize thread
 	thread_http.start()
 
-def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
+def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 	if reason == 0:
 		for type in tunerTypes:
 			if path.exists('/etc/enigma2/%s.discover' % type):
@@ -380,13 +380,13 @@ def PlexDVRAPI_AutoStart(reason, session=None, **kwargs):
 			if path.exists('/etc/enigma2/%s.device' % type):
 				startssdp(type)
 
-def PlexDVRAPI_SetupMain(session, **kwargs):
-	session.open(PlexDVRAPI_Setup)
+def HRTunerProxy_SetupMain(session, **kwargs):
+	session.open(HRTunerProxy_Setup)
 
-def startPlexDVRAPI_Setup(menuid):
+def startHRTunerProxy_Setup(menuid):
 	if menuid != "system":
 		return []
-	return [( _("Plex DVR API"), PlexDVRAPI_SetupMain, "plexdvr_setup", None)]
+	return [( _("HR-Tuner Proxy"), HRTunerProxy_SetupMain, "dvr_setup", None)]
 
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()
@@ -394,6 +394,6 @@ def Plugins(**kwargs):
 		iconpic="plugin-hd.png"
 	else:
 		iconpic="plugin.png"
-	return [PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=PlexDVRAPI_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=PlexDVRAPI_SetupMain),
-			PluginDescriptor(name = "Plex DVR API",description = "Setup Enigma2 to link with a Plex Server DVR", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startPlexDVRAPI_Setup)]
+	return [PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
+			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startHRTunerProxy_Setup)]

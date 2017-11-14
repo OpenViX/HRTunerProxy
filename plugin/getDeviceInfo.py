@@ -93,9 +93,12 @@ def write_discover(dvbtype="DVB-S"):
 		return
 
 def devicedata(dvbtype):
-	datafile = open('/etc/enigma2/%s.device' % dvbtype,'r')
-	xmldoc = datafile.read()
-	datafile.close()
+	if path.exists('/etc/enigma2/%s.device' % dvbtype):
+		datafile = open('/etc/enigma2/%s.device' % dvbtype,'r')
+		xmldoc = datafile.read()
+		datafile.close()
+	else:
+		xmldoc = ""
 	return xmldoc
 
 def write_device_xml(dvbtype):

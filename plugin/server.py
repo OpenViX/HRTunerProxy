@@ -27,7 +27,7 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 					break
 			self.port = int(host.split(':')[2])
 		except:
-			print '[Plex DVR API] USING DEFAULT PORT'
+			print '[HRTunerProxy] USING DEFAULT PORT'
 			self.port = 6081
 		tunertype = porttypes[self.port]
 
@@ -64,8 +64,8 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 			self.end_headers()
 			self.wfile.write(getdeviceinfo.devicedata(tunertype))
 		else:
-			self.send_error(404,'[Plex DVR API] File not found!')
-			print '[Plex DVR API] file type not coded:',self.path
+			self.send_error(404,'[HRTunerProxy] File not found!')
+			print '[HRTunerProxy] file type not coded:',self.path
 			return
 
 def run(dvbtype):
@@ -77,7 +77,7 @@ def startserver(ip_address='', port=''):
 	server_address = (ip_address, int(port))
 	httpd = RootedHTTPServer(server_address, RootedHTTPRequestHandler)
 	sa = httpd.socket.getsockname()
-	print "[Plex DVR API] Serving HTTP on %s port %s" % (str(sa[0]),str(sa[1]))
+	print "[HRTunerProxy] Serving HTTP on %s port %s" % (str(sa[0]),str(sa[1]))
 	httpd.serve_forever()
 
 

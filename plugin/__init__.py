@@ -81,8 +81,8 @@ def getIP():
 		IP = eth['addr']
 	return '%s' % IP
 
-PluginLanguageDomain = "PlexDVRAPI"
-PluginLanguagePath = "SystemPlugins/PlexDVRAPI/locale"
+PluginLanguageDomain = "HRTunerProxy"
+PluginLanguagePath = "SystemPlugins/HRTunerProxy/locale"
 
 def localeInit():
 	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))

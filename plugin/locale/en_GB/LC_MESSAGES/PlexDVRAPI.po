@@ -61,8 +61,8 @@ msgstr "Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex S
 msgid "Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass"
 msgstr "Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass"
 
-msgid "Plex DVR API for Enigma2"
-msgstr "Plex DVR API for Enigma2"
+msgid "HR-Tuner Proxy for Enigma2"
+msgstr "HR-Tuner Proxy for Enigma2"
 
 msgid "PlexDVR"
 msgstr "PlexDVR"

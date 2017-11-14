@@ -114,7 +114,7 @@ class getLineup:
 					service_ref = row[9:].strip()
 					service_ref_split = service_ref.split(":")
 					if len(service_ref_split) < 10:
-						print "[Plex DVR API] [read_tv_bouquets] Error in %s" % filename
+						print "[HRTunerProxy] [read_tv_bouquets] Error in %s" % filename
 						continue
 					service_flags = int(service_ref_split[1])
 					if service_flags == (eServiceReference.mustDescent|eServiceReference.canDescent|eServiceReference.isGroup): # alternatives (134)
@@ -182,7 +182,7 @@ class getLineup:
 					service_ref = row[9:].strip()
 					service_ref_split = service_ref.split(":")
 					if len(service_ref_split) < 10:
-						print "[Plex DVR API] [alternatives] Error in %s" % result.group(1)
+						print "[HRTunerProxy] [alternatives] Error in %s" % result.group(1)
 						continue
 					if int(service_ref_split[0], 16) != 1: # not a regular service. Might be IPTV.
 						continue
