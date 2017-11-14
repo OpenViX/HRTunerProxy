@@ -66,19 +66,18 @@ def getIfConfig(ifname):
 	sock.close()
 	return ifreq
 
-def getIF():
-	eth0 = getIfConfig('eth0')
-	eth1 = getIfConfig('eth1')
-	if eth0.has_key('addr'):
-		return 'eth0'
-	elif eth1.has_key('addr'):
-		return 'eth1'
+def getIfInfo():
+	for port in ('eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'wlan3', 'ra0'):
+		ifinfo = getIfConfig(port)
+		if ifinfo.has_key('addr'):
+			return ifinfo
+	return None
 
 def getIP():
 	IP = '0.0.0.0'
-	eth = getIfConfig(getIF())
-	if eth.has_key('addr'):
-		IP = eth['addr']
+	ifinfo = getIfInfo()
+	if ifinfo:
+		IP = ifinfo['addr']
 	return '%s' % IP
 
 PluginLanguageDomain = "HRTunerProxy"
