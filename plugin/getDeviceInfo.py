@@ -7,6 +7,7 @@ from sys import modules
 
 from Components.About import about
 from Components.NimManager import nimmanager
+from Components.config import config
 
 try:
 	from boxbranding import getMachineName, getDriverDate, getBoxType, getMachineBrand, getImageDistro
@@ -74,8 +75,63 @@ class getDeviceInfo:
 		discover['TunerCount']=tunercount(dvb_type)
 		return discover
 
+	def tunersInUse(self):
+		# returns list of nim.slot numbers that are currenly in use
+		mask = config.plexdvrapi.slotsinuse.value
+		print "[HRTunerProxy] mask:%s\n" % mask
+		slots = []
+		for i in range(len(format(mask, 'b'))):
+			if (mask >> i) & 0x1:
+				slots.append(i)
+		return slots
+
+	def getTunerInfo(self, dvb_type):
+		nimList = getNimList(dvb_type)
+		tunersInUse = self.tunersInUse()
+		print "[HRTunerProxy] tunersInUse", tunersInUse
+		tunerstatus = {}
+		x = 0
+		for nim in nimList:
+			status = _("In use") if nim in tunersInUse else "none"
+			tunerstatus["tuner%s" % x] = status
+			x += 1
+		return tunerstatus
+
+
+def getNimList(dvbtype):
+	return nimmanager.getNimListOfType(dvbtype) if dvbtype not in ('multi','iptv') else nimmanager.nimList()
+
 def tunercount(dvbtype):
 	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype not in ('multi','iptv') else len(nimmanager.nimList())
+
+def tunerdata(dvbtype):
+	device_info = getDeviceInfo()
+	output = device_info.getTunerInfo(dvbtype)
+	return output
+
+def tunerstatus(dvbtype):
+	discover = discoverdata(dvbtype=dvbtype)
+	ts = tunerdata(dvbtype)
+	data = """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Tuner Status</title>
+<link rel="stylesheet" type="text/css" href="/style.css" />
+</head>
+<body>
+<div class="B C" style="background: #c0c0c0">
+<a href="/"><div class="T">%s</div></a>
+<div class="S">Tuner Status</div>
+<table>
+""" % discover['FriendlyName']
+	for x in range(tunercount(dvbtype)):
+		data += "<tr><td>Tuner %s Channel</td><td>%s</td></tr>\n" % (x,ts["tuner%s" % x])
+	data += """</table>
+</div>
+</body>
+</html>"""
+	return data
 
 def discoverdata(dvbtype):
 	device_info = getDeviceInfo()

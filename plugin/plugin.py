@@ -7,7 +7,7 @@ from shutil import rmtree
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
-from Components.config import config, configfile, ConfigSubsection, ConfigSelection, getConfigListEntry, ConfigSelectionNumber
+from Components.config import config, configfile, ConfigSubsection, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, NoSave
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -19,7 +19,7 @@ from Screens.MessageBox import MessageBox
 
 from . import _, tunerTypes, tunerfolders, tunerports, getIP
 from about import HRTunerProxy_About
-from enigma import getDesktop
+from enigma import getDesktop, eDVBResourceManager
 from getLineup import getlineup, getBouquetsList
 from getDeviceInfo import getdeviceinfo
 from ssdp import SSDPServer
@@ -28,6 +28,7 @@ from server import server
 config.plexdvrapi = ConfigSubsection()
 config.plexdvrapi.bouquets_list = ConfigSelection(default = "all", choices = [('all', _('All'))] + getBouquetsList())
 config.plexdvrapi.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
+config.plexdvrapi.slotsinuse = NoSave(ConfigNumber(default = ""))
 
 BaseURL = {}
 FriendlyName = {}
@@ -347,6 +348,15 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		else:
 			self.close()
 
+class TunerMask():
+	def __init__(self):
+		res_mgr = eDVBResourceManager.getInstance()
+		if res_mgr:
+			res_mgr.frontendUseMaskChanged.get().append(self.tunerUseMaskChanged)
+
+	def tunerUseMaskChanged(self, mask):
+		config.plexdvrapi.slotsinuse.setValue(mask)
+
 def updateTunerInfo(value):
 		HRTunerProxy_Setup.instance.populate()
 if not config.plexdvrapi.type.notifiers:
@@ -379,6 +389,7 @@ def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 				starthttpserver(type)
 			if path.exists('/etc/enigma2/%s.device' % type):
 				startssdp(type)
+			TunerMask()
 
 def HRTunerProxy_SetupMain(session, **kwargs):
 	session.open(HRTunerProxy_Setup)

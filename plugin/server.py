@@ -40,6 +40,8 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 			mimeType = 'application/javascript'
 		elif self.path.endswith(".xml"):
 			mimeType = 'application/xml'
+		elif self.path.endswith(".css"):
+			mimeType = 'text/css'
 		elif self.path.endswith(".ico"):
 			mimeType = 'image/x-icon'
 
@@ -63,6 +65,35 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
 			self.wfile.write(getdeviceinfo.devicedata(tunertype))
+		elif self.path.endswith("tuners.html"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write(getdeviceinfo.tunerstatus(tunertype))
+		elif self.path.endswith("style.css"):
+			self.send_response(200)
+			self.send_header('Content-type', mimeType)
+			self.end_headers()
+			self.wfile.write("""html { width:100%; height: 100%;}
+body {background: #777 url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMSAxIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmFkaWFsR3JhZGllbnQgaWQ9InJnIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjA2Yzg4IiBzdG9wLW9wYWNpdHk9IjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxMzE3MjEiIHN0b3Atb3BhY2l0eT0iMSIvPjwvcmFkaWFsR3JhZGllbnQ+PHJlY3QgeD0iLTUwIiB5PSItNTAiIHdpZHRoPSIxMDEiIGhlaWdodD0iMTAxIiBmaWxsPSJ1cmwoI3JnKSIgLz48L3N2Zz4K) no-repeat center center fixed;background-size: cover;font-family: sans-serif;}
+.B {background: #fff;margin: 9.5em;border: 3px solid #000;box-shadow: 10px 10px 50px #000;display: table}
+.C, .W {margin: auto;margin-top: 1em;padding: 10px;}
+.C {width: 21em;}
+.W {width: 80em;}
+.S, .T {color: #fff;margin: -10px -10px 10px -10px;}
+.S {background: #393;padding: 2px 20px;font-size: 0.8em;}
+.T {background: #000;padding-left: 20px;font-weight: 700;}
+.TE {background: #a00;}
+.BE {background: #f00;color: #fff;border-color:#a00;}
+a {text-decoration: none;}
+a:hover {text-decoration: underline;}
+a,a:visited {color: #00f;}
+table {width: inherit;}
+td img {margin-right:5px;}
+.L * {border-bottom: 1px solid black;}
+td {white-space: nowrap;}
+td:first-child {text-align: center;}
+button { margin-top: 0.25em; }""")
 		else:
 			self.send_error(404,'[HRTunerProxy] File not found!')
 			print '[HRTunerProxy] file type not coded:',self.path
