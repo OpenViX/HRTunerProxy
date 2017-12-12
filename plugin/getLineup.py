@@ -132,7 +132,7 @@ class getLineup:
 						continue
 					if (self.bouquets_flags[filename] & self.isInvisible): # invisible bouquet (512)
 						continue
-					if int(service_ref_split[0]) != 1: # not a regular service. Might be IPTV.
+					if int(service_ref_split[0]) not in (1, 4097): # not a regular service. Might be IPTV.
 						continue
 					if service_flags != 0: # not a normal service that can be fed directly into the "play"-handler.
 						continue
@@ -199,7 +199,7 @@ class getLineup:
 		self.lineup = []
 
 		for c_n_r in output:
-			if dvb_type == 'multi' or c_n_r[3] == dvb_type:
+			if dvb_type in ('multi', 'iptv', c_n_r[3]):
 				self.data_tmp = {}
 				self.data_tmp['GuideNumber']='%s' % c_n_r[0]
 				self.data_tmp['GuideName']='%s' % c_n_r[1]

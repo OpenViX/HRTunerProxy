@@ -2,7 +2,7 @@ from distutils.core import setup
 import setup_translate
 
 pkg = 'SystemPlugins.HRTunerProxy'
-setup (name = 'enigma2-plugin-systemplugins-plexdvrapi',
+setup (name = 'enigma2-plugin-systemplugins-hrtunerproxy',
        version = '3.0',
        description = 'HRTunerProxy',
        package_dir = {pkg: 'plugin'},
