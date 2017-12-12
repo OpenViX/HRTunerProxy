@@ -217,7 +217,7 @@ def noofchannels(dvb_type):
 	return len(lineupdata(dvbtype=dvb_type))
 
 def lineupdata(ipinput='0.0.0.0', dvbtype=''):
-	channel_numbers = getLineup(single_bouquet=config.plexdvrapi.bouquets_list.value)
+	channel_numbers = getLineup(single_bouquet=config.hrtunerproxy.bouquets_list[dvbtype].value)
 	return channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
 
 def getBouquetsList():

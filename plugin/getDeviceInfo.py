@@ -77,7 +77,7 @@ class getDeviceInfo:
 
 	def tunersInUse(self):
 		# returns list of nim.slot numbers that are currenly in use
-		mask = config.plexdvrapi.slotsinuse.value
+		mask = config.hrtunerproxy.slotsinuse.value
 		print "[HRTunerProxy] mask:%s\n" % mask
 		slots = []
 		for i in range(len(format(mask, 'b'))):

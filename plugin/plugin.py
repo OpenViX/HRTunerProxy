@@ -7,7 +7,7 @@ from shutil import rmtree
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
-from Components.config import config, configfile, ConfigSubsection, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, NoSave
+from Components.config import config, configfile, ConfigSubsection, ConfigSubDict, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, NoSave
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -25,10 +25,12 @@ from getDeviceInfo import getdeviceinfo
 from ssdp import SSDPServer
 from server import server
 
-config.plexdvrapi = ConfigSubsection()
-config.plexdvrapi.bouquets_list = ConfigSelection(default = "all", choices = [('all', _('All'))] + getBouquetsList())
-config.plexdvrapi.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
-config.plexdvrapi.slotsinuse = NoSave(ConfigNumber(default = ""))
+config.hrtunerproxy = ConfigSubsection()
+config.hrtunerproxy.bouquets_list = ConfigSubDict()
+for type in tunerTypes:
+	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = "all", choices = [('all', _('All'))] + getBouquetsList())
+config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
+config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
 
 BaseURL = {}
 FriendlyName = {}
@@ -44,6 +46,7 @@ def TunerInfoDebug(type=None):
 		print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
 		print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
 		print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
+		print '[HRTunerProxy] Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value
 	else:
 		for type in tunerTypes:
 			print '[HRTunerProxy] %s' % str(BaseURL[type]).replace('\n','')
@@ -51,6 +54,7 @@ def TunerInfoDebug(type=None):
 			print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
 			print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
 			print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
+			print '[HRTunerProxy] Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value
 
 def TunerInfo():
 	global choicelist
@@ -70,7 +74,7 @@ def TunerInfo():
 		discover = getdeviceinfo.discoverdata(type)
 		BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
 		FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
-		TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type)) if type != 'iptv' else 'TunerCount: %s\n' % str(config.plexdvrapi.iptv_tunercount.value)
+		TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type)) if type != 'iptv' else 'TunerCount: %s\n' % str(config.hrtunerproxy.iptv_tunercount.value)
 		Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else str(tunerfolders[type]).upper()
 		NoOfChannels[type] = 'Channels: %s\n\n' % str(getlineup.noofchannels(type))
 
@@ -79,11 +83,11 @@ def TunerInfo():
 
 TunerInfo()
 TunerInfoDebug()
-config.plexdvrapi.type = ConfigSelection(choices = choicelist)
-print '[HRTunerProxy] Using Tuner: %s' % str(config.plexdvrapi.type.value)
+config.hrtunerproxy.type = ConfigSelection(default = "multi", choices = choicelist)
+print '[HRTunerProxy] Using Tuner: %s' % str(config.hrtunerproxy.type.value)
 
 tunerTypes = []
-for type in config.plexdvrapi.type.choices.choices:
+for type in config.hrtunerproxy.type.choices.choices:
 	tunerTypes.append(type[0])
 
 if path.exists('/www') and not listdir('/www'):
@@ -135,8 +139,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		TunerInfo()
 		TunerInfoDebug()
 
-		self.savedval = config.plexdvrapi.type.value
-		config.plexdvrapi.bouquets_list.setChoices([('all', _('All'))] + getBouquetsList())
+		self.savedval = config.hrtunerproxy.type.value
 
 		self.onChangedEntry = [ ]
 		self.list = []
@@ -196,10 +199,10 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 
 	def createmenu(self):
 		self.list = []
-		self.list.append(getConfigListEntry(_('Tuner type to use.'), config.plexdvrapi.type))
-		self.list.append(getConfigListEntry(_('Bouquet to use.'), config.plexdvrapi.bouquets_list))
-		if config.plexdvrapi.type.value == 'iptv':
-			self.list.append(getConfigListEntry(_('Number of concurent streams.'), config.plexdvrapi.iptv_tunercount))
+		self.list.append(getConfigListEntry(_('Tuner type to use.'), config.hrtunerproxy.type))
+		self.list.append(getConfigListEntry(_('Bouquet to use.'), config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value]))
+		if config.hrtunerproxy.type.value == 'iptv':
+			self.list.append(getConfigListEntry(_('Number of concurent streams.'), config.hrtunerproxy.iptv_tunercount))
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -216,7 +219,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["button_yellow"].hide()
 		self["button_blue"].hide()
 
-		if getIP() == '0.0.0.0' or not config.plexdvrapi.type.value:
+		if getIP() == '0.0.0.0' or not config.hrtunerproxy.type.value:
 			if getIP() == '0.0.0.0':
 				self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet as Wi-Fi is not supported at this time.\n\nPress OK to exit.'))
 			else:
@@ -225,7 +228,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			self["closeaction"].setEnabled(True)
 
 		elif self["config"].getCurrent() is not None:
-			type = config.plexdvrapi.type.value
+			type = config.hrtunerproxy.type.value
 			currentconfig = self["config"].getCurrent()[0]
 
 			TunerInfo()
@@ -274,13 +277,13 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 				self.ok()
 
 	def cleanfiles(self):
-		type = config.plexdvrapi.type.value
+		type = config.hrtunerproxy.type.value
 		if path.exists('/etc/enigma2/%s.discover' % type):
 			self.session.openWithCallback(self.cleanconfirm, MessageBox,text = _("Do you really want to remove the files for this tuner type? Doing so will cause the DVR in plex to be none functional."), type = MessageBox.TYPE_YESNO)
 
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
-			type = config.plexdvrapi.type.value
+			type = config.hrtunerproxy.type.value
 			print '[HRTunerProxy] Deleting files for %s' % type
 			if path.exists('/etc/enigma2/%s.discover' % type):
 				remove('/etc/enigma2/%s.discover' % type)
@@ -307,25 +310,25 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 
 
 	def keySave(self):
-		if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
+		if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
 			self.session.openWithCallback(self.saveconfirm, MessageBox,text = _("It seems you have already set up another tuner. Plex Server can only support one tuner type. To use this additional tuner type you will need to setup another Plex Server. Do you want to continue creating the files?"), type = MessageBox.TYPE_YESNO)
 		else:
 			self.saveconfirm(True)
 
 	def saveconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
-			type = config.plexdvrapi.type.value
+			type = config.hrtunerproxy.type.value
 			newsetup = False
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				newsetup = True
 			print '[HRTunerProxy] Creating files for %s' % type
 			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
 				getdeviceinfo.write_device_xml(dvbtype=type)
-				config.plexdvrapi.type.save()
-			config.plexdvrapi.bouquets_list.save()
+				config.hrtunerproxy.type.save()
+			config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value].save()
 			configfile.save()
 			getdeviceinfo.write_discover(dvbtype=type)
-			if self.savedval != config.plexdvrapi.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
+			if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
 				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to Plex Server.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 			else:
 				self.close()
@@ -355,12 +358,12 @@ class TunerMask():
 			res_mgr.frontendUseMaskChanged.get().append(self.tunerUseMaskChanged)
 
 	def tunerUseMaskChanged(self, mask):
-		config.plexdvrapi.slotsinuse.setValue(mask)
+		config.hrtunerproxy.slotsinuse.setValue(mask)
 
 def updateTunerInfo(value):
 		HRTunerProxy_Setup.instance.populate()
-if not config.plexdvrapi.type.notifiers:
-	config.plexdvrapi.type.addNotifier(updateTunerInfo, initial_call = False)
+if not config.hrtunerproxy.type.notifiers:
+	config.hrtunerproxy.type.addNotifier(updateTunerInfo, initial_call = False)
 
 def startssdp(dvbtype):
 	discover = getdeviceinfo.discoverdata(dvbtype)
