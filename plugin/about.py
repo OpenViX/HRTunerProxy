@@ -55,7 +55,7 @@ class HRTunerProxy_About(Screen):
 
 		self["key_red"] = Button(_("Close"))
 
-		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2017 \n") % getVersion()
+		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n") % getVersion()
 		credit += "Andrew Blackburn & Rowland Huevos\n"
 		credit += "http://github.com/openvix\n\n"
 		credit += _("Application credits:\n")
