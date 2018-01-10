@@ -1,0 +1,104 @@
+# Dutch translations for enigma2-openvix-plugins package.
+# Copyright (C) 2017 THE enigma2-openvix-plugins'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the enigma2-openvix-plugins package.
+# Automatically generated, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: enigma2-openvix-plugins 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-06 12:43+0100\n"
+"PO-Revision-Date: 2018-01-10 16:21+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: AdnyBlac/Rob van der Does\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.0.5\n"
+
+msgid "About"
+msgstr "Over"
+
+msgid "Close"
+msgstr "Sluit"
+
+msgid "Create"
+msgstr "Creëer"
+
+msgid "Do you really want to remove the files for this tuner type?, doing so will cause the DVR in plex to be none functional."
+msgstr "Wilt u echt de bestanden voor dit tunertype verwijderen? Dit zorgt ervoor dat de PVR in Plex niet meer werkt."
+
+msgid "Enigma2"
+msgstr "Enigma2"
+
+msgid "Enigma2 STB"
+msgstr "Enigma2 STB"
+
+msgid ""
+"Files created, Please restart enigma2 and then you should be able to add this STB to Plex DVR.\n"
+"Do you want to do this now ?"
+msgstr ""
+"Bestanden gecreëerd; herstart Enigma2 waarna deze ontvanger aan de Plex-PVR kan worden toegevoegd.\n"
+"Wilt u dit nu doen?"
+
+msgid "It seems you have already setup on another tuner, As Plex Server can only support one tuner type, to use this additional tuner type you will need to setup a 2nd Plex Server, do you want to continue creating the files?"
+msgstr "Het lijkt er op dat u al een andere tuner heeft ingesteld. Omdat de Plex-server slechts één tunertype ondersteunt, zult u om dit type te kunnen gebruiken een tweede Plexserver moeten instellen. Wilt u nu doorgaan met het instellen van de bestanden?"
+
+msgid ""
+"No IP address found, please make sure you are connected to your LAN via ethernet, wifi is not supported at this time.\n"
+"\n"
+"Press OK to close"
+msgstr ""
+"Geen IP-adres gevonden. Controleer of uw box met uw LAN verbonden is, want WiFi wordt momenteel niet ondersteund.\n"
+"\n"
+"Druk op 'OK' om dit scherm te sluiten."
+
+msgid "Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex Server, are you sure you want to continue?"
+msgstr "Let op: om een tweede tunertype te gebruiken, moet u een tweede Plexserver gebruiken. Weet u zeker dat u wilt doorgaan?"
+
+msgid "Please note: To use the DVR feature in Plex, you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass"
+msgstr "Let op: om de PVR-functionaliteit in Plex te gebruiken, moet u een 'Plex Pass gebruiker' zijn. Voor meer informatie over Plex zie https://www.plex.tv/features/plex-pass"
+
+msgid "HR-Tuner Proxy for Enigma2"
+msgstr "HR-Tuner Proxy voor Enigma2"
+
+msgid "PlexDVR"
+msgstr "PlexDVR"
+
+msgid ""
+"Press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to create your configuration files."
+msgstr ""
+"Druk op LINKS/RECHTS om een ander tunertype te selecteren.\n"
+"Druk op GROEN om uw configuratiebestanden te creëren."
+
+msgid ""
+"Press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to update your configuration files."
+msgstr ""
+"Druk op LINKS/RECHTS om een ander tunertype te selecteren.\n"
+"Druk op GROEN om uw configuratiebestanden te updaten."
+
+msgid ""
+"Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.\n"
+"Press GREEN button to create your configuration files."
+msgstr ""
+"Druk op 'OK' om door te gaan met deze tuner of drul op LINKS/RECHTS om een ander type te kiezen.\n"
+"Druk op GROEN om uw configuratiebestanden te maken."
+
+msgid "Tuner type to use."
+msgstr "Te gebruiken tunertype."
+
+msgid "Update"
+msgstr "Update"
+
+msgid ""
+"WARNING: It seems you have a single tuner box, if the box is not left in Standby your Plex recordings WILL fail.\n"
+"\n"
+"Press OK to continue"
+msgstr ""
+"WAARSCHUWING: Het lijkt er op, dat u een ontvanger met slechts één tuner gebruikt. Als u de box niet in stand-by zet, zullen uw Plex-opnames mislukken.\n"
+"\n"
+"Druk op 'OK' om door te gaan."
