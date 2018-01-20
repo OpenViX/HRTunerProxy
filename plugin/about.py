@@ -61,7 +61,7 @@ class HRTunerProxy_About(Screen):
 		credit += _("Application credits:\n")
 		credit += "- AndyBlac (main developer)\n"
 		credit += "- Huevos (main developer)\n"
-		credit += "- Rossi2000 (developer)\n\n"
+		credit += "- rossi2000 (developer)\n\n"
 		credit += _("Sources credits:\n")
 		credit += "- FidoFuz (helped us with JSON tags)\n\n"
 		credit += _("Translation credits:\n")
