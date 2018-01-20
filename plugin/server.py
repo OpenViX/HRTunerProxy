@@ -8,7 +8,7 @@ from sys import modules
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from BaseHTTPServer import HTTPServer
 
-from . import getIP, tunerports, porttypes
+from . import getIP, tunerports, porttypes, logger
 from getLineup import getlineup
 from getLineupStatus import getlineupstatus
 from getDeviceInfo import getdeviceinfo
@@ -27,7 +27,7 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 					break
 			self.port = int(host.split(':')[2])
 		except:
-			print '[HRTunerProxy] USING DEFAULT PORT'
+			logger.info('USING DEFAULT PORT')
 			self.port = 6081
 		tunertype = porttypes[self.port]
 
@@ -96,7 +96,7 @@ td:first-child {text-align: center;}
 button { margin-top: 0.25em; }""")
 		else:
 			self.send_error(404,'[HRTunerProxy] File not found!')
-			print '[HRTunerProxy] file type not coded:',self.path
+			logger.info('file type not coded:',self.path)
 			return
 
 def run(dvbtype):
@@ -108,7 +108,7 @@ def startserver(ip_address='', port=''):
 	server_address = (ip_address, int(port))
 	httpd = RootedHTTPServer(server_address, RootedHTTPRequestHandler)
 	sa = httpd.socket.getsockname()
-	print "[HRTunerProxy] Serving HTTP on %s port %s" % (str(sa[0]),str(sa[1]))
+	logger.info('Serving HTTP on %s port %s' % (str(sa[0]),str(sa[1])))
 	httpd.serve_forever()
 
 

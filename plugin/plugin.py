@@ -17,7 +17,7 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
-from . import _, tunerTypes, tunerfolders, tunerports, getIP
+from . import _, tunerTypes, tunerfolders, tunerports, getIP, logger
 from about import HRTunerProxy_About
 from enigma import getDesktop, eDVBResourceManager
 from getLineup import getlineup, getBouquetsList
@@ -41,36 +41,20 @@ choicelist = []
 
 def TunerInfoDebug(type=None):
 	if type:
-		print '[HRTunerProxy] %s' % str(BaseURL[type]).replace('\n','')
-		print '[HRTunerProxy] %s' % str(FriendlyName[type]).replace('\n','')
-		print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
-		print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
-		print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
-		print '[HRTunerProxy] Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value
+		logger.info('%s' % str(BaseURL[type]).replace('\n',''))
+		logger.info('%s' % str(FriendlyName[type]).replace('\n',''))
+		logger.info('%s' % str(Source[type]).replace('\n',''))
+		logger.info('%s' % str(TunerCount[type]).replace('\n',''))
+		logger.info('%s' % str(NoOfChannels[type]).replace('\n\n',''))
+		logger.info('Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value)
 	else:
 		for type in tunerTypes:
-			print '[HRTunerProxy] %s' % str(BaseURL[type]).replace('\n','')
-			print '[HRTunerProxy] %s' % str(FriendlyName[type]).replace('\n','')
-			print '[HRTunerProxy] %s' % str(Source[type]).replace('\n','')
-			print '[HRTunerProxy] %s' % str(TunerCount[type]).replace('\n','')
-			print '[HRTunerProxy] %s' % str(NoOfChannels[type]).replace('\n\n','')
-			print '[HRTunerProxy] Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value
-
-def TunerInfo():
-	global choicelist
-	choicelist = []
-	for type in tunerTypes:
-		if path.exists('/www/%s/lineup_status.json' % tunerfolders[type]):
-			remove('/www/%s/lineup_status.json' % tunerfolders[type])
-		if path.exists('/www/%s/lineup.json' % tunerfolders[type]):
-			remove('/www/%s/lineup.json' % tunerfolders[type])
-		if path.exists('/www/%s/discover.json' % tunerfolders[type]):
-			rename('/www/%s/discover.json' % tunerfolders[type], '/etc/enigma2/%s.discover' % type)
-		if path.exists('/www/%s/device.xml' % tunerfolders[type]):
-			rename('/www/%s/device.xml' % tunerfolders[type], '/etc/enigma2/%s.device' % type)
-		if path.exists('/www/%s' % tunerfolders[type]) and not listdir('/www/%s' % tunerfolders[type]):
-			rmdir('/www/%s' % tunerfolders[type])
-
+			logger.info('%s' % str(BaseURL[type]).replace('\n',''))
+			logger.info('%s' % str(FriendlyName[type]).replace('\n',''))
+			logger.info('%s' % str(Source[type]).replace('\n',''))
+			logger.info('%s' % str(TunerCount[type]).replace('\n',''))
+			logger.info('%s' % str(NoOfChannels[type]).replace('\n\n',''))
+			logger.info('Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value)
 		discover = getdeviceinfo.discoverdata(type)
 		BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
 		FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
@@ -84,7 +68,7 @@ def TunerInfo():
 TunerInfo()
 TunerInfoDebug()
 config.hrtunerproxy.type = ConfigSelection(default = "multi", choices = choicelist)
-print '[HRTunerProxy] Using Tuner: %s' % str(config.hrtunerproxy.type.value)
+logger.info('Using Tuner: %s' % str(config.hrtunerproxy.type.value))
 
 tunerTypes = []
 for type in config.hrtunerproxy.type.choices.choices:
@@ -284,7 +268,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
 			type = config.hrtunerproxy.type.value
-			print '[HRTunerProxy] Deleting files for %s' % type
+			logger.info('Deleting files for %s' % type)
 			if path.exists('/etc/enigma2/%s.discover' % type):
 				remove('/etc/enigma2/%s.discover' % type)
 			if path.exists('/etc/enigma2/%s.device' % type):
@@ -321,7 +305,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			newsetup = False
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				newsetup = True
-			print '[HRTunerProxy] Creating files for %s' % type
+			logger.info('Creating files for %s' % type)
 			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
 				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.hrtunerproxy.type.save()
@@ -368,7 +352,7 @@ if not config.hrtunerproxy.type.notifiers:
 def startssdp(dvbtype):
 	discover = getdeviceinfo.discoverdata(dvbtype)
 	device_uuid = discover['DeviceUUID']
-	print '[HRTunerProxy] Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid)
+	logger.info('Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid))
 	local_ip_address = getIP()
 	ssdp = SSDPServer()
 	ssdp.register('local',
@@ -380,7 +364,7 @@ def startssdp(dvbtype):
 	thread_ssdp.start()
 
 def starthttpserver(dvbtype):
-	print '[HRTunerProxy] Starting HTTPServer for %s' % dvbtype
+	logger.info('Starting HTTPServer for %s' % dvbtype)
 	thread_http = threading.Thread(target=server.run, args=(dvbtype,))
 	thread_http.daemon = True # Daemonize thread
 	thread_http.start()

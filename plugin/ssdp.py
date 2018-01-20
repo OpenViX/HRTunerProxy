@@ -10,6 +10,7 @@
 # Implementation of a SSDP server.
 #
 
+from . import logger
 import random
 import time
 import socket
@@ -71,7 +72,7 @@ class SSDPServer:
 		try:
 			header, payload = data.decode().split('\r\n\r\n')[:2]
 		except ValueError as err:
-			print '[SSDP]', err
+			logger.info('[SSDP]', err)
 			return
 
 		lines = header.split('\r\n')
@@ -82,24 +83,24 @@ class SSDPServer:
 		headers = [x.split(':', 1) for x in lines]
 		headers = dict(map(lambda x: (x[0].lower(), x[1]), headers))
 
-		# print '[HRTunerProxy] SSDP command %s %s - from %s:%d' % (cmd[0], cmd[1], host, port)
-		# print '[HRTunerProxy] SSDP with headers: {}.'.format(headers)
+		# logger.info('SSDP command %s %s - from %s:%d' % (cmd[0], cmd[1], host, port))
+		# logger.info('SSDP with headers: {}.'.format(headers))
 		if cmd[0] == 'M-SEARCH' and cmd[1] == '*':
 			# SSDP discovery
 			self.discovery_request(headers, (host, port))
 		elif cmd[0] == 'NOTIFY' and cmd[1] == '*':
 			# SSDP presence
-			# print '[HRTunerProxy] SSDP NOTIFY *'
+			# logger.info('SSDP NOTIFY *')
 			pass
 		else:
-			print '[HRTunerProxy] SSDP Unknown SSDP command %s %s' % (cmd[0], cmd[1])
+			logger.info('SSDP Unknown SSDP command %s %s' % (cmd[0], cmd[1]))
 
 	def register(self, manifestation, usn, st, location, server=SERVER_ID, cache_control='max-age=1800', silent=False,
 				 host=None):
 		"""Register a service or device that this SSDP server will
 		respond to."""
 
-		print '[HRTunerProxy] SSDP Registering %s (%s)' % (st, location)
+		logger.info('SSDP Registering %s (%s)' % (st, location))
 
 		self.known[usn] = {}
 		self.known[usn]['USN'] = usn
@@ -118,18 +119,18 @@ class SSDPServer:
 			self.do_notify(usn)
 
 	def unregister(self, usn):
-		print '[HRTunerProxy] SSDP Un-registering %s' % usn
+		logger.info('SSDP Un-registering %s' % usn)
 		del self.known[usn]
 
 	def is_known(self, usn):
 		return usn in self.known
 
 	def send_it(self, response, destination, delay, usn):
-		# print '[HRTunerProxy] SSDP send discovery response delayed by %ds for %s to %r' % (delay, usn, destination)
+		# logger.info('SSDP send discovery response delayed by %ds for %s to %r' % (delay, usn, destination))
 		try:
 			self.sock.sendto(response.encode(), destination)
 		except (AttributeError, socket.error) as msg:
-			print '[HRTunerProxy] SSDP failure sending out byebye notification: %r' % msg
+			logger.info('SSDP failure sending out byebye notification: %r' % msg)
 
 	def discovery_request(self, headers, host_port):
 		"""Process a discovery request.  The response must be sent to
@@ -137,8 +138,8 @@ class SSDPServer:
 
 		(host, port) = host_port
 
-		# print '[HRTunerProxy] SSDP Discovery request from (%s,%d) for %s' % (host, port, headers['st'])
-		# print '[HRTunerProxy] SSDP Discovery request for %s' % headers['st']
+		# logger.info('SSDP Discovery request from (%s,%d) for %s' % (host, port, headers['st']))
+		# logger.info('SSDP Discovery request for %s' % headers['st'])
 
 		# Do we know about this service?
 		for i in self.known.values():
@@ -169,7 +170,7 @@ class SSDPServer:
 
 		if self.known[usn]['SILENT']:
 			return
-		print '[HRTunerProxy] SSDP Sending alive notification for %s' % usn
+		logger.info('SSDP Sending alive notification for %s' % usn)
 
 		resp = [
 			'NOTIFY * HTTP/1.1',
@@ -186,17 +187,17 @@ class SSDPServer:
 
 		resp.extend(map(lambda x: ': '.join(x), stcpy.items()))
 		resp.extend(('', ''))
-		print '[HRTunerProxy] SSDP do_notify content', resp
+		logger.info('SSDP do_notify content', resp)
 		try:
 			self.sock.sendto('\r\n'.join(resp).encode(), (SSDP_ADDR, SSDP_PORT))
 			self.sock.sendto('\r\n'.join(resp).encode(), (SSDP_ADDR, SSDP_PORT))
 		except (AttributeError, socket.error) as msg:
-			print '[HRTunerProxy] SSDP failure sending out alive notification: %r' % msg
+			logger.info('SSDP failure sending out alive notification: %r' % msg)
 
 	def do_byebye(self, usn):
 		"""Do byebye"""
 
-		print '[HRTunerProxy] SSDP Sending byebye notification for %s' % usn
+		logger.info('SSDP Sending byebye notification for %s' % usn)
 
 		resp = [
 			'NOTIFY * HTTP/1.1',
@@ -213,11 +214,11 @@ class SSDPServer:
 			del stcpy['last-seen']
 			resp.extend(map(lambda x: ': '.join(x), stcpy.items()))
 			resp.extend(('', ''))
-			print '[HRTunerProxy] SSDP do_byebye content', resp
+			logger.info('SSDP do_byebye content', resp)
 			if self.sock:
 				try:
 					self.sock.sendto('\r\n'.join(resp), (SSDP_ADDR, SSDP_PORT))
 				except (AttributeError, socket.error) as msg:
-					print '[HRTunerProxy] SSDP failure sending out byebye notification: %r' % msg
+					logger.info('SSDP failure sending out byebye notification: %r' % msg)
 		except KeyError as msg:
-			print '[HRTunerProxy] SSDP error building byebye notification: %r' % msg
+			logger.info('SSDP error building byebye notification: %r' % msg)

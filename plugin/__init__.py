@@ -3,9 +3,19 @@ import gettext
 import socket
 import fcntl
 import struct
-
+import logging
+from os import path, remove
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
+
+if path.exists('/tmp/hrtunerproxy.log'):
+	remove('/tmp/hrtunerproxy.log')
+logger = logging.getLogger('[HRTunerProxy]')
+hdlr = logging.FileHandler('/tmp/hrtunerproxy.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
+logger.setLevel(logging.DEBUG)
 
 tunerTypes = ('DVB-C', 'DVB-T', 'DVB-S', 'iptv', 'multi')
 
