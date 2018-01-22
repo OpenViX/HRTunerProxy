@@ -8,8 +8,9 @@ from enigma import eServiceReference
 from Components.config import config
 
 class getLineup:
-	def __init__(self, duplicates = False, single_bouquet = 'all'):
+	def __init__(self, duplicates = False, bouquet = None, bouquet_names_only = False):
 		self.duplicates = duplicates
+		self.bouquet_names_only = bouquet_names_only
 		self.refs_added = []
 		if hasattr(eServiceReference, 'isNumberedMarker'):
 			self.isNumberedMarker = eServiceReference.isNumberedMarker
@@ -28,13 +29,15 @@ class getLineup:
 		self.bouquets_names = [] # contains tuple pairs, e.g. [(filename1, bouquet_name1), (filename2, bouquet_name2)]
 		self.channel_numbers_names_and_refs = []
 		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
-		self.read_services()
-		if single_bouquet != 'all':
-			self.bouquets_filenames.append(single_bouquet)
-			self.bouquets_flags[single_bouquet] = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
-		else:
-			self.read_tv_index()
-		self.read_tv_bouquets()
+		if not self.bouquet_names_only:
+			self.read_services()
+		if bouquet:
+			if bouquet != 'all':
+				self.bouquets_filenames.append(bouquet)
+				self.bouquets_flags[bouquet] = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
+			else:
+				self.read_tv_index()
+			self.read_tv_bouquets()
 
 	def read_services(self):
 		try:
@@ -108,6 +111,8 @@ class getLineup:
 					if not (self.bouquets_flags[filename] & self.isInvisible): # not invisible bouquet
 						name = row.strip()[6:]
 						self.bouquets_names.append((filename, name))
+						if self.bouquet_names_only:
+							break
 				elif row.startswith("#SERVICE "):
 					if content_len > (idx + 1) and content_split[idx + 1].startswith("#DESCRIPTION "): # check if channel name exists in bouquets file
 						channel_name = content_split[idx + 1].strip()[13:]
@@ -199,6 +204,8 @@ class getLineup:
 		self.lineup = []
 
 		for c_n_r in output:
+			if dvb_type == "iptv" and "http" not in c_n_r[2]:
+				continue
 			if dvb_type in ('multi', 'iptv', c_n_r[3]):
 				self.data_tmp = {}
 				self.data_tmp['GuideNumber']='%s' % c_n_r[0]
@@ -213,15 +220,15 @@ class getLineup:
 	def getBouquetsList(self):
 		return self.bouquets_names
 
-def noofchannels(dvb_type):
-	return len(lineupdata(dvbtype=dvb_type))
+def noofchannels(dvb_type, bouquet):
+	return len(lineupdata(dvbtype=dvb_type, bouquet_name=bouquet))
 
-def lineupdata(ipinput='0.0.0.0', dvbtype=''):
-	channel_numbers = getLineup(single_bouquet=config.hrtunerproxy.bouquets_list[dvbtype].value)
+def lineupdata(ipinput='0.0.0.0', dvbtype='', bouquet_name=''):
+	channel_numbers = getLineup(bouquet=bouquet_name)
 	return channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
 
 def getBouquetsList():
-	lineup = getLineup()
+	lineup = getLineup(bouquet_names_only = True, bouquet='all')
 	return lineup.getBouquetsList()
 
 getlineup = modules[__name__]

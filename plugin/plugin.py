@@ -28,7 +28,7 @@ from server import server
 config.hrtunerproxy = ConfigSubsection()
 config.hrtunerproxy.bouquets_list = ConfigSubDict()
 for type in tunerTypes:
-	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = "all", choices = [('all', _('All'))] + getBouquetsList())
+	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = None, choices = [(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
 config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
 config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
 
@@ -55,15 +55,31 @@ def TunerInfoDebug(type=None):
 			logger.info('%s' % str(TunerCount[type]).replace('\n',''))
 			logger.info('%s' % str(NoOfChannels[type]).replace('\n\n',''))
 			logger.info('Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value)
+
+def TunerInfo(type=None):
+	if type:
 		discover = getdeviceinfo.discoverdata(type)
+		nochl = getlineup.noofchannels(type, config.hrtunerproxy.bouquets_list[type].value)
 		BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
 		FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
 		TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type)) if type != 'iptv' else 'TunerCount: %s\n' % str(config.hrtunerproxy.iptv_tunercount.value)
 		Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else str(tunerfolders[type]).upper()
-		NoOfChannels[type] = 'Channels: %s\n\n' % str(getlineup.noofchannels(type))
+		NoOfChannels[type] = 'Channels: %s\n\n' % str(nochl)
 
-		if getdeviceinfo.tunercount(type) > 0 and getlineup.noofchannels(type) > 0:
-			choicelist.append((type, str(tunerfolders[type]).title()))
+	else:
+		global choicelist
+		choicelist = []
+		for type in tunerTypes:
+			discover = getdeviceinfo.discoverdata(type)
+			nochl = getlineup.noofchannels(type, 'all')
+			BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
+			FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
+			TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type)) if type != 'iptv' else 'TunerCount: %s\n' % str(config.hrtunerproxy.iptv_tunercount.value)
+			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else str(tunerfolders[type]).upper()
+			NoOfChannels[type] = 'Channels: %s\n\n' % str(nochl)
+
+			if getdeviceinfo.tunercount(type) > 0 and nochl > 0:
+				choicelist.append((type, str(tunerfolders[type]).title()))
 
 TunerInfo()
 TunerInfoDebug()
@@ -73,9 +89,6 @@ logger.info('Using Tuner: %s' % str(config.hrtunerproxy.type.value))
 tunerTypes = []
 for type in config.hrtunerproxy.type.choices.choices:
 	tunerTypes.append(type[0])
-
-if path.exists('/www') and not listdir('/www'):
-	rmdir('/www')
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	skin="""
@@ -120,8 +133,6 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			title =  _("HR-Tuner Proxy for Enigma2")
 			self.menu_path = ""
 		Screen.setTitle(self, title)
-		TunerInfo()
-		TunerInfoDebug()
 
 		self.savedval = config.hrtunerproxy.type.value
 
@@ -215,7 +226,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			type = config.hrtunerproxy.type.value
 			currentconfig = self["config"].getCurrent()[0]
 
-			TunerInfo()
+			TunerInfo(type)
 			TunerInfoDebug(type)
 
 			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])

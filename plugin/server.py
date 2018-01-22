@@ -12,7 +12,7 @@ from . import getIP, tunerports, porttypes, logger
 from getLineup import getlineup
 from getLineupStatus import getlineupstatus
 from getDeviceInfo import getdeviceinfo
-
+from Components.config import config
 
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
@@ -54,7 +54,7 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype)))
+			self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype, config.hrtunerproxy.bouquets_list[tunertype].value)))
 		elif self.path.endswith("discover.json"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
