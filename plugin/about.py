@@ -64,7 +64,7 @@ class HRTunerProxy_About(Screen):
 		credit += "- rossi2000 (developer)\n\n"
 		credit += _("Sources credits:\n")
 		credit += "- FidoFuz (helped us with JSON tags)\n\n"
-		credit += "- lubomir.h (helped us with debugging OpenDreamBox)\n\n"
+		credit += "- PiGeon (helped us with debugging OpenDreamBox)\n\n"
 		credit += _("Translation credits:\n")
 		credit += "- patrickf95 / captain (German)\n"
 		credit += "- PiGeonCZ (Czech)\n"
