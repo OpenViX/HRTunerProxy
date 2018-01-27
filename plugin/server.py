@@ -27,7 +27,7 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 					break
 			self.port = int(host.split(':')[2])
 		except:
-			logger.info('USING DEFAULT PORT')
+			logger.info('USING DEFAULT PORT: 6081')
 			self.port = 6081
 		tunertype = porttypes[self.port]
 
