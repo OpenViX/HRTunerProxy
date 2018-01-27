@@ -21,7 +21,7 @@ def getVersion():
 
 class HRTunerProxy_About(Screen):
 	skin="""
-	<screen position="center,center" size="500,500">
+	<screen position="50,50" size="500,500">
 		<widget name="about" position="10,10" size="480,430" font="Regular;22"/>
 		<widget name="key_red" position="0,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
 		<ePixmap pixmap="skin_default/buttons/red.png" position="0,460" size="140,40" alphatest="on"/>
@@ -64,6 +64,7 @@ class HRTunerProxy_About(Screen):
 		credit += "- rossi2000 (developer)\n\n"
 		credit += _("Sources credits:\n")
 		credit += "- FidoFuz (helped us with JSON tags)\n\n"
+		credit += "- lubomir.h (helped us with debugging OpenDreamBox)\n\n"
 		credit += _("Translation credits:\n")
 		credit += "- patrickf95 / captain (German)\n"
 		credit += "- PiGeonCZ (Czech)\n"

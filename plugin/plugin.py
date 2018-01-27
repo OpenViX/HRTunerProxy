@@ -92,7 +92,7 @@ for type in config.hrtunerproxy.type.choices.choices:
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	skin="""
-	<screen position="center,center" size="600,350">
+	<screen position="50,50" size="600,350">
 		<widget name="config" position="10,10" size="580,75" scrollbarMode="showOnDemand" />
 		<widget name="information" position="10,95" size="580,185" font="Regular;22"/>
 		<widget name="description" position="10,225" size="580,75" font="Regular;22" valign="bottom"/>
@@ -387,7 +387,8 @@ def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 				starthttpserver(type)
 			if path.exists('/etc/enigma2/%s.device' % type):
 				startssdp(type)
-			TunerMask()
+			if not path.exists('/etc/os-release'): # check if opendreambox image
+				TunerMask()
 
 def HRTunerProxy_SetupMain(session, **kwargs):
 	session.open(HRTunerProxy_Setup)
