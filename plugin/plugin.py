@@ -75,7 +75,7 @@ def TunerInfo(type=None):
 			BaseURL[type] = 'BaseURL: %s\n' % str(discover["BaseURL"])
 			FriendlyName[type] = 'FriendlyName: %s\n' % str(discover["FriendlyName"])
 			TunerCount[type] = 'TunerCount: %s\n' % str(getdeviceinfo.tunercount(type)) if type != 'iptv' else 'TunerCount: %s\n' % str(config.hrtunerproxy.iptv_tunercount.value)
-			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else str(tunerfolders[type]).upper()
+			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else 'Source: %s\n' % str(tunerfolders[type]).upper()
 			NoOfChannels[type] = 'Channels: %s\n\n' % str(nochl)
 
 			if getdeviceinfo.tunercount(type) > 0 and nochl > 0:
