@@ -43,13 +43,9 @@ class getDeviceInfo:
 		ip_port = 'http://%s:%s' % (ip, tunerports[dvb_type])
 		device_uuid = str(uuid.uuid4())
 		if path.exists('/etc/enigma2/%s.discover' % dvb_type):
-		 	if path.exists('/www/%s/device.xml' % tunerfolders[dvb_type]):
-				with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
-					discover = json.load(data_file)
-			else:
-				with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
-					discover = json.load(data_file)
-					discover['DeviceUUID']='%s' % device_uuid
+			with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
+				discover = json.load(data_file)
+				discover['DeviceUUID']='%s' % device_uuid
 			discover.pop('NumChannels', None)
 		else:
 			discover = {}
