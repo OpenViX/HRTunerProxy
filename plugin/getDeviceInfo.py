@@ -45,7 +45,6 @@ class getDeviceInfo:
 		if path.exists('/etc/enigma2/%s.discover' % dvb_type):
 			with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:
 				discover = json.load(data_file)
-				discover['DeviceUUID']='%s' % device_uuid
 			discover.pop('NumChannels', None)
 		else:
 			discover = {}

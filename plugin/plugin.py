@@ -317,12 +317,12 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				newsetup = True
 			logger.info('Creating files for %s' % type)
+			getdeviceinfo.write_discover(dvbtype=type)
 			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
 				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.hrtunerproxy.type.save()
 			config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value].save()
 			configfile.save()
-			getdeviceinfo.write_discover(dvbtype=type)
 			if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
 				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 			else:
