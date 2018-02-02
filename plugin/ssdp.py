@@ -17,6 +17,9 @@ import socket
 from email.utils import formatdate
 from errno import ENOPROTOOPT
 
+from . import logger
+from Components.config import config
+
 SSDP_PORT = 1900
 SSDP_ADDR = '239.255.255.250'
 SERVER_ID = 'SSDP Server for HRTunerProxy'
@@ -83,15 +86,18 @@ class SSDPServer:
 		headers = [x.split(':', 1) for x in lines]
 		headers = dict(map(lambda x: (x[0].lower(), x[1]), headers))
 
-		# logger.info('SSDP command %s %s - from %s:%d' % (cmd[0], cmd[1], host, port))
-		# logger.info('SSDP with headers: {}.'.format(headers))
+		# if config.hrtunerproxy.debug.value:
+		# 	logger.info('SSDP command %s %s - from %s:%d' % (cmd[0], cmd[1], host, port))
+		# 	logger.info('SSDP with headers: {}.'.format(headers))
 		if cmd[0] == 'M-SEARCH' and cmd[1] == '*':
 			# SSDP discovery
 			self.discovery_request(headers, (host, port))
 		elif cmd[0] == 'NOTIFY' and cmd[1] == '*':
-			# SSDP presence
-			# logger.info('SSDP NOTIFY *')
-			pass
+			SSDP presence
+			if config.hrtunerproxy.debug.value:
+				logger.info('SSDP NOTIFY *')
+			else:
+				pass
 		else:
 			logger.info('SSDP Unknown SSDP command %s %s' % (cmd[0], cmd[1]))
 
@@ -100,7 +106,8 @@ class SSDPServer:
 		"""Register a service or device that this SSDP server will
 		respond to."""
 
-		logger.info('SSDP Registering %s (%s)' % (st, location))
+		if config.hrtunerproxy.debug.value:
+			logger.info('SSDP Registering %s (%s)' % (st, location))
 
 		self.known[usn] = {}
 		self.known[usn]['USN'] = usn
@@ -119,14 +126,16 @@ class SSDPServer:
 			self.do_notify(usn)
 
 	def unregister(self, usn):
-		logger.info('SSDP Un-registering %s' % usn)
+		if config.hrtunerproxy.debug.value:
+			logger.info('SSDP Un-registering %s' % usn)
 		del self.known[usn]
 
 	def is_known(self, usn):
 		return usn in self.known
 
 	def send_it(self, response, destination, delay, usn):
-		# logger.info('SSDP send discovery response delayed by %ds for %s to %r' % (delay, usn, destination))
+		# if config.hrtunerproxy.debug.value:
+			# logger.info('SSDP send discovery response delayed by %ds for %s to %r' % (delay, usn, destination))
 		try:
 			self.sock.sendto(response.encode(), destination)
 		except (AttributeError, socket.error) as msg:
@@ -138,8 +147,9 @@ class SSDPServer:
 
 		(host, port) = host_port
 
-		# logger.info('SSDP Discovery request from (%s,%d) for %s' % (host, port, headers['st']))
-		# logger.info('SSDP Discovery request for %s' % headers['st'])
+		# if config.hrtunerproxy.debug.value:
+			# logger.info('SSDP Discovery request from (%s,%d) for %s' % (host, port, headers['st']))
+			# logger.info('SSDP Discovery request for %s' % headers['st'])
 
 		# Do we know about this service?
 		for i in self.known.values():
@@ -170,7 +180,8 @@ class SSDPServer:
 
 		if self.known[usn]['SILENT']:
 			return
-		logger.info('SSDP Sending alive notification for %s' % usn)
+		if config.hrtunerproxy.debug.value:
+			logger.info('SSDP Sending alive notification for %s' % usn)
 
 		resp = [
 			'NOTIFY * HTTP/1.1',
@@ -187,7 +198,8 @@ class SSDPServer:
 
 		resp.extend(map(lambda x: ': '.join(x), stcpy.items()))
 		resp.extend(('', ''))
-		logger.info('SSDP do_notify content', resp)
+		if config.hrtunerproxy.debug.value:
+			logger.info('SSDP do_notify content', resp)
 		try:
 			self.sock.sendto('\r\n'.join(resp).encode(), (SSDP_ADDR, SSDP_PORT))
 			self.sock.sendto('\r\n'.join(resp).encode(), (SSDP_ADDR, SSDP_PORT))
@@ -197,7 +209,8 @@ class SSDPServer:
 	def do_byebye(self, usn):
 		"""Do byebye"""
 
-		logger.info('SSDP Sending byebye notification for %s' % usn)
+		if config.hrtunerproxy.debug.value:
+			logger.info('SSDP Sending byebye notification for %s' % usn)
 
 		resp = [
 			'NOTIFY * HTTP/1.1',
@@ -214,7 +227,8 @@ class SSDPServer:
 			del stcpy['last-seen']
 			resp.extend(map(lambda x: ': '.join(x), stcpy.items()))
 			resp.extend(('', ''))
-			logger.info('SSDP do_byebye content', resp)
+			if config.hrtunerproxy.debug.value:
+				logger.info('SSDP do_byebye content', resp)
 			if self.sock:
 				try:
 					self.sock.sendto('\r\n'.join(resp), (SSDP_ADDR, SSDP_PORT))

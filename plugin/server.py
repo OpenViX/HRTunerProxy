@@ -6,7 +6,7 @@ import json
 
 from sys import modules
 from SimpleHTTPServer import SimpleHTTPRequestHandler
-from BaseHTTPServer import HTTPServer
+from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 from . import getIP, tunerports, porttypes, logger
 from getLineup import getlineup
@@ -14,11 +14,16 @@ from getLineupStatus import getlineupstatus
 from getDeviceInfo import getdeviceinfo
 from Components.config import config
 
+
+class RootedBaseHTTPRequestHandler(BaseHTTPRequestHandler):
+	def log_message(self, format, *args):
+		logger.info("%s %s" % (self.address_string(), format%args))
+
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
 		HTTPServer.__init__(self, *args, **kwargs)
 
-class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
+class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
 			for x in str(self.headers).split('\r\n'):
@@ -27,7 +32,8 @@ class RootedHTTPRequestHandler(SimpleHTTPRequestHandler):
 					break
 			self.port = int(host.split(':')[2])
 		except:
-			logger.info('USING DEFAULT PORT: 6081')
+			if config.hrtunerproxy.debug.value:
+				logger.info('USING DEFAULT PORT: 6081')
 			self.port = 6081
 		tunertype = porttypes[self.port]
 
@@ -96,7 +102,8 @@ td:first-child {text-align: center;}
 button { margin-top: 0.25em; }""")
 		else:
 			self.send_error(404,'[HRTunerProxy] File not found!')
-			logger.info('file type not coded:',self.path)
+			if config.hrtunerproxy.debug.value:
+				logger.info('file type not coded:',self.path)
 			return
 
 def run(dvbtype):
@@ -108,7 +115,8 @@ def startserver(ip_address='', port=''):
 	server_address = (ip_address, int(port))
 	httpd = RootedHTTPServer(server_address, RootedHTTPRequestHandler)
 	sa = httpd.socket.getsockname()
-	logger.info('Serving HTTP on %s port %s' % (str(sa[0]),str(sa[1])))
+	if config.hrtunerproxy.debug.value:
+		logger.info('Serving HTTP on %s port %s' % (str(sa[0]),str(sa[1])))
 	httpd.serve_forever()
 
 

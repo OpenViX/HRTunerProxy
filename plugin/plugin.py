@@ -2,12 +2,13 @@ import threading
 import string
 import random
 import json
+from sys import modules
 from os import path, remove, mkdir, rename, listdir, rmdir
 from shutil import rmtree
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
-from Components.config import config, configfile, ConfigSubsection, ConfigSubDict, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, NoSave
+from Components.config import config, configfile, ConfigSubsection, ConfigSubDict, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, ConfigEnableDisable, NoSave
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -31,6 +32,7 @@ for type in tunerTypes:
 	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = None, choices = [(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
 config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
 config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
+config.hrtunerproxy.debug = ConfigEnableDisable(default = False)
 
 BaseURL = {}
 FriendlyName = {}
@@ -78,13 +80,18 @@ def TunerInfo(type=None):
 			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else 'Source: %s\n' % str(tunerfolders[type]).upper()
 			NoOfChannels[type] = 'Channels: %s\n\n' % str(nochl)
 
-			if getdeviceinfo.tunercount(type) > 0 and nochl > 0:
-				choicelist.append((type, str(tunerfolders[type]).title()))
+if config.hrtunerproxy.debug.value:
+	TunerInfo()
+	TunerInfoDebug()
 
-TunerInfo()
-TunerInfoDebug()
-config.hrtunerproxy.type = ConfigSelection(default = "multi", choices = choicelist)
-logger.info('Using Tuner: %s' % str(config.hrtunerproxy.type.value))
+for type in tunerTypes:
+	discover = getdeviceinfo.discoverdata(type)
+	if getdeviceinfo.tunercount(type) > 0:
+		choicelist.append((type, str(tunerfolders[type]).title()))
+
+config.hrtunerproxy.type = ConfigSelection(choices = choicelist)
+if config.hrtunerproxy.debug.value:
+	logger.info('Using Tuner: %s' % str(config.hrtunerproxy.type.value))
 
 tunerTypes = []
 for type in config.hrtunerproxy.type.choices.choices:
@@ -198,6 +205,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self.list.append(getConfigListEntry(_('Bouquet to use.'), config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value]))
 		if config.hrtunerproxy.type.value == 'iptv':
 			self.list.append(getConfigListEntry(_('Number of concurrent streams.'), config.hrtunerproxy.iptv_tunercount))
+		self.list.append(getConfigListEntry(_('Debug Mode.'), config.hrtunerproxy.debug))
+
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 
@@ -205,6 +214,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self.createmenu()
 		setup_exists = False
 		self["actions"].setEnabled(False)
+		self["closeaction"].setEnabled(False)
 		self["key_red"].hide()
 		self["key_green"].hide()
 		self["key_yellow"].hide()
@@ -224,7 +234,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			currentconfig = self["config"].getCurrent()[0]
 
 			TunerInfo(type)
-			TunerInfoDebug(type)
+			if config.hrtunerproxy.debug.value:
+				TunerInfoDebug(type)
 
 			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 
@@ -233,7 +244,16 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 					setup_exists = True
 
 			if not path.exists('/etc/enigma2/%s.discover' % type):
-				if getdeviceinfo.tunercount(type) < 2:
+				if int(NoOfChannels[type].split(': ')[1]) == 0:
+					if config.hrtunerproxy.bouquets_list[type].value == None:
+						self["information"].setText(_('Please note: Please now select a bouquet to use.'))
+					else:
+						self["information"].setText(_('Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type.'))
+					self["hinttext"].setText('')
+					self["key_red"].show()
+					self["button_red"].show()
+					self["closeaction"].setEnabled(True)
+				elif int(TunerCount[type].split(': ')[1]) < 2:
 					self["information"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail.'))
 					self["hinttext"].setText(_('Press OK to continue setting up this tuner.'))
 					self.hinttext = _('Press GREEN to save your configuration files.')
@@ -276,7 +296,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	def cleanconfirm(self, answer):
 		if answer is not None and answer and self["config"].getCurrent() is not None:
 			type = config.hrtunerproxy.type.value
-			logger.info('Deleting files for %s' % type)
+			if config.hrtunerproxy.debug.value:
+				logger.info('Deleting files for %s' % type)
 			if path.exists('/etc/enigma2/%s.discover' % type):
 				remove('/etc/enigma2/%s.discover' % type)
 			if path.exists('/etc/enigma2/%s.device' % type):
@@ -313,7 +334,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			newsetup = False
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				newsetup = True
-			logger.info('Creating files for %s' % type)
+			if config.hrtunerproxy.debug.value:
+				logger.info('Creating files for %s' % type)
 			getdeviceinfo.write_discover(dvbtype=type)
 			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
 				getdeviceinfo.write_device_xml(dvbtype=type)
@@ -352,15 +374,11 @@ class TunerMask():
 	def tunerUseMaskChanged(self, mask):
 		config.hrtunerproxy.slotsinuse.setValue(mask)
 
-def updateTunerInfo(value):
-		HRTunerProxy_Setup.instance.populate()
-if not config.hrtunerproxy.type.notifiers:
-	config.hrtunerproxy.type.addNotifier(updateTunerInfo, initial_call = False)
-
 def startssdp(dvbtype):
 	discover = getdeviceinfo.discoverdata(dvbtype)
 	device_uuid = discover['DeviceUUID']
-	logger.info('Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid))
+	if config.hrtunerproxy.debug.value:
+		logger.info('Starting SSDP for %s, device_uuid: %s' % (dvbtype,device_uuid))
 	local_ip_address = getIP()
 	ssdp = SSDPServer()
 	ssdp.register('local',
@@ -372,7 +390,8 @@ def startssdp(dvbtype):
 	thread_ssdp.start()
 
 def starthttpserver(dvbtype):
-	logger.info('Starting HTTPServer for %s' % dvbtype)
+	if config.hrtunerproxy.debug.value:
+		logger.info('Starting HTTPServer for %s' % dvbtype)
 	thread_http = threading.Thread(target=server.run, args=(dvbtype,))
 	thread_http.daemon = True # Daemonize thread
 	thread_http.start()
