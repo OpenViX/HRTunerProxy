@@ -2,6 +2,7 @@ import string
 import random
 import json
 import uuid
+from socket import gethostname
 from os import path, mkdir
 from sys import modules
 
@@ -56,7 +57,7 @@ class getDeviceInfo:
 				discover['FirmwareName']='%s' % getImageDistro()
 				discover['FirmwareVersion']='%s' % getDriverDate()
 			else:
-				discover['FriendlyName']='%s' % _('Enigma2 STB')
+				discover['FriendlyName']='%s' % gethostname()
 				discover['ModelNumber']='%s' % getBoxType()
 				discover['FirmwareName']='%s' % _('Enigma2')
 				discover['FirmwareVersion']='%s' % getEnigmaVersionString()
