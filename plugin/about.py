@@ -1,14 +1,14 @@
+from os import path
+from sys import modules
+
 from . import _
-
-from Screens.Screen import Screen
-
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
-from os import path
+from Screens.Screen import Screen
 
 def getVersion():
 	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
@@ -20,12 +20,13 @@ def getVersion():
 	return PLUGIN_VERSION
 
 class HRTunerProxy_About(Screen):
-	skin="""
-	<screen position="50,50" size="500,500">
-		<widget name="about" position="10,10" size="480,430" font="Regular;22"/>
-		<widget name="key_red" position="0,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
-		<ePixmap pixmap="skin_default/buttons/red.png" position="0,460" size="140,40" alphatest="on"/>
-	</screen>"""
+	if path.exists('/etc/os-release'): # check if opendreambox image
+		skin = "%s/skins/dreamos_about.xml" % (path.dirname(modules[__name__].__file__))
+	else:
+		skin = "%s/skins/about.xml" % (path.dirname(modules[__name__].__file__))
+	f = open(skin, "r")
+	skin = f.read()
+	f.close()
 
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)

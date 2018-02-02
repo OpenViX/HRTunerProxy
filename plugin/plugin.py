@@ -98,20 +98,13 @@ for type in config.hrtunerproxy.type.choices.choices:
 	tunerTypes.append(type[0])
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
-	skin="""
-	<screen position="50,50" size="600,350">
-		<widget name="config" position="10,10" size="580,75" scrollbarMode="showOnDemand" />
-		<widget name="information" position="10,95" size="580,185" font="Regular;22"/>
-		<widget name="description" position="10,225" size="580,75" font="Regular;22" valign="bottom"/>
-		<widget name="button_red" pixmap="skin_default/buttons/red.png" position="0,310" size="140,40" alphatest="on"/>
-		<widget name="button_green" pixmap="skin_default/buttons/green.png" position="150,310" size="140,40" alphatest="on"/>
-		<widget name="button_yellow" pixmap="skin_default/buttons/yellow.png" position="300,310" size="140,40" alphatest="on"/>
-		<widget name="button_blue" pixmap="skin_default/buttons/blue.png" position="450,310" size="140,40" alphatest="on"/>
-		<widget name="key_red" position="0,310" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
-		<widget name="key_green" position="150,310" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
-		<widget name="key_yellow" position="300,310" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
-		<widget name="key_blue" position="450,310" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
-	</screen>"""
+	if path.exists('/etc/os-release'): # check if opendreambox image
+		skin = "%s/skins/dreamos_main.xml" % (path.dirname(modules[__name__].__file__))
+	else:
+		skin = "%s/skins/main.xml" % (path.dirname(modules[__name__].__file__))
+	f = open(skin, "r")
+	skin = f.read()
+	f.close()
 
 	def __init__(self, session, menu_path=""):
 		instance = None

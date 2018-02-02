@@ -11,6 +11,6 @@ setup (name = 'enigma2-plugin-systemplugins-hrtunerproxy',
        package_dir = {pkg: 'plugin'},
        packages = [pkg],
        package_data = {pkg:
-           ['plugin.png', 'plugin-hd.png', 'locale/*/LC_MESSAGES/*.mo', 'locale/*/LC_MESSAGES/*.po']},
+           ['plugin.png', 'plugin-hd.png', 'skins/*.xml', 'locale/*/LC_MESSAGES/*.mo', 'locale/*/LC_MESSAGES/*.po']},
        cmdclass = setup_translate.cmdclass, # for translation
       )
