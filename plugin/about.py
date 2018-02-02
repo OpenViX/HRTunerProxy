@@ -58,16 +58,16 @@ class HRTunerProxy_About(Screen):
 
 		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n") % getVersion()
 		credit += "Andrew Blackburn & Rowland Huevos\n"
-		credit += "http://github.com/openvix\n\n"
+		credit += "https://github.com/OpenViX/HRTunerProxy\n\n"
 		credit += _("Application credits:\n")
 		credit += "- AndyBlac (main developer)\n"
 		credit += "- Huevos (main developer)\n"
 		credit += "- rossi2000 (developer)\n\n"
 		credit += _("Sources credits:\n")
-		credit += "- FidoFuz (helped us with JSON tags)\n\n"
-		credit += "- PiGeon (helped us with debugging OpenDreamBox)\n\n"
+		credit += "- FidoFuz (helped us with JSON tags)\n"
+		credit += "- PiGeon(CZ) (helped us with debugging OpenDreamBox)\n\n"
 		credit += _("Translation credits:\n")
 		credit += "- patrickf95 / captain (German)\n"
-		credit += "- PiGeonCZ (Czech)\n"
+		credit += "- PiGeon(CZ) (Czech)\n"
 		credit += "- Pakorro (Spanish)"
 		self["about"].setText(credit)
