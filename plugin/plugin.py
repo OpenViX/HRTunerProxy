@@ -141,7 +141,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.populate)
 
 		self["information"] = Label()
-		self["description"] = Label()
+		self["hinttext"] = Label()
 		self["actions"] = ActionMap(['ColorActions','OkCancelActions', 'DirectionActions'],
 									{
 									"cancel": self.keyCancel,
@@ -214,12 +214,9 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["button_yellow"].hide()
 		self["button_blue"].hide()
 
-		if getIP() == '0.0.0.0' or not config.hrtunerproxy.type.value:
-			if getIP() == '0.0.0.0':
-				self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
-			else:
-				self["information"].setText(_('WARNING: It seems you have no tuners with channels setup on this device. Please perform a channels scan or run ABM.\n\nPress OK to exit.'))
-			self["description"].hide()
+		if getIP() == '0.0.0.0':
+			self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
+			self["hinttext"].hide()
 			self["closeaction"].setEnabled(True)
 
 		elif self["config"].getCurrent() is not None:
@@ -238,7 +235,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			if not path.exists('/etc/enigma2/%s.discover' % type):
 				if getdeviceinfo.tunercount(type) < 2:
 					self["information"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail.'))
-					self["description"].setText(_('Press OK to continue setting up this tuner.'))
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner.'))
 					self.hinttext = _('Press GREEN to save your configuration files.')
 					self["okaction"].setEnabled(True)
 					self["key_green"].setText(_("Save"))
@@ -249,13 +246,13 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 					else:
 						self["information"].setText(_('Please note: To use another tuner type you need to setup/have another server. Are you sure you want to continue?'))
 					if currentconfig == _('Tuner type to use'):
-						self["description"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
+						self["hinttext"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 					elif currentconfig == _('Bouquet to use.'):
-						self["description"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
+						self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
 					else:
-						self["description"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
+						self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to set number of concurent streams.')
 					self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
 					self["okaction"].setEnabled(True)
@@ -290,8 +287,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["okaction"].setEnabled(False)
 		self["actions"].setEnabled(True)
 		self["information"].setText(self.label)
-		self["description"].setText(self.hinttext)
-		self["description"].show()
+		self["hinttext"].setText(self.hinttext)
+		self["hinttext"].show()
 
 		self["key_red"].show()
 		self["key_green"].show()
