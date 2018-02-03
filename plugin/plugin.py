@@ -159,9 +159,11 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 									}, -2)
 		self["okaction"].setEnabled(False)
 
-		self["closeaction"] = ActionMap(['OkCancelActions'],
+		self["closeaction"] = ActionMap(['OkCancelActions', 'ColorActions'],
 									{
 									"ok": self.keyCancel,
+									"cancel": self.keyCancel,
+									"red": self.keyCancel
 									}, -2)
 		self["closeaction"].setEnabled(False)
 
