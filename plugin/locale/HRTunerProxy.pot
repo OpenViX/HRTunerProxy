@@ -1,0 +1,198 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-02-03 16:47+GMT\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: plugin/about.py:19
+msgid "unknown"
+msgstr ""
+
+#: plugin/about.py:34 plugin/about.py:46
+msgid "About HR-Tuner Proxy"
+msgstr ""
+
+#: plugin/about.py:57 plugin/plugin.py:170
+msgid "Close"
+msgstr ""
+
+#: plugin/about.py:59
+msgid ""
+"HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n"
+msgstr ""
+
+#: plugin/about.py:62
+msgid ""
+"Application credits:\n"
+msgstr ""
+
+#: plugin/about.py:66
+msgid ""
+"Sources credits:\n"
+msgstr ""
+
+#: plugin/about.py:69
+msgid ""
+"Translation credits:\n"
+msgstr ""
+
+#: plugin/getDeviceInfo.py:62
+msgid "Enigma2"
+msgstr ""
+
+#: plugin/getDeviceInfo.py:91
+msgid "In use"
+msgstr ""
+
+#: plugin/plugin.py:32
+msgid "All"
+msgstr ""
+
+#: plugin/plugin.py:32
+msgid "Not set"
+msgstr ""
+
+#: plugin/plugin.py:113 plugin/plugin.py:133
+msgid "HR-Tuner Proxy for Enigma2"
+msgstr ""
+
+#: plugin/plugin.py:182
+msgid "About"
+msgstr ""
+
+#: plugin/plugin.py:197
+msgid ""
+"WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n"
+"\n"
+"Press OK to exit."
+msgstr ""
+
+#: plugin/plugin.py:208 plugin/plugin.py:224 plugin/plugin.py:279
+#: plugin/plugin.py:300 plugin/plugin.py:315
+msgid "Tuner type to use."
+msgstr ""
+
+#: plugin/plugin.py:225 plugin/plugin.py:282 plugin/plugin.py:303
+#: plugin/plugin.py:318
+msgid "Bouquet to use."
+msgstr ""
+
+#: plugin/plugin.py:227
+msgid "Number of concurrent streams."
+msgstr ""
+
+#: plugin/plugin.py:228 plugin/plugin.py:306 plugin/plugin.py:321
+msgid "Debug Mode."
+msgstr ""
+
+#: plugin/plugin.py:264
+msgid "Please note: Please now select a bouquet to use."
+msgstr ""
+
+#: plugin/plugin.py:266
+msgid "Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type."
+msgstr ""
+
+#: plugin/plugin.py:272
+msgid "WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail."
+msgstr ""
+
+#: plugin/plugin.py:273
+msgid "Press OK to continue setting up this tuner."
+msgstr ""
+
+#: plugin/plugin.py:276 plugin/plugin.py:311 plugin/plugin.py:324
+msgid "Save"
+msgstr ""
+
+#: plugin/plugin.py:280
+msgid "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type."
+msgstr ""
+
+#: plugin/plugin.py:281 plugin/plugin.py:301 plugin/plugin.py:316
+msgid "Press LEFT / RIGHT to select a different tuner type."
+msgstr ""
+
+#: plugin/plugin.py:283 plugin/plugin.py:286 plugin/plugin.py:289
+msgid "Press OK to continue setting up this tuner or select a different tuner type."
+msgstr ""
+
+#: plugin/plugin.py:284 plugin/plugin.py:287 plugin/plugin.py:305
+#: plugin/plugin.py:320
+msgid "Press LEFT / RIGHT to select a different bouquet."
+msgstr ""
+
+#: plugin/plugin.py:285
+msgid "Debug mode to create logs."
+msgstr ""
+
+#: plugin/plugin.py:290
+msgid "Press LEFT / RIGHT to set number of concurent streams."
+msgstr ""
+
+#: plugin/plugin.py:293
+msgid ""
+"Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\n"
+"https://www.plex.tv/features/plex-pass\n"
+"https://emby.media/premiere.html"
+msgstr ""
+
+#: plugin/plugin.py:294
+msgid "Press OK to continue setting up."
+msgstr ""
+
+#: plugin/plugin.py:297
+msgid ""
+"Please note: To use another tuner type in Plex you need to setup/have another server.\n"
+"Are you sure you want to continue?"
+msgstr ""
+
+#: plugin/plugin.py:308 plugin/plugin.py:323
+msgid "Press LEFT / RIGHT to enable or disable debug mode."
+msgstr ""
+
+#: plugin/plugin.py:325
+msgid "Delete"
+msgstr ""
+
+#: plugin/plugin.py:333
+msgid "Do you really want to remove the files for this tuner type? Doing so will cause your DVR to be none functional."
+msgstr ""
+
+#: plugin/plugin.py:344
+msgid ""
+"Files deleted. Please restart enigma2.\n"
+"\n"
+"Do you want to restart now?"
+msgstr ""
+
+#: plugin/plugin.py:365
+msgid "It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"
+msgstr ""
+
+#: plugin/plugin.py:385
+msgid ""
+"Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n"
+"\n"
+"Do you want to restart now?"
+msgstr ""
+
+#: plugin/plugin.py:403
+msgid "Really close without saving settings?"
+msgstr ""
+
+#: plugin/plugin.py:454
+msgid "HR-Tuner Proxy"
+msgstr ""
+
