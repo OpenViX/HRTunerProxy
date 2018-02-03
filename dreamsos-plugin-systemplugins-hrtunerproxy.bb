@@ -4,7 +4,7 @@ MAINTAINER = "OpenViX"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=a23a74b3f4caf9616230789d94217acb"
 
-inherit setuptools gitpkgv gettext distutils
+inherit allarch setuptools gitpkgv gettext distutils
 
 SRCREV = "${AUTOREV}"
 PV = "git${SRCPV}"
@@ -17,6 +17,7 @@ S = "${WORKDIR}/git"
 
 RDEPENDS_${PN} = " \
     python-argparse \
+    python-json \
     "
 
 do_install_prepend() {
