@@ -138,7 +138,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 
 		self.onChangedEntry = [ ]
 		self.list = []
-		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.populate)
+		ConfigListScreen.__init__(self, self.list, session = session, on_change = self.onChange)
 
 		self["information"] = Label()
 		self["hinttext"] = Label()
@@ -182,11 +182,33 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["key_blue"] = Button(_("About"))
 		self["button_blue"] = Pixmap()
 
+		self.firstrun = True
+
 		assert HRTunerProxy_Setup.instance is None, "class is a singleton class and just one instance of this class is allowed!"
 		HRTunerProxy_Setup.instance = self
 
-		self.onLayoutFinish.append(self.populate)
+		self.onLayoutFinish.append(self.LayoutFinish)
 		self.onClose.append(self.__onClose)
+
+	def LayoutFinish(self):
+		self.createmenu()
+		if getIP() == '0.0.0.0':
+			self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
+			self["hinttext"].hide()
+			self["key_red"].show()
+			self["button_red"].show()
+			self["closeaction"].setEnabled(True)
+		else:
+			self.populate()
+
+	def onChange(self):
+		currentconfig = self["config"].getCurrent()[0]
+		if currentconfig == _('Tuner type to use.'):
+			self.createmenu()
+		self.populate()
+
+	def selectionChanged(self):
+		self.populate()
 
 	def __onClose(self):
 		HRTunerProxy_Setup.instance = None
@@ -201,12 +223,12 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		if config.hrtunerproxy.type.value == 'iptv':
 			self.list.append(getConfigListEntry(_('Number of concurrent streams.'), config.hrtunerproxy.iptv_tunercount))
 		self.list.append(getConfigListEntry(_('Debug Mode.'), config.hrtunerproxy.debug))
-
 		self["config"].list = self.list
 		self["config"].l.setList(self.list)
+		if not self.selectionChanged in self["config"].onSelectionChanged:
+			self["config"].onSelectionChanged.append(self.selectionChanged)
 
 	def populate(self, answer=None):
-		self.createmenu()
 		setup_exists = False
 		self["actions"].setEnabled(False)
 		self["closeaction"].setEnabled(False)
@@ -219,69 +241,77 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["button_yellow"].hide()
 		self["button_blue"].hide()
 
-		if getIP() == '0.0.0.0':
-			self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
-			self["hinttext"].hide()
-			self["closeaction"].setEnabled(True)
+		type = config.hrtunerproxy.type.value
+		currentconfig = self["config"].getCurrent()[0]
 
-		elif self["config"].getCurrent() is not None:
-			type = config.hrtunerproxy.type.value
-			currentconfig = self["config"].getCurrent()[0]
+		TunerInfo(type)
+		if config.hrtunerproxy.debug.value:
+			TunerInfoDebug(type)
 
-			TunerInfo(type)
-			if config.hrtunerproxy.debug.value:
-				TunerInfoDebug(type)
+		self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
 
-			self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
+		for types in tunerTypes:
+			if path.exists('/etc/enigma2/%s.discover' % types):
+				setup_exists = True
 
-			for types in tunerTypes:
-				if path.exists('/etc/enigma2/%s.discover' % types):
-					setup_exists = True
-
-			if not path.exists('/etc/enigma2/%s.discover' % type):
-				if int(NoOfChannels[type].split(': ')[1]) == 0:
-					if config.hrtunerproxy.bouquets_list[type].value == None:
-						self["information"].setText(_('Please note: Please now select a bouquet to use.'))
-					else:
-						self["information"].setText(_('Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type.'))
-					self["hinttext"].setText('')
-					self["key_red"].show()
-					self["button_red"].show()
-					self["closeaction"].setEnabled(True)
-				elif int(TunerCount[type].split(': ')[1]) < 2:
-					self["information"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail.'))
-					self["hinttext"].setText(_('Press OK to continue setting up this tuner.'))
-					self.hinttext = _('Press GREEN to save your configuration files.')
-					self["okaction"].setEnabled(True)
-					self["key_green"].setText(_("Save"))
-					self["key_yellow"].setText("")
+		if not path.exists('/etc/enigma2/%s.discover' % type):
+			if int(NoOfChannels[type].split(': ')[1]) == 0:
+				if config.hrtunerproxy.bouquets_list[type].value == None:
+					self["information"].setText(_('Please note: Please now select a bouquet to use.'))
 				else:
-					if not setup_exists:
-						self["information"].setText(_('Please note: To use the DVR feature in Plex Server you need to be a Plex Pass user. For more information about Plex Pass see https://www.plex.tv/features/plex-pass'))
-					else:
-						self["information"].setText(_('Please note: To use another tuner type you need to setup/have another server. Are you sure you want to continue?'))
-					if currentconfig == _('Tuner type to use'):
-						self["hinttext"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
+					self["information"].setText(_('Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type.'))
+				self["hinttext"].setText('')
+				self["key_red"].show()
+				self["button_red"].show()
+				self["closeaction"].setEnabled(True)
+			elif int(TunerCount[type].split(': ')[1]) < 2:
+				self["information"].setText(_('WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail.'))
+				self["hinttext"].setText(_('Press OK to continue setting up this tuner.'))
+				self.hinttext = ''
+				self["okaction"].setEnabled(True)
+				self["key_green"].setText(_("Save"))
+				self["key_yellow"].setText("")
+			else:
+				if currentconfig == _('Tuner type to use.'):
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
+					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+				elif currentconfig == _('Bouquet to use.'):
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
+					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
+				elif currentconfig == _('Debug mode to create logs.'):
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
+					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
+				else:
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
+					self.hinttext = _('Press LEFT / RIGHT to set number of concurent streams.')
+				if not setup_exists and self.firstrun:
+					self["information"].setText(_('Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\nhttps://www.plex.tv/features/plex-pass\nhttps://emby.media/premiere.html'))
+					self["hinttext"].setText(_('Press OK to continue setting up.'))
+				elif setup_exists:
+					self["information"].setText(_('Please note: To use another tuner type in Plex you need to setup/have another server.\nAre you sure you want to continue?'))
+				else:
+					if currentconfig == _('Tuner type to use.'):
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 					elif currentconfig == _('Bouquet to use.'):
-						self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-					else:
-						self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
-						self.hinttext = _('Press LEFT / RIGHT to set number of concurent streams.')
-					self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
-					self["okaction"].setEnabled(True)
-					self["key_green"].setText(_("Save"))
-					self["key_yellow"].setText("")
-			else:
-				if currentconfig == _('Tuner type to use'):
-					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
-				else:
-					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
-				self.hinttext = self.hinttext + '\n'+_('Press GREEN to save your configuration.')
+					elif currentconfig == _('Debug Mode.'):
+						self.hinttext = _('Press LEFT / RIGHT to enable or disable debug mode.')
+					self.ok()
+				self["okaction"].setEnabled(True)
 				self["key_green"].setText(_("Save"))
-				self["key_yellow"].setText(_("Delete"))
-				self.ok()
+				self["key_yellow"].setText("")
+		else:
+			if currentconfig == _('Tuner type to use.'):
+				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+			elif currentconfig == _('Bouquet to use.'):
+				self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
+			elif currentconfig == _('Debug Mode.'):
+				self.hinttext = _('Press LEFT / RIGHT to enable or disable debug mode.')
+			self["key_green"].setText(_("Save"))
+			self["key_yellow"].setText(_("Delete"))
+			self["key_yellow"].show()
+			self["button_yellow"].show()
+			self.ok()
 
 	def cleanfiles(self):
 		type = config.hrtunerproxy.type.value
@@ -300,6 +330,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files deleted. Please restart enigma2.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
 
 	def ok(self):
+		self.firstrun = False
 		self["okaction"].setEnabled(False)
 		self["actions"].setEnabled(True)
 		self["information"].setText(self.label)
@@ -308,12 +339,10 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 
 		self["key_red"].show()
 		self["key_green"].show()
-		self["key_yellow"].show()
 		self["key_blue"].show()
 
 		self["button_red"].show()
 		self["button_green"].show()
-		self["button_yellow"].show()
 		self["button_blue"].show()
 
 
@@ -336,6 +365,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.hrtunerproxy.type.save()
 			config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value].save()
+			config.hrtunerproxy.debug.save()
 			configfile.save()
 			if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval) or newsetup:
 				self.session.openWithCallback(self.rebootconfirm, MessageBox,text = _("Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n\nDo you want to restart now?"), type = MessageBox.TYPE_YESNO)
