@@ -1,14 +1,19 @@
-<screen position="center,170" size="1200,520" >
-	<widget enableWrapAround="1" name="config" position="10,90" scrollbarMode="showOnDemand" size="1180,120" />
-	<eLabel backgroundColor="grey" position="10,80" size="1180,1" />
-	<widget name="information" position="10,250" size="1180,185" font="Regular;22"/>
-	<widget name="hinttext" position="10,400" size="1180,75" font="Regular;22" valign="bottom"/>
-	<widget name="button_red" pixmap="skin_default/buttons/red.png" position="200,10" size="240,60" alphatest="on"/>
-	<widget name="button_green" pixmap="skin_default/buttons/green.png" position="450,10" size="240,60" alphatest="on"/>
-	<widget name="button_yellow" pixmap="skin_default/buttons/yellow.png" position="700,10" size="240,60" alphatest="on"/>
-	<widget name="button_blue" pixmap="skin_default/buttons/blue.png" position="950,10" size="240,60" alphatest="on"/>
-	<widget name="key_red" position="200,10" zPosition="1" size="240,60" font="Regular;30" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
-	<widget name="key_green" position="450,10" zPosition="1" size="240,60" font="Regular;30" halign="center" valign="center" backgroundColor="#1f771f" transparent="1"/>
-	<widget name="key_yellow" position="700,10" zPosition="1" size="240,60" font="Regular;30" halign="center" valign="center" backgroundColor="#a08500" transparent="1"/>
-	<widget name="key_blue" position="950,10" zPosition="1" size="240,60" font="Regular;30" halign="center" valign="center" backgroundColor="#18188b" transparent="1"/>
+<screen backgroundColor="transparent" flags="wfNoBorder" name="HRtunerProxy_main" position="center,center" size="1280,720" title=" ">
+    <eLabel backgroundColor="background" position="10,10" size="1260,700" zPosition="-1"/>
+    <eLabel backgroundColor="transparent" position="10,55" size="1260,2" zPosition="1"/>
+    <widget backgroundColor="background" font="Regular;26" foregroundColor="foreground" noWrap="1" position="30,15" render="Label" size="1080,35" source="Title" transparent="1" valign="center"/>
+    <widget backgroundColor="background" font="Regular;28" foregroundColor="foreground" halign="right" position="1150,15" render="Label" size="100,35" source="global.CurrentTime" transparent="1">
+        <convert type="ClockToText"/>
+    </widget>
+    <widget name="config" position="10,90" size="1180,120" enableWrapAround="1" scrollbarMode="showOnDemand" />
+    <widget name="information" position="10,250" size="1180,185" font="Regular;22"/>
+    <widget name="hinttext" position="10,400" size="1180,75" font="Regular;22" valign="bottom"/>
+    <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_red" position="65,677" size="200,30" transparent="1"/>
+    <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_green" position="305,677" size="200,30" transparent="1"/>
+    <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_yellow" position="550,677" size="200,30" transparent="1"/>
+    <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_blue" position="800,677" size="200,30" transparent="1"/>
+    <widget alphatest="on" name="button_red" pixmap="skin_default/buttons/button_red.png" position="30,680" size="16,16"/>
+    <widget alphatest="on" name="button_green" pixmap="skin_default/buttons/button_green.png" position="275,680" size="16,16"/>
+    <widget alphatest="on" name="button_yellow" pixmap="skin_default/buttons/button_yellow.png" position="520,680" size="16,16"/>
+    <widget alphatest="on" name="button_blue" pixmap="skin_default/buttons/button_blue.png" position="770,680" size="16,16"/>
 </screen>

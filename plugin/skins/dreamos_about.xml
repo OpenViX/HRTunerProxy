@@ -1,5 +1,11 @@
-<screen position="50,50" size="500,500">
-	<widget name="about" position="10,10" size="480,430" font="Regular;22"/>
-	<widget name="key_red" position="0,460" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1"/>
-	<ePixmap pixmap="skin_default/buttons/red.png" position="0,460" size="140,40" alphatest="on"/>
+<screen backgroundColor="transparent" flags="wfNoBorder" name="HRtunerProxy_about" position="center,center" size="1280,720" title=" ">
+    <eLabel backgroundColor="background" position="10,10" size="1260,700" zPosition="-1"/>
+    <eLabel backgroundColor="transparent" position="10,55" size="1260,2" zPosition="1"/>
+    <widget backgroundColor="background" font="Regular;26" foregroundColor="foreground" noWrap="1" position="30,15" render="Label" size="1080,35" source="Title" transparent="1" valign="center"/>
+    <widget backgroundColor="background" font="Regular;28" foregroundColor="foreground" halign="right" position="1150,15" render="Label" size="100,35" source="global.CurrentTime" transparent="1">
+        <convert type="ClockToText"/>
+    </widget>
+    <widget name="about" position="10,90" size="1180,430" font="Regular;22"/>
+    <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_red" position="65,677" size="200,30" transparent="1"/>
+    <widget alphatest="on" name="button_red" pixmap="skin_default/buttons/button_red.png" position="30,680" size="16,16"/>
 </screen>

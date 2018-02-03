@@ -55,6 +55,7 @@ class HRTunerProxy_About(Screen):
 		}, -2)
 
 		self["key_red"] = Button(_("Close"))
+		self["button_red"] = Pixmap()
 
 		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n") % getVersion()
 		credit += "Andrew Blackburn & Rowland Huevos\n"
