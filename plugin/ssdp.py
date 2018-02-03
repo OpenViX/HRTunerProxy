@@ -93,11 +93,8 @@ class SSDPServer:
 			# SSDP discovery
 			self.discovery_request(headers, (host, port))
 		elif cmd[0] == 'NOTIFY' and cmd[1] == '*':
-			SSDP presence
-			if config.hrtunerproxy.debug.value:
-				logger.info('SSDP NOTIFY *')
-			else:
-				pass
+			# SSDP presence
+			logger.info('SSDP NOTIFY *')
 		else:
 			logger.info('SSDP Unknown SSDP command %s %s' % (cmd[0], cmd[1]))
 
