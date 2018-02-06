@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-03 16:47+GMT\n"
+"POT-Creation-Date: 2018-02-06 10:50+GMT\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,26 +23,26 @@ msgstr ""
 msgid "About HR-Tuner Proxy"
 msgstr ""
 
-#: plugin/about.py:57 plugin/plugin.py:170
+#: plugin/about.py:57 plugin/plugin.py:171
 msgid "Close"
 msgstr ""
 
-#: plugin/about.py:59
+#: plugin/about.py:60
 msgid ""
 "HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n"
 msgstr ""
 
-#: plugin/about.py:62
+#: plugin/about.py:63
 msgid ""
 "Application credits:\n"
 msgstr ""
 
-#: plugin/about.py:66
+#: plugin/about.py:67
 msgid ""
 "Sources credits:\n"
 msgstr ""
 
-#: plugin/about.py:69
+#: plugin/about.py:70
 msgid ""
 "Translation credits:\n"
 msgstr ""
@@ -55,144 +55,148 @@ msgstr ""
 msgid "In use"
 msgstr ""
 
-#: plugin/plugin.py:32
+#: plugin/plugin.py:33
 msgid "All"
 msgstr ""
 
-#: plugin/plugin.py:32
+#: plugin/plugin.py:33
 msgid "Not set"
 msgstr ""
 
-#: plugin/plugin.py:113 plugin/plugin.py:133
+#: plugin/plugin.py:114 plugin/plugin.py:134
 msgid "HR-Tuner Proxy for Enigma2"
 msgstr ""
 
-#: plugin/plugin.py:182
+#: plugin/plugin.py:183
 msgid "About"
 msgstr ""
 
-#: plugin/plugin.py:197
+#: plugin/plugin.py:198
 msgid ""
 "WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n"
 "\n"
 "Press OK to exit."
 msgstr ""
 
-#: plugin/plugin.py:208 plugin/plugin.py:224 plugin/plugin.py:279
-#: plugin/plugin.py:300 plugin/plugin.py:315
+#: plugin/plugin.py:209 plugin/plugin.py:225 plugin/plugin.py:280
+#: plugin/plugin.py:301 plugin/plugin.py:316
 msgid "Tuner type to use."
 msgstr ""
 
-#: plugin/plugin.py:225 plugin/plugin.py:282 plugin/plugin.py:303
-#: plugin/plugin.py:318
+#: plugin/plugin.py:226 plugin/plugin.py:283 plugin/plugin.py:304
+#: plugin/plugin.py:319
 msgid "Bouquet to use."
 msgstr ""
 
-#: plugin/plugin.py:227
+#: plugin/plugin.py:228
 msgid "Number of concurrent streams."
 msgstr ""
 
-#: plugin/plugin.py:228 plugin/plugin.py:306 plugin/plugin.py:321
+#: plugin/plugin.py:229 plugin/plugin.py:307 plugin/plugin.py:322
 msgid "Debug Mode."
 msgstr ""
 
-#: plugin/plugin.py:264
+#: plugin/plugin.py:265
 msgid "Please note: Please now select a bouquet to use."
 msgstr ""
 
-#: plugin/plugin.py:266
+#: plugin/plugin.py:267
 msgid "Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type."
 msgstr ""
 
-#: plugin/plugin.py:272
+#: plugin/plugin.py:273
 msgid "WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail."
 msgstr ""
 
-#: plugin/plugin.py:273
+#: plugin/plugin.py:274
 msgid "Press OK to continue setting up this tuner."
 msgstr ""
 
-#: plugin/plugin.py:276 plugin/plugin.py:311 plugin/plugin.py:324
+#: plugin/plugin.py:277 plugin/plugin.py:312 plugin/plugin.py:325
 msgid "Save"
 msgstr ""
 
-#: plugin/plugin.py:280
+#: plugin/plugin.py:281
 msgid "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type."
 msgstr ""
 
-#: plugin/plugin.py:281 plugin/plugin.py:301 plugin/plugin.py:316
+#: plugin/plugin.py:282 plugin/plugin.py:302 plugin/plugin.py:317
 msgid "Press LEFT / RIGHT to select a different tuner type."
 msgstr ""
 
-#: plugin/plugin.py:283 plugin/plugin.py:286 plugin/plugin.py:289
+#: plugin/plugin.py:284 plugin/plugin.py:287 plugin/plugin.py:290
 msgid "Press OK to continue setting up this tuner or select a different tuner type."
 msgstr ""
 
-#: plugin/plugin.py:284 plugin/plugin.py:287 plugin/plugin.py:305
-#: plugin/plugin.py:320
+#: plugin/plugin.py:285 plugin/plugin.py:288 plugin/plugin.py:306
+#: plugin/plugin.py:321
 msgid "Press LEFT / RIGHT to select a different bouquet."
 msgstr ""
 
-#: plugin/plugin.py:285
+#: plugin/plugin.py:286
 msgid "Debug mode to create logs."
 msgstr ""
 
-#: plugin/plugin.py:290
+#: plugin/plugin.py:291
 msgid "Press LEFT / RIGHT to set number of concurent streams."
 msgstr ""
 
-#: plugin/plugin.py:293
+#: plugin/plugin.py:294
 msgid ""
 "Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\n"
 "https://www.plex.tv/features/plex-pass\n"
 "https://emby.media/premiere.html"
 msgstr ""
 
-#: plugin/plugin.py:294
+#: plugin/plugin.py:295
 msgid "Press OK to continue setting up."
 msgstr ""
 
-#: plugin/plugin.py:297
+#: plugin/plugin.py:298
 msgid ""
 "Please note: To use another tuner type in Plex you need to setup/have another server.\n"
 "Are you sure you want to continue?"
 msgstr ""
 
-#: plugin/plugin.py:308 plugin/plugin.py:323
+#: plugin/plugin.py:309 plugin/plugin.py:324
 msgid "Press LEFT / RIGHT to enable or disable debug mode."
 msgstr ""
 
-#: plugin/plugin.py:325
+#: plugin/plugin.py:326
 msgid "Delete"
 msgstr ""
 
-#: plugin/plugin.py:333
+#: plugin/plugin.py:334
 msgid "Do you really want to remove the files for this tuner type? Doing so will cause your DVR to be none functional."
 msgstr ""
 
-#: plugin/plugin.py:344
+#: plugin/plugin.py:345
 msgid ""
 "Files deleted. Please restart enigma2.\n"
 "\n"
 "Do you want to restart now?"
 msgstr ""
 
-#: plugin/plugin.py:365
+#: plugin/plugin.py:366
 msgid "It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"
 msgstr ""
 
-#: plugin/plugin.py:385
+#: plugin/plugin.py:386
 msgid ""
 "Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n"
 "\n"
 "Do you want to restart now?"
 msgstr ""
 
-#: plugin/plugin.py:403
+#: plugin/plugin.py:404
 msgid "Really close without saving settings?"
 msgstr ""
 
-#: plugin/plugin.py:454
+#: plugin/plugin.py:455
 msgid "HR-Tuner Proxy"
+msgstr ""
+
+#: plugin/plugin.py:463 plugin/plugin.py:464 plugin/plugin.py:465
+msgid "Setup Enigma2 to act as HR Proxy Server"
 msgstr ""
 
