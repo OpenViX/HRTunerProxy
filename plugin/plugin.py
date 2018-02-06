@@ -445,6 +445,6 @@ def Plugins(**kwargs):
 		iconpic="plugin-hd.png"
 	else:
 		iconpic="plugin.png"
-	return [PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
-			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startHRTunerProxy_Setup)]
+	return [PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), where = PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
+			PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startHRTunerProxy_Setup)]

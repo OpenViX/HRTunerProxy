@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-06 22:35+GMT\n"
+"POT-Creation-Date: 2018-02-06 22:49+GMT\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -197,6 +197,6 @@ msgid "HR-Tuner Proxy"
 msgstr ""
 
 #: plugin/plugin.py:463 plugin/plugin.py:464 plugin/plugin.py:465
-msgid "Setup Enigma2 to act as HR Proxy Server"
+msgid "Setup the HR-Tuner Proxy server"
 msgstr ""
 
