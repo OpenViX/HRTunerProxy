@@ -1,7 +1,7 @@
 from os import path
 from sys import modules
 
-from . import _
+from . import _, isDreamOS
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
@@ -20,7 +20,7 @@ def getVersion():
 	return PLUGIN_VERSION
 
 class HRTunerProxy_About(Screen):
-	if path.exists('/etc/os-release'): # check if opendreambox image
+	if isDreamOS: # check if DreamOS image
 		skin = "%s/skins/dreamos_about.xml" % (path.dirname(modules[__name__].__file__))
 	else:
 		skin = "%s/skins/about.xml" % (path.dirname(modules[__name__].__file__))

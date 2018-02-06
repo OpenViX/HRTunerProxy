@@ -8,6 +8,12 @@ from os import path, remove, environ as os_environ
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
 
+try:
+	from enigma import eMediaDatabase
+	isDreamOS = True
+except:
+	isDreamOS = False
+
 if path.exists('/tmp/hrtunerproxy.log'):
 	remove('/tmp/hrtunerproxy.log')
 logger = logging.getLogger('[HRTunerProxy]')
@@ -94,12 +100,12 @@ PluginLanguageDomain = "HRTunerProxy"
 PluginLanguagePath = "SystemPlugins/HRTunerProxy/locale"
 
 def localeInit():
-	if path.exists('/etc/os-release'): # check if opendreambox image
+	if isDreamOS: # check if opendreambox image
 		lang = language.getLanguage()[:2] # getLanguage returns e.g. "fi_FI" for "language_country"
 		os_environ["LANGUAGE"] = lang # Enigma doesn't set this (or LC_ALL, LC_MESSAGES, LANG). gettext needs it!
 	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
 
-if path.exists('/etc/os-release'): # check if opendreambox image
+if isDreamOS: # check if DreamOS image
 	_ = lambda txt: gettext.dgettext(PluginLanguageDomain, txt) if txt else ""
 	localeInit()
 	language.addCallback(localeInit)
