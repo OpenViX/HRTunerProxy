@@ -70,5 +70,6 @@ class HRTunerProxy_About(Screen):
 		credit += _("Translation credits:\n")
 		credit += "- patrickf95 / captain (German)\n"
 		credit += "- PiGeon(CZ) (Czech)\n"
+		credit += "- Rob van der Does(NL) (Dutch)\n"
 		credit += "- Pakorro (Spanish)"
 		self["about"].setText(credit)
