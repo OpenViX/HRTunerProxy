@@ -18,7 +18,7 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
-from . import _, tunerTypes, tunerfolders, tunerports, getIP, logger
+from . import _, tunerTypes, tunerfolders, tunerports, getIP, logger, isDreamOS
 from about import HRTunerProxy_About
 from enigma import getDesktop, eDVBResourceManager
 from getLineup import getlineup, getBouquetsList
@@ -98,7 +98,7 @@ for type in config.hrtunerproxy.type.choices.choices:
 	tunerTypes.append(type[0])
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
-	if path.exists('/etc/os-release'): # check if opendreambox image
+	if isDreamOS: # check if DreamOS image
 		skin = "%s/skins/dreamos_main.xml" % (path.dirname(modules[__name__].__file__))
 	else:
 		skin = "%s/skins/main.xml" % (path.dirname(modules[__name__].__file__))
@@ -428,7 +428,7 @@ def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 				starthttpserver(type)
 			if path.exists('/etc/enigma2/%s.device' % type):
 				startssdp(type)
-			if not path.exists('/etc/os-release'): # check if opendreambox image
+			if not isDreamOS: # check if DreamOS image
 				TunerMask()
 
 def HRTunerProxy_SetupMain(session, **kwargs):
@@ -445,6 +445,6 @@ def Plugins(**kwargs):
 		iconpic="plugin-hd.png"
 	else:
 		iconpic="plugin.png"
-	return [PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
-			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
-			PluginDescriptor(name = "HRTunerProxy",description = "Setup Enigma2 to act as HR Proxy Server", where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startHRTunerProxy_Setup)]
+	return [PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), where = PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
+			PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), icon=iconpic, where = PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
+			PluginDescriptor(name = "HRTunerProxy",description = _("Setup the HR-Tuner Proxy server"), where = PluginDescriptor.WHERE_MENU,needsRestart = False, fnc=startHRTunerProxy_Setup)]

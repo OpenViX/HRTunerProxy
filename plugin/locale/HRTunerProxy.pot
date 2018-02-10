@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-06 10:50+GMT\n"
+"POT-Creation-Date: 2018-02-06 22:49+GMT\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: plugin/about.py:19
-msgid "unknown"
+#: plugin/about.py:16
+msgid "v%s "
 msgstr ""
 
 #: plugin/about.py:34 plugin/about.py:46
@@ -29,7 +29,7 @@ msgstr ""
 
 #: plugin/about.py:60
 msgid ""
-"HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n"
+"HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
 msgstr ""
 
 #: plugin/about.py:63
@@ -197,6 +197,6 @@ msgid "HR-Tuner Proxy"
 msgstr ""
 
 #: plugin/plugin.py:463 plugin/plugin.py:464 plugin/plugin.py:465
-msgid "Setup Enigma2 to act as HR Proxy Server"
+msgid "Setup the HR-Tuner Proxy server"
 msgstr ""
 

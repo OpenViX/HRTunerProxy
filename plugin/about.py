@@ -1,7 +1,7 @@
 from os import path
 from sys import modules
 
-from . import _
+from . import _, isDreamOS
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
@@ -13,14 +13,14 @@ from Screens.Screen import Screen
 def getVersion():
 	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
 		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
-		PLUGIN_VERSION = f.read().replace('\n','')
+		PLUGIN_VERSION = _('v%s ') % f.read().replace('\n','')
 		f.close()
 	else:
-		PLUGIN_VERSION = _('unknown')
+		PLUGIN_VERSION = ''
 	return PLUGIN_VERSION
 
 class HRTunerProxy_About(Screen):
-	if path.exists('/etc/os-release'): # check if opendreambox image
+	if isDreamOS: # check if DreamOS image
 		skin = "%s/skins/dreamos_about.xml" % (path.dirname(modules[__name__].__file__))
 	else:
 		skin = "%s/skins/about.xml" % (path.dirname(modules[__name__].__file__))
@@ -57,7 +57,7 @@ class HRTunerProxy_About(Screen):
 		self["key_red"] = Button(_("Close"))
 		self["button_red"] = Pixmap()
 
-		credit = _("HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n") % getVersion()
+		credit = _("HR-Tuner Proxy for Enigma2 %s(c) 2018\n") % getVersion()
 		credit += "Andrew Blackburn & Rowland Huevos\n"
 		credit += "https://github.com/OpenViX/HRTunerProxy\n\n"
 		credit += _("Application credits:\n")
