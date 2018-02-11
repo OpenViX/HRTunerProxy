@@ -8,7 +8,7 @@ from shutil import rmtree
 
 from Components.ActionMap import ActionMap
 from Components.Button import Button
-from Components.config import config, configfile, ConfigSubsection, ConfigSubDict, ConfigSelection, getConfigListEntry, ConfigSelectionNumber, ConfigNumber, ConfigEnableDisable, NoSave
+from Components.config import config, configfile, ConfigSelection, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -21,18 +21,10 @@ from Screens.MessageBox import MessageBox
 from . import _, tunerTypes, tunerfolders, tunerports, getIP, logger, isDreamOS
 from about import HRTunerProxy_About
 from enigma import getDesktop, eDVBResourceManager
-from getLineup import getlineup, getBouquetsList
+from getLineup import getlineup
 from getDeviceInfo import getdeviceinfo
 from ssdp import SSDPServer
 from server import server
-
-config.hrtunerproxy = ConfigSubsection()
-config.hrtunerproxy.bouquets_list = ConfigSubDict()
-for type in tunerTypes:
-	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = None, choices = [(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
-config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
-config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
-config.hrtunerproxy.debug = ConfigEnableDisable(default = False)
 
 BaseURL = {}
 FriendlyName = {}
@@ -191,6 +183,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self.onClose.append(self.__onClose)
 
 	def LayoutFinish(self):
+		print 'LayoutFinish'
 		self.createmenu()
 		if getIP() == '0.0.0.0':
 			self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
@@ -202,12 +195,14 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			self.populate()
 
 	def onChange(self):
+		print 'onChange'
 		currentconfig = self["config"].getCurrent()[0]
 		if currentconfig == _('Tuner type to use.'):
 			self.createmenu()
 		self.populate()
 
 	def selectionChanged(self):
+		print 'selectionChanged'
 		self.populate()
 
 	def __onClose(self):
@@ -229,6 +224,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			self["config"].onSelectionChanged.append(self.selectionChanged)
 
 	def populate(self, answer=None):
+		print 'populate'
 		setup_exists = False
 		self["actions"].setEnabled(False)
 		self["closeaction"].setEnabled(False)
@@ -285,27 +281,37 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 					self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 					self.hinttext = _('Press LEFT / RIGHT to set number of concurent streams.')
 				if not setup_exists and self.firstrun:
+					print 'U1'
 					self["information"].setText(_('Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\nhttps://www.plex.tv/features/plex-pass\nhttps://emby.media/premiere.html'))
 					self["hinttext"].setText(_('Press OK to continue setting up.'))
 				elif setup_exists:
+					print 'U2'
 					self["information"].setText(_('Please note: To use another tuner type in Plex you need to setup/have another server.\nAre you sure you want to continue?'))
 				else:
+					print 'U3'
 					if currentconfig == _('Tuner type to use.'):
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+						print 'T2'
 					elif currentconfig == _('Bouquet to use.'):
+						print 'T3'
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
 					elif currentconfig == _('Debug Mode.'):
+						print 'T4'
 						self.hinttext = _('Press LEFT / RIGHT to enable or disable debug mode.')
 					self.ok()
 				self["okaction"].setEnabled(True)
 				self["key_green"].setText(_("Save"))
 				self["key_yellow"].setText("")
 		else:
+			print 'T1'
 			if currentconfig == _('Tuner type to use.'):
 				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+				print 'T2'
 			elif currentconfig == _('Bouquet to use.'):
+				print 'T3'
 				self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
 			elif currentconfig == _('Debug Mode.'):
+				print 'T4'
 				self.hinttext = _('Press LEFT / RIGHT to enable or disable debug mode.')
 			self["key_green"].setText(_("Save"))
 			self["key_yellow"].setText(_("Delete"))

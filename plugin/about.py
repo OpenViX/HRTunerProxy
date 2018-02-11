@@ -1,7 +1,7 @@
 from os import path
 from sys import modules
 
-from . import _, isDreamOS
+from . import _, getVersion, isDreamOS
 from Components.ActionMap import ActionMap
 from Components.Button import Button
 from Components.config import config
@@ -9,15 +9,6 @@ from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
-
-def getVersion():
-	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
-		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
-		PLUGIN_VERSION = _('v%s ') % f.read().replace('\n','')
-		f.close()
-	else:
-		PLUGIN_VERSION = ''
-	return PLUGIN_VERSION
 
 class HRTunerProxy_About(Screen):
 	if isDreamOS: # check if DreamOS image

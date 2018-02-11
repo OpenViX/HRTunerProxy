@@ -5,8 +5,12 @@ import fcntl
 import struct
 import logging
 from os import path, remove, environ as os_environ
+
+from Components.config import config, ConfigSubsection, ConfigSubDict, ConfigSelection, ConfigSelectionNumber, ConfigNumber, ConfigEnableDisable, NoSave
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
+
+from getLineup import getBouquetsList
 
 try:
 	from enigma import eMediaDatabase
@@ -56,6 +60,26 @@ porttypes = {
 	6084 : 'multi',
 	6085 : 'iptv'
 	}
+
+config.hrtunerproxy = ConfigSubsection()
+config.hrtunerproxy.bouquets_list = ConfigSubDict()
+for type in tunerTypes:
+	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = None, choices = [(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
+config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
+config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
+config.hrtunerproxy.debug = ConfigEnableDisable(default = False)
+
+def getVersion():
+	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
+		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
+		PLUGIN_VERSION = _('v%s ') % f.read().replace('\n','')
+		f.close()
+	else:
+		PLUGIN_VERSION = ''
+	return PLUGIN_VERSION
+
+if config.hrtunerproxy.debug.value:
+	logger.info('Version: %s' % getVersion())
 
 def _ifinfo(sock, addr, ifname):
 	iface = struct.pack('256s', ifname[:15])
