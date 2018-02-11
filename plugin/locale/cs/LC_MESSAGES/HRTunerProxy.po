@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: enigma2-openvix-plugins 1.0\n"
-"POT-Creation-Date: 2018-02-06 10:50+GMT\n"
-"PO-Revision-Date: 2018-02-06 17:11+0100\n"
+"POT-Creation-Date: 2018-02-11 15:24+GMT\n"
+"PO-Revision-Date: 2018-02-11 15:39+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: PiGeon(CZ)\n"
 "Language: cs\n"
@@ -16,31 +16,39 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: plugin/about.py:19
-msgid "unknown"
-msgstr "neznámý"
+#: plugin/__init__.py:67
+msgid "All"
+msgstr "Všechny"
 
-#: plugin/about.py:34 plugin/about.py:46
+#: plugin/__init__.py:67
+msgid "Not set"
+msgstr "nenastaveno"
+
+#: plugin/__init__.py:75
+msgid "v%s "
+msgstr "v%s "
+
+#: plugin/about.py:25 plugin/about.py:37
 msgid "About HR-Tuner Proxy"
 msgstr "O HR-Tuner Proxy"
 
-#: plugin/about.py:57 plugin/plugin.py:171
+#: plugin/about.py:48 plugin/plugin.py:162
 msgid "Close"
 msgstr "Uzavřít"
 
-#: plugin/about.py:60
-msgid "HR-Tuner Proxy for Enigma2 v%s (c) 2018 \n"
-msgstr "HR-Tuner Proxy pro Enigma2 v%s (c) 2018 \n"
+#: plugin/about.py:51
+msgid "HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
+msgstr "HR-Tuner Proxy pro Enigma2 v%s(c) 2018 \n"
 
-#: plugin/about.py:63
+#: plugin/about.py:54
 msgid "Application credits:\n"
 msgstr "Poděkování - Aplikace:\n"
 
-#: plugin/about.py:67
+#: plugin/about.py:58
 msgid "Sources credits:\n"
 msgstr "Poděkování - Zdroj:\n"
 
-#: plugin/about.py:70
+#: plugin/about.py:61
 msgid "Translation credits:\n"
 msgstr "Poděkování - Překlady:\n"
 
@@ -52,23 +60,15 @@ msgstr "Enigma2"
 msgid "In use"
 msgstr "V použití"
 
-#: plugin/plugin.py:33
-msgid "All"
-msgstr "Všechny"
-
-#: plugin/plugin.py:33
-msgid "Not set"
-msgstr "nenastaveno"
-
-#: plugin/plugin.py:114 plugin/plugin.py:134
+#: plugin/plugin.py:105 plugin/plugin.py:125
 msgid "HR-Tuner Proxy for Enigma2"
 msgstr "HR-Tuner Proxy pro Enigma2"
 
-#: plugin/plugin.py:183
+#: plugin/plugin.py:174
 msgid "About"
 msgstr "O pluginu"
 
-#: plugin/plugin.py:198
+#: plugin/plugin.py:189
 msgid ""
 "WARNING: No IP address found. Please make sure you are connected to your LAN "
 "via ethernet or Wi-Fi.\n"
@@ -80,29 +80,29 @@ msgstr ""
 "\n"
 "Zmáčkněte OK pro uzavření."
 
-#: plugin/plugin.py:209 plugin/plugin.py:225 plugin/plugin.py:280
-#: plugin/plugin.py:301 plugin/plugin.py:316
+#: plugin/plugin.py:200 plugin/plugin.py:216 plugin/plugin.py:271
+#: plugin/plugin.py:292 plugin/plugin.py:307
 msgid "Tuner type to use."
 msgstr "Typ tuneru, který bude použit."
 
-#: plugin/plugin.py:226 plugin/plugin.py:283 plugin/plugin.py:304
-#: plugin/plugin.py:319
+#: plugin/plugin.py:217 plugin/plugin.py:274 plugin/plugin.py:295
+#: plugin/plugin.py:310
 msgid "Bouquet to use."
 msgstr "Sada kanálů, která bude použita."
 
-#: plugin/plugin.py:228
+#: plugin/plugin.py:219
 msgid "Number of concurrent streams."
 msgstr "Počet současných streamů."
 
-#: plugin/plugin.py:229 plugin/plugin.py:307 plugin/plugin.py:322
+#: plugin/plugin.py:220 plugin/plugin.py:298 plugin/plugin.py:313
 msgid "Debug Mode."
 msgstr "Debug mód."
 
-#: plugin/plugin.py:265
+#: plugin/plugin.py:256
 msgid "Please note: Please now select a bouquet to use."
 msgstr "Poznámka: Prosím vyberte sadu kanálů."
 
-#: plugin/plugin.py:267
+#: plugin/plugin.py:258
 msgid ""
 "Please note: You do not seem to have any channels setup for this tuner, "
 "please add some channels to Enigma2 or choose anther tuner type."
@@ -110,7 +110,7 @@ msgstr ""
 "Poznámka: Zdá se, že nemáte naladěny žádné kanály pro tento tuner, nalaďte "
 "prosím nějaké kanály nebo vyberte jiný typ tuneru."
 
-#: plugin/plugin.py:273
+#: plugin/plugin.py:264
 msgid ""
 "WARNING: It seems you have a single tuner box. If the box is not left in "
 "standby your recordings WILL fail."
@@ -118,15 +118,15 @@ msgstr ""
 "Upozornení: Zdá se, že máte přijímač pouze s jedním tunerem, Plex nahrávání "
 "nebude fungovat, pokud nebude přijímač v režimu StanBy."
 
-#: plugin/plugin.py:274
+#: plugin/plugin.py:265
 msgid "Press OK to continue setting up this tuner."
-msgstr "Zmáčkněte OK pro pokračování v nastavení tohoto tuneru"
+msgstr "Zmáčkněte OK pro pokračování v nastavení tohoto tuneru."
 
-#: plugin/plugin.py:277 plugin/plugin.py:312 plugin/plugin.py:325
+#: plugin/plugin.py:268 plugin/plugin.py:303 plugin/plugin.py:316
 msgid "Save"
 msgstr "Uložit"
 
-#: plugin/plugin.py:281
+#: plugin/plugin.py:272
 msgid ""
 "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a "
 "different tuner type."
@@ -134,31 +134,31 @@ msgstr ""
 "Zmáčkněte OK pro pokračování v nastavení tohoto tuneru nebo levou/pravou "
 "šipku pro výběr jiného typu tuneru."
 
-#: plugin/plugin.py:282 plugin/plugin.py:302 plugin/plugin.py:317
+#: plugin/plugin.py:273 plugin/plugin.py:293 plugin/plugin.py:308
 msgid "Press LEFT / RIGHT to select a different tuner type."
 msgstr "Zmáčkněte levou/pravou šipku pro výběr jiného typu tuneru."
 
-#: plugin/plugin.py:284 plugin/plugin.py:287 plugin/plugin.py:290
+#: plugin/plugin.py:275 plugin/plugin.py:278 plugin/plugin.py:281
 msgid ""
 "Press OK to continue setting up this tuner or select a different tuner type."
 msgstr ""
 "Zmáčkněte OK pro pokračování v nastavení tohoto tuneru nebo výberte jiný "
 "typu tuneru."
 
-#: plugin/plugin.py:285 plugin/plugin.py:288 plugin/plugin.py:306
-#: plugin/plugin.py:321
+#: plugin/plugin.py:276 plugin/plugin.py:279 plugin/plugin.py:297
+#: plugin/plugin.py:312
 msgid "Press LEFT / RIGHT to select a different bouquet."
 msgstr "Zmáčkněte levou/pravou šipku pro výběr jiné sady kanálů."
 
-#: plugin/plugin.py:286
+#: plugin/plugin.py:277
 msgid "Debug mode to create logs."
 msgstr "Debug mód pro vytvoření logu."
 
-#: plugin/plugin.py:291
+#: plugin/plugin.py:282
 msgid "Press LEFT / RIGHT to set number of concurent streams."
 msgstr "Zmáčkněte levou/pravou šipku pro nastavení počtu současných streamů."
 
-#: plugin/plugin.py:294
+#: plugin/plugin.py:285
 msgid ""
 "Please note: DVR feature in Plex / Emby is premire feature. For more "
 "information please refer to:\n"
@@ -170,11 +170,11 @@ msgstr ""
 "https://www.plex.tv/features/plex-pass\n"
 "https://emby.media/premiere.html"
 
-#: plugin/plugin.py:295
+#: plugin/plugin.py:286
 msgid "Press OK to continue setting up."
 msgstr "Zmáčkněte OK pro pokračování v nastavení."
 
-#: plugin/plugin.py:298
+#: plugin/plugin.py:289
 msgid ""
 "Please note: To use another tuner type in Plex you need to setup/have "
 "another server.\n"
@@ -184,15 +184,15 @@ msgstr ""
 "druhý Plex server.\n"
 "Chcete opravdu pokracovat?"
 
-#: plugin/plugin.py:309 plugin/plugin.py:324
+#: plugin/plugin.py:300 plugin/plugin.py:315
 msgid "Press LEFT / RIGHT to enable or disable debug mode."
 msgstr "Zmáčkněte levou/pravou šipku pro zapnutí nebo vypnutí debug módu."
 
-#: plugin/plugin.py:326
+#: plugin/plugin.py:317
 msgid "Delete"
 msgstr "Smazat"
 
-#: plugin/plugin.py:334
+#: plugin/plugin.py:325
 msgid ""
 "Do you really want to remove the files for this tuner type? Doing so will "
 "cause your DVR to be none functional."
@@ -200,7 +200,7 @@ msgstr ""
 "Opravdu chcete odebrat soubory pro tento typ tuneru? Pokud tak učiníte, "
 "způsobí to nefunkčnost tohoto DVR v Plexu."
 
-#: plugin/plugin.py:345
+#: plugin/plugin.py:336
 msgid ""
 "Files deleted. Please restart enigma2.\n"
 "\n"
@@ -210,7 +210,7 @@ msgstr ""
 "\n"
 "Chcete provést restart nyní?"
 
-#: plugin/plugin.py:366
+#: plugin/plugin.py:357
 msgid ""
 "It seems you have already set up another tuner. Your server can only support "
 "one tuner type. To use this additional tuner type you will need to setup "
@@ -220,7 +220,7 @@ msgstr ""
 "jeden typ tuneru, pro využití dalšího typu tuneru budete muset nainstalovat "
 "druhý Plex server, chcete pokračovat s vytvořením souboru?"
 
-#: plugin/plugin.py:386
+#: plugin/plugin.py:377
 msgid ""
 "Files created. Please restart enigma2 and then you should be able to add "
 "this STB to your server.\n"
@@ -232,14 +232,15 @@ msgstr ""
 "\n"
 "Chcete provést restart nyní?"
 
-#: plugin/plugin.py:404
+#: plugin/plugin.py:395
 msgid "Really close without saving settings?"
 msgstr "Opravdu uzavřít bez uložení nastavení?"
 
-#: plugin/plugin.py:455
+#: plugin/plugin.py:446
 msgid "HR-Tuner Proxy"
 msgstr "HR-Tuner Proxy"
 
-#: plugin/plugin.py:463 plugin/plugin.py:464 plugin/plugin.py:465
-msgid "Setup Enigma2 to act as HR Proxy Server"
+#: plugin/plugin.py:454 plugin/plugin.py:455 plugin/plugin.py:456
+msgid "Setup the HR-Tuner Proxy server"
 msgstr "Nastavení HR-Tuner proxy serveru"
+
