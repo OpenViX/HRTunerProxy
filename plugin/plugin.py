@@ -282,7 +282,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 					self.hinttext = _('Press LEFT / RIGHT to set number of concurent streams.')
 				if not setup_exists and self.firstrun:
 					print 'U1'
-					self["information"].setText(_('Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\nhttps://www.plex.tv/features/plex-pass\nhttps://emby.media/premiere.html'))
+					self["information"].setText(_('Please note: DVR feature in Plex / Emby is a premium / premiere feature. For more information please refer to:\nhttps://www.plex.tv/features/plex-pass\nhttps://emby.media/premiere.html'))
 					self["hinttext"].setText(_('Press OK to continue setting up.'))
 				elif setup_exists:
 					print 'U2'
