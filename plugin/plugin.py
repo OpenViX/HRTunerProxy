@@ -428,6 +428,8 @@ def starthttpserver(dvbtype):
 	thread_http.start()
 
 def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
+	if config.hrtunerproxy.debug.value:
+		logger.info('Starting AutoSart reason: %s, for types: %s' % (reason,tunerTypes))
 	if reason == 0:
 		for type in tunerTypes:
 			if path.exists('/etc/enigma2/%s.discover' % type):

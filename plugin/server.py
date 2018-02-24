@@ -17,7 +17,8 @@ from Components.config import config
 
 class RootedBaseHTTPRequestHandler(BaseHTTPRequestHandler):
 	def log_message(self, format, *args):
-		logger.info("%s %s" % (self.address_string(), format%args))
+		if config.hrtunerproxy.debug.value:
+			logger.info("%s %s" % (self.address_string(), format%args))
 
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
