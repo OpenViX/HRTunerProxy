@@ -28,7 +28,7 @@ class getLineup:
 		self.bouquets_flags = {}
 		self.bouquets_names = [] # contains tuple pairs, e.g. [(filename1, bouquet_name1), (filename2, bouquet_name2)]
 		self.channel_numbers_names_and_refs = []
-		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 135]
+		self.video_allowed_types = [1, 4, 5, 17, 22, 24, 25, 27, 31, 135]
 		if not self.bouquet_names_only:
 			self.read_services()
 		if bouquet:
