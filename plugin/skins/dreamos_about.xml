@@ -7,5 +7,5 @@
     </widget>
     <widget name="about" position="10,90" size="1180,430" font="Regular;22"/>
     <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_red" position="65,677" size="200,30" transparent="1"/>
-    <widget alphatest="on" name="button_red" pixmap="skin_default/buttons/button_red.png" position="30,680" size="16,16"/>
+    <widget alphatest="on" name="button_red" pixmap="buttons/button_red.png" position="30,680" size="16,16"/>
 </screen>
