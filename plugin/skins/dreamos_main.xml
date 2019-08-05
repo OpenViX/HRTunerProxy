@@ -12,8 +12,8 @@
     <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_green" position="305,677" size="200,30" transparent="1"/>
     <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_yellow" position="550,677" size="200,30" transparent="1"/>
     <widget backgroundColor="background" font="Regular;21" foregroundColor="foreground" name="key_blue" position="800,677" size="200,30" transparent="1"/>
-    <widget alphatest="on" name="button_red" pixmap="buttons/button_red.png" position="30,680" size="16,16"/>
-    <widget alphatest="on" name="button_green" pixmap="buttons/button_green.png" position="275,680" size="16,16"/>
-    <widget alphatest="on" name="button_yellow" pixmap="buttons/button_yellow.png" position="520,680" size="16,16"/>
-    <widget alphatest="on" name="button_blue" pixmap="buttons/button_blue.png" position="770,680" size="16,16"/>
+    <widget alphatest="on" name="button_red" pixmap="skin_default/buttons/button_red.png" position="30,680" size="16,16"/>
+    <widget alphatest="on" name="button_green" pixmap="skin_default/buttons/button_green.png" position="275,680" size="16,16"/>
+    <widget alphatest="on" name="button_yellow" pixmap="skin_default/buttons/button_yellow.png" position="520,680" size="16,16"/>
+    <widget alphatest="on" name="button_blue" pixmap="skin_default/buttons/button_blue.png" position="770,680" size="16,16"/>
 </screen>
