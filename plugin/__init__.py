@@ -66,7 +66,7 @@ config.hrtunerproxy.bouquets_list = ConfigSubDict()
 for type in tunerTypes:
 	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default = None, choices = [(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
 config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min = 1, max = 10, stepwidth = 1, default = 2, wraparound = True)
-config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber(default = ""))
+config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber())
 config.hrtunerproxy.debug = ConfigEnableDisable(default = False)
 
 def getVersion():
