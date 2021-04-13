@@ -72,7 +72,7 @@ config.hrtunerproxy.debug = ConfigEnableDisable(default=False)
 def getVersion():
 	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
 		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
-		PLUGIN_VERSION = _('v%s ') % f.read().replace('\n','')
+		PLUGIN_VERSION = _('v%s ') % f.read().replace('\n', '')
 		f.close()
 	else:
 		PLUGIN_VERSION = ''
@@ -99,7 +99,7 @@ def getIfConfig(ifname):
 	infos['hwaddr'] = 0x8927 # SIOCSIFHWADDR
 	infos['netmask'] = 0x891b # SIOCGIFNETMASK
 	try:
-		for k,v in infos.items():
+		for k, v in infos.items():
 			ifreq[k] = _ifinfo(sock, v, ifname)
 	except:
 		pass
