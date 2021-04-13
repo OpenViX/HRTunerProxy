@@ -95,10 +95,10 @@ class getDeviceInfo:
 
 
 def getNimList(dvbtype):
-	return nimmanager.getNimListOfType(dvbtype) if dvbtype not in ('multi','iptv') else nimmanager.nimList()
+	return nimmanager.getNimListOfType(dvbtype) if dvbtype not in ('multi', 'iptv') else nimmanager.nimList()
 
 def tunercount(dvbtype):
-	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype not in ('multi','iptv') else len(nimmanager.nimList())
+	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype not in ('multi', 'iptv') else len(nimmanager.nimList())
 
 def tunerdata(dvbtype):
 	device_info = getDeviceInfo()
@@ -122,7 +122,7 @@ def tunerstatus(dvbtype):
 <table>
 """ % discover['FriendlyName']
 	for x in range(tunercount(dvbtype)):
-		data += "<tr><td>Tuner %s Channel</td><td>%s</td></tr>\n" % (x,ts["tuner%s" % x])
+		data += "<tr><td>Tuner %s Channel</td><td>%s</td></tr>\n" % (x, ts["tuner%s" % x])
 	data += """</table>
 </div>
 </body>
@@ -146,7 +146,7 @@ def write_discover(dvbtype="DVB-S"):
 
 def devicedata(dvbtype):
 	if path.exists('/etc/enigma2/%s.device' % dvbtype):
-		datafile = open('/etc/enigma2/%s.device' % dvbtype,'r')
+		datafile = open('/etc/enigma2/%s.device' % dvbtype, 'r')
 		xmldoc = datafile.read()
 		datafile.close()
 	else:
