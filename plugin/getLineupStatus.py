@@ -14,10 +14,10 @@ class getLineupStatus:
 
 	def lineupstatusJSON(self, dvb_type):
 		lineup_status = {}
-		lineup_status['ScanInProgess']=0
-		lineup_status['ScanPossible']=0
-		lineup_status['Source']='%s' % tunertypes[dvb_type]
-		lineup_status['SourceList']=["%s" % tunertypes[dvb_type]]
+		lineup_status['ScanInProgess'] = 0
+		lineup_status['ScanPossible'] = 0
+		lineup_status['Source'] = '%s' % tunertypes[dvb_type]
+		lineup_status['SourceList'] = ["%s" % tunertypes[dvb_type]]
 		return lineup_status
 
 def lineupstatus(dvbtype):

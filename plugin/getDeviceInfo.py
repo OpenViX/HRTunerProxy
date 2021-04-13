@@ -52,23 +52,23 @@ class getDeviceInfo:
 			deviceauth = generator(24, charset['auth'])
 			deviceid = generator(8, charset['id'])
 			if brandingmodule:
-				discover['FriendlyName']='%s %s' % (getMachineBrand(), getMachineName())
-				discover['ModelNumber']='%s' % getBoxType()
-				discover['FirmwareName']='%s' % getImageDistro()
-				discover['FirmwareVersion']='%s' % getDriverDate()
+				discover['FriendlyName'] = '%s %s' % (getMachineBrand(), getMachineName())
+				discover['ModelNumber'] = '%s' % getBoxType()
+				discover['FirmwareName'] = '%s' % getImageDistro()
+				discover['FirmwareVersion'] = '%s' % getDriverDate()
 			else:
-				discover['FriendlyName']='%s' % gethostname()
-				discover['ModelNumber']='%s' % getBoxType()
-				discover['FirmwareName']='%s' % _('Enigma2')
-				discover['FirmwareVersion']='%s' % getEnigmaVersionString()
-			discover['DeviceID']='%s' % deviceid
-			discover['DeviceAuth']='%s' % deviceauth
-			discover['DeviceUUID']='%s' % device_uuid
+				discover['FriendlyName'] = '%s' % gethostname()
+				discover['ModelNumber'] = '%s' % getBoxType()
+				discover['FirmwareName'] = '%s' % _('Enigma2')
+				discover['FirmwareVersion'] = '%s' % getEnigmaVersionString()
+			discover['DeviceID'] = '%s' % deviceid
+			discover['DeviceAuth'] = '%s' % deviceauth
+			discover['DeviceUUID'] = '%s' % device_uuid
 
-		discover['Manufacturer']='Silicondust'
-		discover['BaseURL']='%s' % ip_port
-		discover['LineupURL']='%s/lineup.json' % ip_port
-		discover['TunerCount']=tunercount(dvb_type)
+		discover['Manufacturer'] = 'Silicondust'
+		discover['BaseURL'] = '%s' % ip_port
+		discover['LineupURL'] = '%s/lineup.json' % ip_port
+		discover['TunerCount'] = tunercount(dvb_type)
 		return discover
 
 	def tunersInUse(self):
