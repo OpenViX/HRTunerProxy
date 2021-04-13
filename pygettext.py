@@ -295,7 +295,8 @@ def _get_modpkg_path(dotted_name, pathlist=None):
         # we have a dotted path, import top-level package
         try:
             file, pathname, description = imp.find_module(parts[0], pathlist)
-            if file: file.close()
+            if file:
+                file.close()
         except ImportError:
             return None
 
