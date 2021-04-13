@@ -30,35 +30,35 @@ logger.setLevel(logging.DEBUG)
 tunerTypes = ('DVB-C', 'DVB-T', 'DVB-S', 'iptv', 'multi')
 
 tunertypes = {
-	'DVB-C' : 'Cable',
-	'DVB-T' : 'Antenna',
-	'DVB-S' : 'Cable',
-	'multi' : 'Cable',
-	'iptv' : 'Cable'
+	'DVB-C': 'Cable',
+	'DVB-T': 'Antenna',
+	'DVB-S': 'Cable',
+	'multi': 'Cable',
+	'iptv': 'Cable'
 	}
 
 tunerports = {
-	'DVB-C' : '6081',
-	'DVB-T' : '6082',
-	'DVB-S' : '6083',
-	'multi' : '6084',
-	'iptv' : '6085'
+	'DVB-C': '6081',
+	'DVB-T': '6082',
+	'DVB-S': '6083',
+	'multi': '6084',
+	'iptv': '6085'
 	}
 
 tunerfolders = {
-	'DVB-C' : 'cable',
-	'DVB-T' : 'antenna',
-	'DVB-S' : 'satellite',
-	'multi' : 'multi',
-	'iptv' : 'iptv'
+	'DVB-C': 'cable',
+	'DVB-T': 'antenna',
+	'DVB-S': 'satellite',
+	'multi': 'multi',
+	'iptv': 'iptv'
 	}
 
 porttypes = {
-	6081 : 'DVB-C',
-	6082 : 'DVB-T',
-	6083 : 'DVB-S',
-	6084 : 'multi',
-	6085 : 'iptv'
+	6081: 'DVB-C',
+	6082: 'DVB-T',
+	6083: 'DVB-S',
+	6084: 'multi',
+	6085: 'iptv'
 	}
 
 config.hrtunerproxy = ConfigSubsection()

@@ -2,7 +2,7 @@ from distutils.core import setup
 import setup_translate
 
 pkg = 'SystemPlugins.HRTunerProxy'
-setup (name='enigma2-plugin-systemplugins-hrtunerproxy',
+setup(name='enigma2-plugin-systemplugins-hrtunerproxy',
        version='3.5',
        description='HRTunerProxy',
        long_description='Setup Enigma2 to act as HR-Tuner Proxy',
