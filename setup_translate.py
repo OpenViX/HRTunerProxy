@@ -39,4 +39,3 @@ cmdclass = {
 	'build': build,
 	'build_trans': build_trans,
 }
-
