@@ -33,6 +33,7 @@ Source = {}
 NoOfChannels = {}
 choicelist = []
 
+
 def TunerInfoDebug(type=None):
 	if type:
 		logger.info('%s' % str(BaseURL[type]).replace('\n', ''))
@@ -49,6 +50,7 @@ def TunerInfoDebug(type=None):
 			logger.info('%s' % str(TunerCount[type]).replace('\n', ''))
 			logger.info('%s' % str(NoOfChannels[type]).replace('\n\n', ''))
 			logger.info('Bouquet %s' % config.hrtunerproxy.bouquets_list[type].value)
+
 
 def TunerInfo(type=None):
 	if type:
@@ -72,6 +74,7 @@ def TunerInfo(type=None):
 			Source[type] = 'Source: %s\n' % str(tunerfolders[type]).title() if type != 'iptv' else 'Source: %s\n' % str(tunerfolders[type]).upper()
 			NoOfChannels[type] = 'Channels: %s\n\n' % str(nochl)
 
+
 if config.hrtunerproxy.debug.value:
 	TunerInfo()
 	TunerInfoDebug()
@@ -88,6 +91,7 @@ if config.hrtunerproxy.debug.value:
 tunerTypes = []
 for type in config.hrtunerproxy.type.choices.choices:
 	tunerTypes.append(type[0])
+
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	if isDreamOS: # check if DreamOS image
@@ -351,7 +355,6 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["button_green"].show()
 		self["button_blue"].show()
 
-
 	def keySave(self):
 		if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
 			self.session.openWithCallback(self.saveconfirm, MessageBox, text=_("It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"), type=MessageBox.TYPE_YESNO)
@@ -396,6 +399,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		else:
 			self.close()
 
+
 class TunerMask():
 	def __init__(self):
 		res_mgr = eDVBResourceManager.getInstance()
@@ -404,6 +408,7 @@ class TunerMask():
 
 	def tunerUseMaskChanged(self, mask):
 		config.hrtunerproxy.slotsinuse.setValue(mask)
+
 
 def startssdp(dvbtype):
 	discover = getdeviceinfo.discoverdata(dvbtype)
@@ -420,12 +425,14 @@ def startssdp(dvbtype):
 	thread_ssdp.daemon = True # Daemonize thread
 	thread_ssdp.start()
 
+
 def starthttpserver(dvbtype):
 	if config.hrtunerproxy.debug.value:
 		logger.info('Starting HTTPServer for %s' % dvbtype)
 	thread_http = threading.Thread(target=server.run, args=(dvbtype,))
 	thread_http.daemon = True # Daemonize thread
 	thread_http.start()
+
 
 def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 	if config.hrtunerproxy.debug.value:
@@ -439,13 +446,16 @@ def HRTunerProxy_AutoStart(reason, session=None, **kwargs):
 			if not isDreamOS: # check if DreamOS image
 				TunerMask()
 
+
 def HRTunerProxy_SetupMain(session, **kwargs):
 	session.open(HRTunerProxy_Setup)
+
 
 def startHRTunerProxy_Setup(menuid):
 	if menuid != "system":
 		return []
 	return [(_("HR-Tuner Proxy"), HRTunerProxy_SetupMain, "dvr_setup", None)]
+
 
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()

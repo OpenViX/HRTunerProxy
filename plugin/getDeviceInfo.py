@@ -32,8 +32,10 @@ charset = {
 	"id": string.ascii_uppercase + string.digits,
 }
 
+
 def generator(size, chars=charset['id']):
 	return ''.join(random.choice(chars) for _ in range(size))
+
 
 class getDeviceInfo:
 	def __init__(self):
@@ -97,13 +99,16 @@ class getDeviceInfo:
 def getNimList(dvbtype):
 	return nimmanager.getNimListOfType(dvbtype) if dvbtype not in ('multi', 'iptv') else nimmanager.nimList()
 
+
 def tunercount(dvbtype):
 	return len(nimmanager.getNimListOfType(dvbtype)) if dvbtype not in ('multi', 'iptv') else len(nimmanager.nimList())
+
 
 def tunerdata(dvbtype):
 	device_info = getDeviceInfo()
 	output = device_info.getTunerInfo(dvbtype)
 	return output
+
 
 def tunerstatus(dvbtype):
 	discover = discoverdata(dvbtype=dvbtype)
@@ -129,10 +134,12 @@ def tunerstatus(dvbtype):
 </html>"""
 	return data
 
+
 def discoverdata(dvbtype):
 	device_info = getDeviceInfo()
 	output = device_info.discoverJSON(dvb_type=dvbtype)
 	return output
+
 
 def write_discover(dvbtype="DVB-S"):
 	data = discoverdata(dvbtype=dvbtype)
@@ -144,6 +151,7 @@ def write_discover(dvbtype="DVB-S"):
 		print "Error opening %s for writing" % writefile
 		return
 
+
 def devicedata(dvbtype):
 	if path.exists('/etc/enigma2/%s.device' % dvbtype):
 		datafile = open('/etc/enigma2/%s.device' % dvbtype, 'r')
@@ -152,6 +160,7 @@ def devicedata(dvbtype):
 	else:
 		xmldoc = ""
 	return xmldoc
+
 
 def write_device_xml(dvbtype):
 	discover = discoverdata(dvbtype=dvbtype)
@@ -182,5 +191,6 @@ def write_device_xml(dvbtype):
 	with open('/etc/enigma2/%s.device' % dvbtype, 'w') as outfile:
 		outfile.writelines(xmlfile)
 	outfile.close()
+
 
 getdeviceinfo = modules[__name__]

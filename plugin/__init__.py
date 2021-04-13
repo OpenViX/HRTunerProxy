@@ -69,6 +69,7 @@ config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min=1, max=10, stepw
 config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber())
 config.hrtunerproxy.debug = ConfigEnableDisable(default=False)
 
+
 def getVersion():
 	if path.exists("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION"):
 		f = open("/usr/lib/enigma2/python/Plugins/SystemPlugins/HRTunerProxy/PLUGIN_VERSION")
@@ -78,8 +79,10 @@ def getVersion():
 		PLUGIN_VERSION = ''
 	return PLUGIN_VERSION
 
+
 if config.hrtunerproxy.debug.value:
 	logger.info('Version: %s' % getVersion())
+
 
 def _ifinfo(sock, addr, ifname):
 	iface = struct.pack('256s', ifname[:15])
@@ -88,6 +91,7 @@ def _ifinfo(sock, addr, ifname):
 		return ''.join(['%02x:' % ord(char) for char in info[18:24]])[:-1].upper()
 	else:
 		return socket.inet_ntoa(info[20:24])
+
 
 def getIfConfig(ifname):
 	ifreq = {'ifname': ifname}
@@ -106,12 +110,14 @@ def getIfConfig(ifname):
 	sock.close()
 	return ifreq
 
+
 def getIfInfo():
 	for port in ('eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'wlan3', 'ra0'):
 		ifinfo = getIfConfig(port)
 		if ifinfo.has_key('addr'):
 			return ifinfo
 	return None
+
 
 def getIP():
 	IP = '0.0.0.0'
@@ -120,14 +126,17 @@ def getIP():
 		IP = ifinfo['addr']
 	return '%s' % IP
 
+
 PluginLanguageDomain = "HRTunerProxy"
 PluginLanguagePath = "SystemPlugins/HRTunerProxy/locale"
+
 
 def localeInit():
 	if isDreamOS: # check if opendreambox image
 		lang = language.getLanguage()[:2] # getLanguage returns e.g. "fi_FI" for "language_country"
 		os_environ["LANGUAGE"] = lang # Enigma doesn't set this (or LC_ALL, LC_MESSAGES, LANG). gettext needs it!
 	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
+
 
 if isDreamOS: # check if DreamOS image
 	_ = lambda txt: gettext.dgettext(PluginLanguageDomain, txt) if txt else ""

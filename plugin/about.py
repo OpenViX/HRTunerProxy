@@ -10,6 +10,7 @@ from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
 
+
 class HRTunerProxy_About(Screen):
 	if isDreamOS: # check if DreamOS image
 		skin = "%s/skins/dreamos_about.xml" % (path.dirname(modules[__name__].__file__))

@@ -173,7 +173,6 @@ DEFAULTKEYWORDS = ', '.join(default_keywords)
 EMPTYSTRING = ''
 
 
-
 # The normal pot-file header. msgmerge and Emacs's po-mode work better if it's
 # there.
 pot_header = _('''\
@@ -203,8 +202,8 @@ def usage(code, msg=''):
     sys.exit(code)
 
 
-
 escapes = []
+
 
 def make_escapes(pass_iso8859):
     global escapes
@@ -502,7 +501,6 @@ class TokenEater:
                 print >> fp, 'msgstr ""\n'
 
 
-
 def main():
     global default_keywords
     try:
