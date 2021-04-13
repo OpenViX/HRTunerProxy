@@ -22,7 +22,7 @@ class HRTunerProxy_About(Screen):
 	def __init__(self, session, menu_path=""):
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
-			screentitle =  _("About HR-Tuner Proxy")
+			screentitle = _("About HR-Tuner Proxy")
 			if config.usage.show_menupath.value == 'large':
 				menu_path += screentitle
 				title = menu_path
@@ -34,7 +34,7 @@ class HRTunerProxy_About(Screen):
 				title = screentitle
 				self["menu_path_compressed"] = StaticText("")
 		else:
-			title =  _("About HR-Tuner Proxy")
+			title = _("About HR-Tuner Proxy")
 		Screen.setTitle(self, title)
 
 		self["about"] = Label()

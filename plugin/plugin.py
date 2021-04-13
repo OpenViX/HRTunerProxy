@@ -102,7 +102,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		instance = None
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
-			screentitle =  _("HR-Tuner Proxy for Enigma2")
+			screentitle = _("HR-Tuner Proxy for Enigma2")
 			self.menu_path = menu_path
 			if config.usage.show_menupath.value == 'large':
 				self.menu_path += screentitle
@@ -122,7 +122,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 				title = screentitle
 				self["menu_path_compressed"] = StaticText("")
 		else:
-			title =  _("HR-Tuner Proxy for Enigma2")
+			title = _("HR-Tuner Proxy for Enigma2")
 			self.menu_path = ""
 		Screen.setTitle(self, title)
 
@@ -244,7 +244,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		if config.hrtunerproxy.debug.value:
 			TunerInfoDebug(type)
 
-		self.label = (BaseURL[type]+FriendlyName[type]+Source[type]+TunerCount[type]+NoOfChannels[type])
+		self.label = (BaseURL[type] + FriendlyName[type] + Source[type] + TunerCount[type] + NoOfChannels[type])
 
 		for types in tunerTypes:
 			if path.exists('/etc/enigma2/%s.discover' % types):
@@ -450,9 +450,9 @@ def startHRTunerProxy_Setup(menuid):
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()
 	if screenwidth and screenwidth == 1920:
-		iconpic="plugin-hd.png"
+		iconpic = "plugin-hd.png"
 	else:
-		iconpic="plugin.png"
+		iconpic = "plugin.png"
 	return [PluginDescriptor(name="HRTunerProxy",description=_("Setup the HR-Tuner Proxy server"), where=PluginDescriptor.WHERE_SESSIONSTART, fnc=HRTunerProxy_AutoStart, needsRestart=True),
 			PluginDescriptor(name="HRTunerProxy",description=_("Setup the HR-Tuner Proxy server"), icon=iconpic, where=PluginDescriptor.WHERE_PLUGINMENU, fnc=HRTunerProxy_SetupMain),
 			PluginDescriptor(name="HRTunerProxy",description=_("Setup the HR-Tuner Proxy server"), where=PluginDescriptor.WHERE_MENU,needsRestart=False, fnc=startHRTunerProxy_Setup)]

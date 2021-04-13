@@ -18,7 +18,7 @@ from Components.config import config
 class RootedBaseHTTPRequestHandler(BaseHTTPRequestHandler):
 	def log_message(self, format, *args):
 		if config.hrtunerproxy.debug.value:
-			logger.info("%s %s" % (self.address_string(), format%args))
+			logger.info("%s %s" % (self.address_string(), format % args))
 
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
@@ -39,7 +39,7 @@ class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 		tunertype = porttypes[self.port]
 
 		if self.path == '/':
-			self.path  = '/device.xml'
+			self.path = '/device.xml'
 
 		if self.path.endswith(".html"):
 			mimeType = 'text/html'
@@ -109,7 +109,7 @@ button { margin-top: 0.25em; }""")
 
 def run(dvbtype):
 	ipaddress = getIP()
-	ipport='%d' % int(tunerports[dvbtype])
+	ipport = '%d' % int(tunerports[dvbtype])
 	startserver(ip_address=ipaddress, port=ipport)
 
 def startserver(ip_address='', port=''):

@@ -34,7 +34,7 @@ class getLineup:
 		if bouquet:
 			if bouquet != 'all':
 				self.bouquets_filenames.append(bouquet)
-				self.bouquets_flags[bouquet] = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
+				self.bouquets_flags[bouquet] = (eServiceReference.isDirectory | eServiceReference.mustDescent | eServiceReference.canDescent) # default bouquet folder (7)
 			else:
 				self.read_tv_index()
 			self.read_tv_bouquets()
@@ -53,9 +53,9 @@ class getLineup:
 
 		srv_blocks = content[srv_start + 9:srv_stop].strip().split("\n")
 
-		for i in range(0, len(srv_blocks)/3):
-			service_reference = srv_blocks[i*3].strip().split(":")
-			service_name = srv_blocks[(i*3)+1].strip()
+		for i in range(0, len(srv_blocks) / 3):
+			service_reference = srv_blocks[i * 3].strip().split(":")
+			service_name = srv_blocks[(i * 3) + 1].strip()
 
 			if len(service_reference) != 6 and len(service_reference) != 7:
 				continue
@@ -82,7 +82,7 @@ class getLineup:
 			if result is None:
 				continue
 			self.bouquets_filenames.append(result.group(1))
-			bouquet_flags = (eServiceReference.isDirectory|eServiceReference.mustDescent|eServiceReference.canDescent) # default bouquet folder (7)
+			bouquet_flags = (eServiceReference.isDirectory | eServiceReference.mustDescent | eServiceReference.canDescent) # default bouquet folder (7)
 			if result.group(0).startswith("#SERVICE "):
 				service_ref = result.group(0)[9:].strip()
 				service_ref_split = service_ref.split(":")
@@ -122,7 +122,7 @@ class getLineup:
 						print "[HRTunerProxy] [read_tv_bouquets] Error in %s" % filename
 						continue
 					service_flags = int(service_ref_split[1])
-					if service_flags == (eServiceReference.mustDescent|eServiceReference.canDescent|eServiceReference.isGroup): # alternatives (134)
+					if service_flags == (eServiceReference.mustDescent | eServiceReference.canDescent | eServiceReference.isGroup): # alternatives (134)
 						alternative = self.alternatives(row)
 						if alternative is None: # something must be wrong with alternatives group
 							channel_number += 1
@@ -208,12 +208,12 @@ class getLineup:
 				continue
 			if dvb_type in ('multi', 'iptv', c_n_r[3]):
 				self.data_tmp = {}
-				self.data_tmp['GuideNumber']='%s' % c_n_r[0]
-				self.data_tmp['GuideName']='%s' % c_n_r[1]
+				self.data_tmp['GuideNumber'] = '%s' % c_n_r[0]
+				self.data_tmp['GuideName'] = '%s' % c_n_r[1]
 				if "http" in c_n_r[2]:
 					self.data_tmp['URL'] = c_n_r[2]
 				else:
-					self.data_tmp['URL']='http://%s:%d/%s' % (ip, port, c_n_r[2])
+					self.data_tmp['URL'] = 'http://%s:%d/%s' % (ip, port, c_n_r[2])
 				self.lineup.append(self.data_tmp)
 		return self.lineup
 
