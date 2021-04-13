@@ -128,7 +128,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 
 		self.savedval = config.hrtunerproxy.type.value
 
-		self.onChangedEntry = [ ]
+		self.onChangedEntry = []
 		self.list = []
 		ConfigListScreen.__init__(self, self.list, session=session, on_change=self.onChange)
 
@@ -445,7 +445,7 @@ def HRTunerProxy_SetupMain(session, **kwargs):
 def startHRTunerProxy_Setup(menuid):
 	if menuid != "system":
 		return []
-	return [( _("HR-Tuner Proxy"), HRTunerProxy_SetupMain, "dvr_setup", None)]
+	return [(_("HR-Tuner Proxy"), HRTunerProxy_SetupMain, "dvr_setup", None)]
 
 def Plugins(**kwargs):
 	screenwidth = getDesktop(0).size().width()
