@@ -8,7 +8,7 @@ from enigma import eServiceReference
 from Components.config import config
 
 class getLineup:
-	def __init__(self, duplicates = False, bouquet = None, bouquet_names_only = False):
+	def __init__(self, duplicates=False, bouquet=None, bouquet_names_only=False):
 		self.duplicates = duplicates
 		self.bouquet_names_only = bouquet_names_only
 		self.refs_added = []
@@ -228,7 +228,7 @@ def lineupdata(ipinput='0.0.0.0', dvbtype='', bouquet_name=''):
 	return channel_numbers.createJSON(ip=ipinput, dvb_type=dvbtype)
 
 def getBouquetsList():
-	lineup = getLineup(bouquet_names_only = True, bouquet='all')
+	lineup = getLineup(bouquet_names_only=True, bouquet='all')
 	return lineup.getBouquetsList()
 
 getlineup = modules[__name__]
