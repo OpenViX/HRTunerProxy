@@ -8,6 +8,7 @@ from . import tunerTypes, tunertypes
 
 lineup_status = {}
 
+
 class getLineupStatus:
 	def __init__(self):
 		pass
@@ -19,6 +20,7 @@ class getLineupStatus:
 		lineup_status['Source'] = '%s' % tunertypes[dvb_type]
 		lineup_status['SourceList'] = ["%s" % tunertypes[dvb_type]]
 		return lineup_status
+
 
 def lineupstatus(dvbtype):
 	lineup_status = getLineupStatus()

@@ -20,9 +20,11 @@ class RootedBaseHTTPRequestHandler(BaseHTTPRequestHandler):
 		if config.hrtunerproxy.debug.value:
 			logger.info("%s %s" % (self.address_string(), format % args))
 
+
 class RootedHTTPServer(HTTPServer):
 	def __init__(self, *args, **kwargs):
 		HTTPServer.__init__(self, *args, **kwargs)
+
 
 class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 	def do_GET(self):
@@ -107,10 +109,12 @@ button { margin-top: 0.25em; }""")
 				logger.info('file type not coded:', self.path)
 			return
 
+
 def run(dvbtype):
 	ipaddress = getIP()
 	ipport = '%d' % int(tunerports[dvbtype])
 	startserver(ip_address=ipaddress, port=ipport)
+
 
 def startserver(ip_address='', port=''):
 	server_address = (ip_address, int(port))
