@@ -114,7 +114,7 @@ def getIfConfig(ifname):
 def getIfInfo():
 	for port in ('eth0', 'eth1', 'wlan0', 'wlan1', 'wlan2', 'wlan3', 'ra0'):
 		ifinfo = getIfConfig(port)
-		if ifinfo.has_key('addr'):
+		if 'addr' in ifinfo:
 			return ifinfo
 	return None
 
