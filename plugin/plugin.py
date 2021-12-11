@@ -94,6 +94,7 @@ for type in config.hrtunerproxy.type.choices.choices:
 
 
 class HRTunerProxy_Setup(ConfigListScreen, Screen):
+	instance = None
 	if isDreamOS: # check if DreamOS image
 		skin = "%s/skins/dreamos_main.xml" % (path.dirname(modules[__name__].__file__))
 	else:
@@ -103,7 +104,6 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	f.close()
 
 	def __init__(self, session, menu_path=""):
-		instance = None
 		Screen.__init__(self, session)
 		if hasattr(config.usage, 'show_menupath'):
 			screentitle = _("HR-Tuner Proxy for Enigma2")
