@@ -29,7 +29,8 @@ class RootedHTTPServer(HTTPServer):
 class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
-			for x in str(self.headers).split('\r\n'):
+			for x in str(self.headers).split('\n'):
+				x = x.strip()
 				if x.startswith('Host:'):
 					host = x
 					break
