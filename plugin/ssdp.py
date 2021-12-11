@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 # Licensed under the MIT license
 # http://opensource.org/licenses/mit-license.php
 

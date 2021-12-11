@@ -1,17 +1,24 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 import posixpath
 import argparse
 import urllib
 import os
 import json
+import six
 
 from sys import modules
-from SimpleHTTPServer import SimpleHTTPRequestHandler
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+try:
+	from http.server import SimpleHTTPRequestHandler, HTTPServer, BaseHTTPRequestHandler
+except:
+	from SimpleHTTPServer import SimpleHTTPRequestHandler
+	from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 from . import getIP, tunerports, porttypes, logger
-from getLineup import getlineup
-from getLineupStatus import getlineupstatus
-from getDeviceInfo import getdeviceinfo
+from .getLineup import getlineup
+from .getLineupStatus import getlineupstatus
+from .getDeviceInfo import getdeviceinfo
 from Components.config import config
 
 
@@ -59,32 +66,32 @@ class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(json.dumps(getlineupstatus.lineupstatus(tunertype)))
+			self.wfile.write(six.ensure_binary(json.dumps(getlineupstatus.lineupstatus(tunertype))))
 		elif self.path.endswith("lineup.json"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(json.dumps(getlineup.lineupdata(getIP(), tunertype, config.hrtunerproxy.bouquets_list[tunertype].value)))
+			self.wfile.write(six.ensure_binary(json.dumps(getlineup.lineupdata(getIP(), tunertype, config.hrtunerproxy.bouquets_list[tunertype].value))))
 		elif self.path.endswith("discover.json"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(json.dumps(getdeviceinfo.discoverdata(tunertype)))
+			self.wfile.write(six.ensure_binary(json.dumps(getdeviceinfo.discoverdata(tunertype))))
 		elif self.path.endswith("device.xml"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(getdeviceinfo.devicedata(tunertype))
+			self.wfile.write(six.ensure_binary(getdeviceinfo.devicedata(tunertype)))
 		elif self.path.endswith("tuners.html"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(getdeviceinfo.tunerstatus(tunertype))
+			self.wfile.write(six.ensure_binary(getdeviceinfo.tunerstatus(tunertype)))
 		elif self.path.endswith("style.css"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write("""html { width:100%; height: 100%;}
+			self.wfile.write(six.ensure_binary("""html { width:100%; height: 100%;}
 body {background: #777 url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMSAxIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIj48cmFkaWFsR3JhZGllbnQgaWQ9InJnIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNjA2Yzg4IiBzdG9wLW9wYWNpdHk9IjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxMzE3MjEiIHN0b3Atb3BhY2l0eT0iMSIvPjwvcmFkaWFsR3JhZGllbnQ+PHJlY3QgeD0iLTUwIiB5PSItNTAiIHdpZHRoPSIxMDEiIGhlaWdodD0iMTAxIiBmaWxsPSJ1cmwoI3JnKSIgLz48L3N2Zz4K) no-repeat center center fixed;background-size: cover;font-family: sans-serif;}
 .B {background: #fff;margin: 9.5em;border: 3px solid #000;box-shadow: 10px 10px 50px #000;display: table}
 .C, .W {margin: auto;margin-top: 1em;padding: 10px;}
@@ -103,7 +110,7 @@ td img {margin-right:5px;}
 .L * {border-bottom: 1px solid black;}
 td {white-space: nowrap;}
 td:first-child {text-align: center;}
-button { margin-top: 0.25em; }""")
+button { margin-top: 0.25em; }"""))
 		else:
 			self.send_error(404, '[HRTunerProxy] File not found!')
 			if config.hrtunerproxy.debug.value:

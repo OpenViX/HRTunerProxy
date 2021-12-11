@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 import string
 import random
 import json
@@ -24,7 +27,7 @@ except:
 		def getEnigmaVersionString():
 			return '000000'
 
-from getLineup import getlineup
+from .getLineup import getlineup
 from . import tunertypes, tunerports, tunerfolders, getIP
 
 charset = {
@@ -76,7 +79,7 @@ class getDeviceInfo:
 	def tunersInUse(self):
 		# returns list of nim.slot numbers that are currenly in use
 		mask = config.hrtunerproxy.slotsinuse.value
-		print "[HRTunerProxy] mask:%s\n" % mask
+		print("[HRTunerProxy] mask:%s\n" % mask)
 		slots = []
 		for i in range(len(format(mask, 'b'))):
 			if (mask >> i) & 0x1:
@@ -86,7 +89,7 @@ class getDeviceInfo:
 	def getTunerInfo(self, dvb_type):
 		nimList = getNimList(dvb_type)
 		tunersInUse = self.tunersInUse()
-		print "[HRTunerProxy] tunersInUse", tunersInUse
+		print("[HRTunerProxy] tunersInUse", tunersInUse)
 		tunerstatus = {}
 		x = 0
 		for nim in nimList:
@@ -147,8 +150,8 @@ def write_discover(dvbtype="DVB-S"):
 		with open('/etc/enigma2/%s.discover' % dvbtype, 'w') as outfile:
 			json.dump(data, outfile)
 		outfile.close()
-	except Exception, e:
-		print "Error opening %s for writing" % writefile
+	except Exception as e:
+		print("Error opening %s for writing" % writefile)
 		return
 
 

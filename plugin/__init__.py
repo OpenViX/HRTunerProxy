@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import absolute_import
+
 import gettext
 import socket
 import fcntl
@@ -10,13 +13,15 @@ from Components.config import config, ConfigSubsection, ConfigSubDict, ConfigSel
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
 
-from getLineup import getBouquetsList
+from .getLineup import getBouquetsList
 
 try:
 	from enigma import eMediaDatabase
 	isDreamOS = True
 except:
 	isDreamOS = False
+
+import six
 
 if path.exists('/tmp/hrtunerproxy.log'):
 	remove('/tmp/hrtunerproxy.log')
@@ -85,10 +90,10 @@ if config.hrtunerproxy.debug.value:
 
 
 def _ifinfo(sock, addr, ifname):
-	iface = struct.pack('256s', ifname[:15])
+	iface = struct.pack('256s', six.ensure_binary(ifname[:15]))
 	info = fcntl.ioctl(sock.fileno(), addr, iface)
 	if addr == 0x8927:
-		return ''.join(['%02x:' % ord(char) for char in info[18:24]])[:-1].upper()
+		return ''.join(['%02x:' % char if six.PY3 else ord(char) for char in info[18:24]])[:-1].upper()
 	else:
 		return socket.inet_ntoa(info[20:24])
 
@@ -147,6 +152,6 @@ else:
 		if gettext.dgettext(PluginLanguageDomain, txt):
 			return gettext.dgettext(PluginLanguageDomain, txt)
 		else:
-			print "[" + PluginLanguageDomain + "] fallback to default translation for " + txt
+			print("[" + PluginLanguageDomain + "] fallback to default translation for " + txt)
 			return gettext.gettext(txt)
 	language.addCallback(localeInit())
