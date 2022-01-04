@@ -93,7 +93,7 @@ def _ifinfo(sock, addr, ifname):
 	iface = struct.pack('256s', six.ensure_binary(ifname[:15]))
 	info = fcntl.ioctl(sock.fileno(), addr, iface)
 	if addr == 0x8927:
-		return ''.join(['%02x:' % char if six.PY3 else ord(char) for char in info[18:24]])[:-1].upper()
+		return ':'.join(['%02x' % (char if six.PY3 else ord(char)) for char in info[18:24]]).upper()
 	else:
 		return socket.inet_ntoa(info[20:24])
 
