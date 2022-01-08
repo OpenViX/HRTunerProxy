@@ -23,7 +23,7 @@ class build_trans(cmd.Command):
 					if f.endswith('.po'):
 						src = os.path.join(lc, f)
 						dest = os.path.join(lc, f[:-2] + 'mo')
-						print "Language compile %s -> %s" % (src, dest)
+						print("Language compile %s -> %s" % (src, dest))
 						if os.system("msgfmt '%s' -o '%s'" % (src, dest)) != 0:
 							raise Exception, "Failed to compile: " + src
 
