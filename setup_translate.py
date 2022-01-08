@@ -25,7 +25,7 @@ class build_trans(cmd.Command):
 						dest = os.path.join(lc, f[:-2] + 'mo')
 						print("Language compile %s -> %s" % (src, dest))
 						if os.system("msgfmt '%s' -o '%s'" % (src, dest)) != 0:
-							raise Exception, "Failed to compile: " + src
+							raise Exception("Failed to compile:%s " % src)
 
 
 class build(_build):
