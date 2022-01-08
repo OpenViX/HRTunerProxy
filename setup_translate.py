@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+
 # Language extension for distutils Python scripts. Based on this concept:
 # http://wiki.maemo.org/Internationalize_a_Python_application
 from distutils import cmd
@@ -23,7 +26,7 @@ class build_trans(cmd.Command):
 					if f.endswith('.po'):
 						src = os.path.join(lc, f)
 						dest = os.path.join(lc, f[:-2] + 'mo')
-						print "Language compile %s -> %s" % (src, dest)
+						print("Language compile %s -> %s" % (src, dest))
 						if os.system("msgfmt '%s' -o '%s'" % (src, dest)) != 0:
 							raise Exception, "Failed to compile: " + src
 
