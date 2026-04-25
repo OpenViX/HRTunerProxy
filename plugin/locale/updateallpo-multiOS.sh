@@ -188,6 +188,7 @@ for lang in "${languages[@]}" ; do
 			msgfmt -o $mofile $lang/LC_MESSAGES/"$plugin".po;
 		fi
 	fi
+	sed -i 's/\r$//' $lang/LC_MESSAGES/"$plugin".po
 done
 if [ $delete -eq 1 ]; then \
 	rm "$plugin"-py.pot "$plugin"-xml.pot
