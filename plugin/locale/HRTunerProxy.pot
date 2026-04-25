@@ -1,202 +1,208 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-11 15:24+GMT\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-25 20:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
-"Generated-By: pygettext.py 1.5\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
-
-#: plugin/__init__.py:67
-msgid "All"
-msgstr ""
-
-#: plugin/__init__.py:67
-msgid "Not set"
-msgstr ""
-
-#: plugin/__init__.py:75
-msgid "v%s "
-msgstr ""
-
-#: plugin/about.py:25 plugin/about.py:37
-msgid "About HR-Tuner Proxy"
-msgstr ""
-
-#: plugin/about.py:48 plugin/plugin.py:162
-msgid "Close"
-msgstr ""
-
-#: plugin/about.py:51
-msgid ""
-"HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
-msgstr ""
-
-#: plugin/about.py:54
-msgid ""
-"Application credits:\n"
-msgstr ""
-
-#: plugin/about.py:58
-msgid ""
-"Sources credits:\n"
-msgstr ""
-
-#: plugin/about.py:61
-msgid ""
-"Translation credits:\n"
-msgstr ""
-
-#: plugin/getDeviceInfo.py:62
-msgid "Enigma2"
-msgstr ""
-
-#: plugin/getDeviceInfo.py:91
-msgid "In use"
-msgstr ""
-
-#: plugin/plugin.py:105 plugin/plugin.py:125
-msgid "HR-Tuner Proxy for Enigma2"
-msgstr ""
-
-#: plugin/plugin.py:174
+#: ../plugin.py:183
 msgid "About"
 msgstr ""
 
-#: plugin/plugin.py:189
-msgid ""
-"WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n"
-"\n"
-"Press OK to exit."
+#: ../about.py:26 ../about.py:38
+msgid "About HR-Tuner Proxy"
 msgstr ""
 
-#: plugin/plugin.py:200 plugin/plugin.py:216 plugin/plugin.py:271
-#: plugin/plugin.py:292 plugin/plugin.py:307
-msgid "Tuner type to use."
+#: ../__init__.py:72
+msgid "All"
 msgstr ""
 
-#: plugin/plugin.py:217 plugin/plugin.py:274 plugin/plugin.py:295
-#: plugin/plugin.py:310
+#: ../about.py:55
+msgid "Application credits:\n"
+msgstr ""
+
+#: ../plugin.py:220 ../plugin.py:280 ../plugin.py:303 ../plugin.py:320
 msgid "Bouquet to use."
 msgstr ""
 
-#: plugin/plugin.py:219
-msgid "Number of concurrent streams."
+#: ../about.py:49 ../plugin.py:171
+msgid "Close"
 msgstr ""
 
-#: plugin/plugin.py:220 plugin/plugin.py:298 plugin/plugin.py:313
+#: ../plugin.py:223 ../plugin.py:306 ../plugin.py:323
 msgid "Debug Mode."
 msgstr ""
 
-#: plugin/plugin.py:256
-msgid "Please note: Please now select a bouquet to use."
-msgstr ""
-
-#: plugin/plugin.py:258
-msgid "Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type."
-msgstr ""
-
-#: plugin/plugin.py:264
-msgid "WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail."
-msgstr ""
-
-#: plugin/plugin.py:265
-msgid "Press OK to continue setting up this tuner."
-msgstr ""
-
-#: plugin/plugin.py:268 plugin/plugin.py:303 plugin/plugin.py:316
-msgid "Save"
-msgstr ""
-
-#: plugin/plugin.py:272
-msgid "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type."
-msgstr ""
-
-#: plugin/plugin.py:273 plugin/plugin.py:293 plugin/plugin.py:308
-msgid "Press LEFT / RIGHT to select a different tuner type."
-msgstr ""
-
-#: plugin/plugin.py:275 plugin/plugin.py:278 plugin/plugin.py:281
-msgid "Press OK to continue setting up this tuner or select a different tuner type."
-msgstr ""
-
-#: plugin/plugin.py:276 plugin/plugin.py:279 plugin/plugin.py:297
-#: plugin/plugin.py:312
-msgid "Press LEFT / RIGHT to select a different bouquet."
-msgstr ""
-
-#: plugin/plugin.py:277
+#: ../plugin.py:283
 msgid "Debug mode to create logs."
 msgstr ""
 
-#: plugin/plugin.py:282
-msgid "Press LEFT / RIGHT to set number of concurent streams."
-msgstr ""
-
-#: plugin/plugin.py:285
-msgid ""
-"Please note: DVR feature in Plex / Emby is premire feature. For more information please refer to:\n"
-"https://www.plex.tv/features/plex-pass\n"
-"https://emby.media/premiere.html"
-msgstr ""
-
-#: plugin/plugin.py:286
-msgid "Press OK to continue setting up."
-msgstr ""
-
-#: plugin/plugin.py:289
-msgid ""
-"Please note: To use another tuner type in Plex you need to setup/have another server.\n"
-"Are you sure you want to continue?"
-msgstr ""
-
-#: plugin/plugin.py:300 plugin/plugin.py:315
-msgid "Press LEFT / RIGHT to enable or disable debug mode."
-msgstr ""
-
-#: plugin/plugin.py:317
+#: ../plugin.py:327
 msgid "Delete"
 msgstr ""
 
-#: plugin/plugin.py:325
+#: ../plugin.py:335
 msgid "Do you really want to remove the files for this tuner type? Doing so will cause your DVR to be none functional."
 msgstr ""
 
-#: plugin/plugin.py:336
-msgid ""
-"Files deleted. Please restart enigma2.\n"
-"\n"
-"Do you want to restart now?"
+#: ../getDeviceInfo.py:67
+msgid "Enigma2"
 msgstr ""
 
-#: plugin/plugin.py:357
-msgid "It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"
-msgstr ""
-
-#: plugin/plugin.py:377
+#: ../plugin.py:390
 msgid ""
 "Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n"
 "\n"
 "Do you want to restart now?"
 msgstr ""
 
-#: plugin/plugin.py:395
-msgid "Really close without saving settings?"
+#: ../plugin.py:346
+msgid ""
+"Files deleted. Please restart enigma2.\n"
+"\n"
+"Do you want to restart now?"
 msgstr ""
 
-#: plugin/plugin.py:446
+#: ../plugin.py:467
 msgid "HR-Tuner Proxy"
 msgstr ""
 
-#: plugin/plugin.py:454 plugin/plugin.py:455 plugin/plugin.py:456
+#: ../plugin.py:113 ../plugin.py:133
+msgid "HR-Tuner Proxy for Enigma2"
+msgstr ""
+
+#: ../about.py:52
+#, python-format
+msgid "HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
+msgstr ""
+
+#: ../plugin.py:219 ../plugin.py:277 ../plugin.py:301 ../plugin.py:318
+msgid "IP address or hostname to use."
+msgstr ""
+
+#: ../getDeviceInfo.py:96
+msgid "In use"
+msgstr ""
+
+#: ../plugin.py:369
+msgid "It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"
+msgstr ""
+
+#: ../plugin.py:279 ../plugin.py:302 ../plugin.py:319
+msgid "Leave empty to use the detected IP address."
+msgstr ""
+
+#: ../plugin.py:366
+msgid "No IP address found. Please enter an IP address or hostname."
+msgstr ""
+
+#: ../__init__.py:72
+msgid "Not set"
+msgstr ""
+
+#: ../plugin.py:222
+msgid "Number of concurrent streams."
+msgstr ""
+
+#: ../plugin.py:291
+msgid ""
+"Please note: DVR feature in Plex / Emby is a premium / premiere feature. For more information please refer to:\n"
+"https://www.plex.tv/features/plex-pass\n"
+"https://emby.media/premiere.html"
+msgstr ""
+
+#: ../plugin.py:259
+msgid "Please note: Please now select a bouquet to use."
+msgstr ""
+
+#: ../plugin.py:295
+msgid ""
+"Please note: To use another tuner type in Plex you need to setup/have another server.\n"
+"Are you sure you want to continue?"
+msgstr ""
+
+#: ../plugin.py:261
+msgid "Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type."
+msgstr ""
+
+#: ../plugin.py:308 ../plugin.py:325
+msgid "Press LEFT / RIGHT to enable or disable debug mode."
+msgstr ""
+
+#: ../plugin.py:282 ../plugin.py:285 ../plugin.py:305 ../plugin.py:322
+msgid "Press LEFT / RIGHT to select a different bouquet."
+msgstr ""
+
+#: ../plugin.py:276 ../plugin.py:299 ../plugin.py:316
+msgid "Press LEFT / RIGHT to select a different tuner type."
+msgstr ""
+
+#: ../plugin.py:288
+msgid "Press LEFT / RIGHT to set number of concurent streams."
+msgstr ""
+
+#: ../plugin.py:278
+msgid "Press OK to continue setting up this tuner or enter an IP address or hostname."
+msgstr ""
+
+#: ../plugin.py:275
+msgid "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type."
+msgstr ""
+
+#: ../plugin.py:281 ../plugin.py:284 ../plugin.py:287
+msgid "Press OK to continue setting up this tuner or select a different tuner type."
+msgstr ""
+
+#: ../plugin.py:268
+msgid "Press OK to continue setting up this tuner."
+msgstr ""
+
+#: ../plugin.py:292
+msgid "Press OK to continue setting up."
+msgstr ""
+
+#: ../plugin.py:408
+msgid "Really close without saving settings?"
+msgstr ""
+
+#: ../plugin.py:271 ../plugin.py:311 ../plugin.py:326
+msgid "Save"
+msgstr ""
+
+#: ../plugin.py:476 ../plugin.py:477 ../plugin.py:478
 msgid "Setup the HR-Tuner Proxy server"
 msgstr ""
 
+#: ../about.py:59
+msgid "Sources credits:\n"
+msgstr ""
+
+#: ../about.py:62
+msgid "Translation credits:\n"
+msgstr ""
+
+#: ../plugin.py:202 ../plugin.py:218 ../plugin.py:274 ../plugin.py:298
+#: ../plugin.py:315
+msgid "Tuner type to use."
+msgstr ""
+
+#: ../plugin.py:267
+msgid "WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail."
+msgstr ""
+
+#: ../__init__.py:82
+#, python-format
+msgid "v%s "
+msgstr ""

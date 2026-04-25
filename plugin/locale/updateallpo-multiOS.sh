@@ -174,7 +174,7 @@ for lang in "${languages[@]}" ; do
 	fi
 	if [ -f $lang/LC_MESSAGES/"$plugin".po ]; then
 		printf "Updating existing translation file %s/LC_MESSAGES/$plugin.po\n" $lang
-		msgmerge --backup=none --no-wrap --no-location --no-fuzzy-matching -s -U $lang/LC_MESSAGES/"$plugin".po "$plugin".pot && touch $lang/LC_MESSAGES/"$plugin".po;
+		msgmerge --backup=none --no-wrap --no-fuzzy-matching -s -U $lang/LC_MESSAGES/"$plugin".po "$plugin".pot && touch $lang/LC_MESSAGES/"$plugin".po;
 		msgattrib --no-wrap --no-obsolete --no-fuzzy $lang/LC_MESSAGES/"$plugin".po -o $lang/LC_MESSAGES/"$plugin".po;
 		if [ $createmo -eq 1 ] ; then
 			printf "Updating existing mo file %s\n" $mofile
