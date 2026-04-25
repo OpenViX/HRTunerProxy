@@ -19,6 +19,7 @@ from . import getIP, getHost, tunerports, porttypes, logger
 from .getLineup import getlineup
 from .getLineupStatus import getlineupstatus
 from .getDeviceInfo import getdeviceinfo
+from .getEPG import getepg
 from Components.config import config
 
 
@@ -82,6 +83,13 @@ class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
 			self.wfile.write(six.ensure_binary(getdeviceinfo.devicedata(tunertype)))
+		elif self.path.endswith("epg.xml") or self.path.endswith("xmltv.xml"):
+			self.send_response(200)
+			self.send_header('Content-type', 'application/xml; charset=utf-8')
+			self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+			self.send_header('Pragma', 'no-cache')
+			self.end_headers()
+			self.wfile.write(six.ensure_binary(getepg.epgdata(tunertype, config.hrtunerproxy.bouquets_list[tunertype].value)))
 		elif self.path.endswith("tuners.html"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
