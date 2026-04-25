@@ -9,7 +9,7 @@ import struct
 import logging
 from os import path, remove, environ as os_environ
 
-from Components.config import config, ConfigSubsection, ConfigSubDict, ConfigSelection, ConfigSelectionNumber, ConfigNumber, ConfigEnableDisable, NoSave
+from Components.config import config, ConfigSubsection, ConfigSubDict, ConfigSelection, ConfigSelectionNumber, ConfigNumber, ConfigEnableDisable, ConfigText, NoSave
 from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_LANGUAGE
 
@@ -72,6 +72,7 @@ for type in tunerTypes:
 	config.hrtunerproxy.bouquets_list[type] = ConfigSelection(default=None, choices=[(None, _('Not set')), ('all', _('All'))] + getBouquetsList())
 config.hrtunerproxy.iptv_tunercount = ConfigSelectionNumber(min=1, max=10, stepwidth=1, default=2, wraparound=True)
 config.hrtunerproxy.slotsinuse = NoSave(ConfigNumber())
+config.hrtunerproxy.host = ConfigText(default="", fixed_size=False)
 config.hrtunerproxy.debug = ConfigEnableDisable(default=False)
 
 
@@ -130,6 +131,13 @@ def getIP():
 	if ifinfo:
 		IP = ifinfo['addr']
 	return '%s' % IP
+
+
+def getHost():
+	host = config.hrtunerproxy.host.value.strip()
+	if host:
+		return host
+	return getIP()
 
 
 PluginLanguageDomain = "HRTunerProxy"

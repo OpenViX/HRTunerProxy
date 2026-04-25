@@ -15,7 +15,7 @@ except:
 	from SimpleHTTPServer import SimpleHTTPRequestHandler
 	from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
-from . import getIP, tunerports, porttypes, logger
+from . import getIP, getHost, tunerports, porttypes, logger
 from .getLineup import getlineup
 from .getLineupStatus import getlineupstatus
 from .getDeviceInfo import getdeviceinfo
@@ -71,7 +71,7 @@ class RootedHTTPRequestHandler(RootedBaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
 			self.end_headers()
-			self.wfile.write(six.ensure_binary(json.dumps(getlineup.lineupdata(getIP(), tunertype, config.hrtunerproxy.bouquets_list[tunertype].value))))
+			self.wfile.write(six.ensure_binary(json.dumps(getlineup.lineupdata(getHost(), tunertype, config.hrtunerproxy.bouquets_list[tunertype].value))))
 		elif self.path.endswith("discover.json"):
 			self.send_response(200)
 			self.send_header('Content-type', mimeType)
