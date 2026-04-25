@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enigma2-openvix-plugins 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-06 12:43+0100\n"
-"PO-Revision-Date: 2021-12-12 13:37+0200\n"
+"POT-Creation-Date: 2026-04-25 19:33+0300\n"
+"PO-Revision-Date: 2026-04-25 20:19+0300\n"
 "Last-Translator: Orlandox\n"
 "Language-Team: none\n"
 "Language: fi\n"
@@ -16,127 +16,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.9\n"
 
-msgid "All"
-msgstr "Kaikki"
-
-msgid "Not set"
-msgstr "Ei asetettu"
-
-msgid "v%s "
-msgstr "v%s "
-
-msgid "About HR-Tuner Proxy"
-msgstr "Tietoja HR-Tuner Proxy:sta"
-
-msgid "Close"
-msgstr "Sulje"
-
-msgid "HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
-msgstr "HR-Tuner Proxy Enigma2:lle %s(c) 2018\n"
-
-msgid "Application credits:\n"
-msgstr "Sovelluksen krediitit:\n"
-
-msgid "Sources credits:\n"
-msgstr "Lähteen krediitit:\n"
-
-msgid "Translation credits:\n"
-msgstr "Kännöksen krediitit:\n"
-
-msgid "In use"
-msgstr "Käytössä"
-
-msgid "Bouquet to use."
-msgstr "Käytettävä suosikkilista."
-
-msgid "Number of concurrent streams."
-msgstr "Samanaikaisten streamien määrä."
-
-msgid "Debug Mode."
-msgstr "Debug-moodi."
-
-msgid "Please note: Please now select a bouquet to use."
-msgstr "Huomio: Valitse käytettävä suosikkilista."
-
-msgid ""
-"Please note: You do not seem to have any channels setup for this tuner, "
-"please add some channels to Enigma2 or choose anther tuner type."
-msgstr ""
-"Huomio: Näyttää, että yhtään kanavaa ei ole määritetty tälle virittimelle. "
-"Lisää kanavia Enigma2:lle tai valitse eri viritintyyppi."
-
-msgid "Save"
-msgstr "Tallenna"
-
-msgid "Press OK to continue setting up this tuner."
-msgstr "Paina OK jatkaaksesi tämän virittimen asennusta."
-
-msgid "Press LEFT / RIGHT to select a different tuner type."
-msgstr "Paina VASEN / OIKEA valitaksesi eri viritintyypin."
-
-msgid ""
-"Press OK to continue setting up this tuner or select a different tuner type."
-msgstr ""
-"Paina OK jatkaaksesi tämän virittimen asennusta tai valitse toinen "
-"viritintyyppi."
-
-msgid "Press LEFT / RIGHT to select a different bouquet."
-msgstr "Paina VASEN / OIKEA valitaksesi eri suosikkilistan."
-
-msgid "Debug mode to create logs."
-msgstr "Debug-moodi lokien luontiin."
-
-msgid "Press LEFT / RIGHT to set number of concurent streams."
-msgstr "Paina VASEN / OIKEA asettaaksesi samanaikaisten streamien määrän."
-
-msgid ""
-"Please note: DVR feature in Plex / Emby is a premium / premiere feature. For "
-"more information please refer to:\n"
-"https://www.plex.tv/features/plex-pass\n"
-"https://emby.media/premiere.html"
-msgstr ""
-"Huomio: DVR-toiminto Plex:ssa / Emby:ssa on lisähintainen toiminto. "
-"Lisätietoja:\n"
-"https://www.plex.tv/features/plex-pass\n"
-"https://emby.media/premiere.html"
-
-msgid "Press OK to continue setting up."
-msgstr "Paina OK jatkaaksesi asennusta."
-
-msgid ""
-"Press OK to continue setting up this tuner or press LEFT / RIGHT to select a "
-"different tuner type."
-msgstr ""
-"Paina OK jatkaaksesi tämään virittimen asennusta tai paina VASEN / OIKEA "
-"valitaksesi eri viritintyypin."
-
-msgid ""
-"Please note: To use another tuner type in Plex you need to setup/have "
-"another server.\n"
-"Are you sure you want to continue?"
-msgstr ""
-"Huomio: käyttääksesi toista viritintyyppiä Plex:ssa, täytyy asentaa/olla "
-"toinen serveri.\n"
-"Haluatko varmasti jatkaa?"
-
-msgid "Press LEFT / RIGHT to enable or disable debug mode."
-msgstr "Paina VASEN / OIKEA salliaksesi tai estääksesi debug-moodin."
-
+#: ../plugin.py:183
 msgid "About"
 msgstr "Tietoja"
 
-msgid "Create"
-msgstr "Luo"
+#: ../about.py:26 ../about.py:38
+msgid "About HR-Tuner Proxy"
+msgstr "Tietoja HR-Tuner Proxy:sta"
 
+#: ../__init__.py:72
+msgid "All"
+msgstr "Kaikki"
+
+#: ../about.py:55
+msgid "Application credits:\n"
+msgstr "Sovelluksen krediitit:\n"
+
+#: ../plugin.py:220 ../plugin.py:280 ../plugin.py:303 ../plugin.py:320
+msgid "Bouquet to use."
+msgstr "Käytettävä suosikkilista."
+
+#: ../about.py:49 ../plugin.py:171
+msgid "Close"
+msgstr "Sulje"
+
+#: ../plugin.py:223 ../plugin.py:306 ../plugin.py:323
+msgid "Debug Mode."
+msgstr "Debug-moodi."
+
+#: ../plugin.py:283
+msgid "Debug mode to create logs."
+msgstr "Debug-moodi lokien luontiin."
+
+#: ../plugin.py:327
+msgid "Delete"
+msgstr "Poista"
+
+#: ../plugin.py:335
+msgid "Do you really want to remove the files for this tuner type? Doing so will cause your DVR to be none functional."
+msgstr "Haluatko todella poistaa tämän viritintyypin tiedostot? Poistamisen seurauksena DVR ei enää toimi."
+
+#: ../getDeviceInfo.py:67
+msgid "Enigma2"
+msgstr "Enigma2"
+
+#: ../plugin.py:390
 msgid ""
-"Do you really want to remove the files for this tuner type?, doing so will "
-"cause the DVR in plex to be none functional."
+"Files created. Please restart enigma2 and then you should be able to add this STB to your server.\n"
+"\n"
+"Do you want to restart now?"
 msgstr ""
-"Haluatko todella poistaa tämän viritintyypin tiedostot?Poistamisen "
-"seurauksena DVR Plexissä ei enää toimi."
+"Tiedostot luotu. Käynnistä enigma2 uudelleen, niin sinun pitäisi pystyä lisäämään tämä laite palvelimellesi.\n"
+"\n"
+"Haluatko käynnistää sen uudelleen nyt?"
 
+#: ../plugin.py:346
 msgid ""
 "Files deleted. Please restart enigma2.\n"
 "\n"
@@ -146,126 +82,139 @@ msgstr ""
 "\n"
 "Käynnistetäänkö uudelleen nyt?"
 
-msgid "BaseURL: "
-msgstr "Verkko-osoite: "
+#: ../plugin.py:467
+msgid "HR-Tuner Proxy"
+msgstr "HR-virittimen välityspalvelin"
 
-msgid "FriendlyName: "
-msgstr "Malli: "
-
-msgid "Source: "
-msgstr "Lähde: "
-
-msgid "TunerCount: "
-msgstr "Virittimien määrä: "
-
-msgid "Channels: "
-msgstr "Kanavia: "
-
-msgid "Enigma2"
-msgstr "Enigma2"
-
-msgid "Enigma2 STB"
-msgstr "Enigma2 digiboksi"
-
-msgid ""
-"Files created, Please restart enigma2 and then you should be able to add "
-"this STB to Plex DVR.\n"
-"Do you want to do this now ?"
-msgstr ""
-"Tiedostot luotu, käynnistä Enigma2 uudelleen, jonka jälkeen voit lisätä "
-"tämän digiboksin Plex DVR:iin.\n"
-"Haluatko tehdä sen nyt ?"
-
-msgid ""
-"It seems you have already setup on another tuner, As Plex Server can only "
-"support one tuner type, to use this additional tuner type you will need to "
-"setup a 2nd Plex Server, do you want to continue creating the files?"
-msgstr ""
-"Näyttää, että olet jo tehnyt asetukset toiselle virittimelle, Plex Server "
-"tukee vain yhtä viritintyyppiä, käyttääksesi tätä lisäviritintä, täytyy "
-"sinun määritellä toinen Plex Server. Haluatko jatkaa luomalla tiedostot ?"
-
-msgid ""
-"No IP address found, please make sure you are connected to your LAN via "
-"ethernet, wifi is not supported at this time.\n"
-"\n"
-"Press OK to close"
-msgstr ""
-"IP-osoitetta ei löydy, varmista, että olet kytkeytynyt LAN-yhteydellä "
-"ethernethiin. WiFi ei ole tuettu tällä hetkellä.\n"
-"\n"
-"Paina OK sulkeaksesi"
-
-msgid ""
-"Please note: To use a 2nd tuner type you need to setup/have a 2nd Plex "
-"Server, are you sure you want to continue?"
-msgstr ""
-"Huomio: Käyttääksesi toista viritintyyppiä, täytyy määrittää/olla toinen "
-"Plex Server. Haluatko varmasti jatkaa ?"
-
-msgid ""
-"Please note: To use the DVR feature in Plex, you need to be a Plex Pass "
-"user. For more information about Plex Pass see https://www.plex.tv/features/"
-"plex-pass"
-msgstr ""
-"Huomio: Käyttääksesi DVR-toimintoa Plexissä, täytyy sinun olla Plex Pass -"
-"käyttäjä. Lisätietoja Plex Pass:sta, katso  https://www.plex.tv/features/"
-"plex-pass"
-
+#: ../plugin.py:113 ../plugin.py:133
 msgid "HR-Tuner Proxy for Enigma2"
 msgstr "HR-Tuner Proxy Enigma2:lle"
 
-msgid "PlexDVR"
-msgstr "PlexDVR"
+#: ../about.py:52
+#, python-format
+msgid "HR-Tuner Proxy for Enigma2 %s(c) 2018\n"
+msgstr "HR-Tuner Proxy Enigma2:lle %s(c) 2018\n"
 
+#: ../plugin.py:219 ../plugin.py:277 ../plugin.py:301 ../plugin.py:318
+msgid "IP address or hostname to use."
+msgstr "Käytettävä IP-osoite tai isäntänimi."
+
+#: ../getDeviceInfo.py:96
+msgid "In use"
+msgstr "Käytössä"
+
+#: ../plugin.py:369
+msgid "It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"
+msgstr "Näyttää siltä, ​​että olet jo asentanut toisen virittimen. Palvelimesi tukee vain yhtä viritintyyppiä. Tämän lisäviritintyypin käyttämiseksi sinun on määritettävä toinen palvelin. Haluatko jatkaa tiedostojen luomista?"
+
+#: ../plugin.py:279 ../plugin.py:302 ../plugin.py:319
+msgid "Leave empty to use the detected IP address."
+msgstr "Jätä kenttä tyhjäksi, jos haluat käyttää tunnistettua IP-osoitetta."
+
+#: ../plugin.py:366
+msgid "No IP address found. Please enter an IP address or hostname."
+msgstr "IP-osoitetta ei löytynyt. Syötä IP-osoite tai isäntänimi."
+
+#: ../__init__.py:72
+msgid "Not set"
+msgstr "Ei asetettu"
+
+#: ../plugin.py:222
+msgid "Number of concurrent streams."
+msgstr "Samanaikaisten streamien määrä."
+
+#: ../plugin.py:291
 msgid ""
-"Press LEFT / RIGHT to select a different tuner type.\n"
-"Press GREEN button to create your configuration files."
+"Please note: DVR feature in Plex / Emby is a premium / premiere feature. For more information please refer to:\n"
+"https://www.plex.tv/features/plex-pass\n"
+"https://emby.media/premiere.html"
 msgstr ""
-"Paina VASEN / OIKEA valitaksesi eri viritintyypin.\n"
-"Paina VIHREÄÄ näppäintä luodaksesi konfiguraatiotiedostot."
+"Huomio: DVR-toiminto Plex:ssa / Emby:ssa on lisähintainen toiminto. Lisätietoja:\n"
+"https://www.plex.tv/features/plex-pass\n"
+"https://emby.media/premiere.html"
 
+#: ../plugin.py:259
+msgid "Please note: Please now select a bouquet to use."
+msgstr "Huomio: Valitse käytettävä suosikkilista."
+
+#: ../plugin.py:295
 msgid ""
-"Press LEFT / RIGHT to select a different tuner type.\n"
-"Press GREEN button to update your configuration files."
+"Please note: To use another tuner type in Plex you need to setup/have another server.\n"
+"Are you sure you want to continue?"
 msgstr ""
-"Paina VASEN / OIKEA valitaksesi eri viritintyypin.\n"
-"Paina VIHREÄÄ näppäintä päivittääksesi konfiguraatiotiedostot."
+"Huomio: käyttääksesi toista viritintyyppiä Plex:ssa, täytyy asentaa/olla toinen serveri.\n"
+"Haluatko varmasti jatkaa?"
 
-msgid ""
-"Press OK to continue setting up this tuner or press LEFT / RIGHT to select a "
-"different tuner type.\n"
-"Press GREEN button to create your configuration files."
-msgstr ""
-"Paina OK jatkaaksesi tämän virittimen asennusta tai paina VASEN / OIKEA "
-"valitaksesi eri viritintyypin.\n"
-"Paina VIHREÄÄ näppäintä luodaksesi konfiguraatiotiedostot."
+#: ../plugin.py:261
+msgid "Please note: You do not seem to have any channels setup for this tuner, please add some channels to Enigma2 or choose anther tuner type."
+msgstr "Huomio: Näyttää, että yhtään kanavaa ei ole määritetty tälle virittimelle. Lisää kanavia Enigma2:lle tai valitse eri viritintyyppi."
 
+#: ../plugin.py:308 ../plugin.py:325
+msgid "Press LEFT / RIGHT to enable or disable debug mode."
+msgstr "Paina VASEN / OIKEA salliaksesi tai estääksesi debug-moodin."
+
+#: ../plugin.py:282 ../plugin.py:285 ../plugin.py:305 ../plugin.py:322
+msgid "Press LEFT / RIGHT to select a different bouquet."
+msgstr "Paina VASEN / OIKEA valitaksesi eri suosikkilistan."
+
+#: ../plugin.py:276 ../plugin.py:299 ../plugin.py:316
+msgid "Press LEFT / RIGHT to select a different tuner type."
+msgstr "Paina VASEN / OIKEA valitaksesi eri viritintyypin."
+
+#: ../plugin.py:288
+msgid "Press LEFT / RIGHT to set number of concurent streams."
+msgstr "Paina VASEN / OIKEA asettaaksesi samanaikaisten streamien määrän."
+
+#: ../plugin.py:278
+msgid "Press OK to continue setting up this tuner or enter an IP address or hostname."
+msgstr "Paina OK jatkaaksesi tämän virittimen asennusta tai syöttääksesi IP-osoitteen tai isäntänimen."
+
+#: ../plugin.py:275
+msgid "Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type."
+msgstr "Paina OK jatkaaksesi tämään virittimen asennusta tai paina VASEN / OIKEA valitaksesi eri viritintyypin."
+
+#: ../plugin.py:281 ../plugin.py:284 ../plugin.py:287
+msgid "Press OK to continue setting up this tuner or select a different tuner type."
+msgstr "Paina OK jatkaaksesi tämän virittimen asennusta tai valitse toinen viritintyyppi."
+
+#: ../plugin.py:268
+msgid "Press OK to continue setting up this tuner."
+msgstr "Paina OK jatkaaksesi tämän virittimen asennusta."
+
+#: ../plugin.py:292
+msgid "Press OK to continue setting up."
+msgstr "Paina OK jatkaaksesi asennusta."
+
+#: ../plugin.py:408
+msgid "Really close without saving settings?"
+msgstr "Suljetaanko todella ilman asetusten tallennusta?"
+
+#: ../plugin.py:271 ../plugin.py:311 ../plugin.py:326
+msgid "Save"
+msgstr "Tallenna"
+
+#: ../plugin.py:476 ../plugin.py:477 ../plugin.py:478
+msgid "Setup the HR-Tuner Proxy server"
+msgstr "HR-Tuner-välityspalvelimen määrittäminen"
+
+#: ../about.py:59
+msgid "Sources credits:\n"
+msgstr "Lähteen krediitit:\n"
+
+#: ../about.py:62
+msgid "Translation credits:\n"
+msgstr "Käännöksen krediitit:\n"
+
+#: ../plugin.py:202 ../plugin.py:218 ../plugin.py:274 ../plugin.py:298
+#: ../plugin.py:315
 msgid "Tuner type to use."
 msgstr "Käytettävä viritintyyppi."
 
-msgid "Update"
-msgstr "Päivitä"
+#: ../plugin.py:267
+msgid "WARNING: It seems you have a single tuner box. If the box is not left in standby your recordings WILL fail."
+msgstr "VAROITUS: Näyttää siltä, ​​että sinulla on vain yksi viritin. Jos laitetta ei jätetä valmiustilaan, tallennuksesi EIVÄT onnistu."
 
-msgid ""
-"WARNING: It seems you have a single tuner box, if the box is not left in "
-"Standby your Plex recordings WILL fail.\n"
-"\n"
-"Press OK to continue"
-msgstr ""
-"VAROITUS: Näyttää, että käytössä on yhden virittimen boksi. Plex-"
-"tallennukset epäonnistuvat, jos boksia ei jätetä valmiustilaan.\n"
-"\n"
-"Paina OK jatkaaksesi"
-
-msgid "Setup the HR-Tuner Proxy server"
-msgstr "HR-Tuner Proxyn Asetukset"
-
-msgid "Antenna"
-msgstr "Antenni"
-
-msgid "Satellite"
-msgstr "Satelliitti"
-
-msgid "Multi"
-msgstr "Monivalinta"
+#: ../__init__.py:82
+#, python-format
+msgid "v%s "
+msgstr "v%s "
