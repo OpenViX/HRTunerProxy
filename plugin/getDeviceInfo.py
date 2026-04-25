@@ -28,7 +28,7 @@ except:
 			return '000000'
 
 from .getLineup import getlineup
-from . import tunertypes, tunerports, tunerfolders, getIP
+from . import tunertypes, tunerports, tunerfolders, getHost
 
 charset = {
 	"auth": string.ascii_letters + string.digits,
@@ -45,8 +45,8 @@ class getDeviceInfo:
 		pass
 
 	def discoverJSON(self, dvb_type):
-		ip = getIP()
-		ip_port = 'http://%s:%s' % (ip, tunerports[dvb_type])
+		host = getHost()
+		ip_port = 'http://%s:%s' % (host, tunerports[dvb_type])
 		device_uuid = str(uuid.uuid4())
 		if path.exists('/etc/enigma2/%s.discover' % dvb_type):
 			with open('/etc/enigma2/%s.discover' % dvb_type) as data_file:

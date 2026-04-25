@@ -23,7 +23,7 @@ from Plugins.Plugin import PluginDescriptor
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
-from . import _, tunerTypes, tunerfolders, tunerports, getIP, logger, isDreamOS
+from . import _, tunerTypes, tunerfolders, tunerports, getHost, logger, isDreamOS
 from .about import HRTunerProxy_About
 from .getLineup import getlineup
 from .getDeviceInfo import getdeviceinfo
@@ -135,6 +135,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		Screen.setTitle(self, title)
 
 		self.savedval = config.hrtunerproxy.type.value
+		self.savedhost = config.hrtunerproxy.host.value
 
 		self.onChangedEntry = []
 		self.list = []
@@ -193,14 +194,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	def LayoutFinish(self):
 		print('LayoutFinish')
 		self.createmenu()
-		if getIP() == '0.0.0.0':
-			self["information"].setText(_('WARNING: No IP address found. Please make sure you are connected to your LAN via ethernet or Wi-Fi.\n\nPress OK to exit.'))
-			self["hinttext"].hide()
-			self["key_red"].show()
-			self["button_red"].show()
-			self["closeaction"].setEnabled(True)
-		else:
-			self.populate()
+		self.populate()
 
 	def onChange(self):
 		print('onChange')
@@ -222,6 +216,7 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 	def createmenu(self):
 		self.list = []
 		self.list.append(getConfigListEntry(_('Tuner type to use.'), config.hrtunerproxy.type))
+		self.list.append(getConfigListEntry(_('IP address or hostname to use.'), config.hrtunerproxy.host))
 		self.list.append(getConfigListEntry(_('Bouquet to use.'), config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value]))
 		if config.hrtunerproxy.type.value == 'iptv':
 			self.list.append(getConfigListEntry(_('Number of concurrent streams.'), config.hrtunerproxy.iptv_tunercount))
@@ -279,6 +274,9 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 				if currentconfig == _('Tuner type to use.'):
 					self["hinttext"].setText(_('Press OK to continue setting up this tuner or press LEFT / RIGHT to select a different tuner type.'))
 					self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
+				elif currentconfig == _('IP address or hostname to use.'):
+					self["hinttext"].setText(_('Press OK to continue setting up this tuner or enter an IP address or hostname.'))
+					self.hinttext = _('Leave empty to use the detected IP address.')
 				elif currentconfig == _('Bouquet to use.'):
 					self["hinttext"].setText(_('Press OK to continue setting up this tuner or select a different tuner type.'))
 					self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
@@ -300,6 +298,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 					if currentconfig == _('Tuner type to use.'):
 						self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 						print('T2')
+					elif currentconfig == _('IP address or hostname to use.'):
+						self.hinttext = _('Leave empty to use the detected IP address.')
 					elif currentconfig == _('Bouquet to use.'):
 						print('T3')
 						self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
@@ -315,6 +315,8 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			if currentconfig == _('Tuner type to use.'):
 				self.hinttext = _('Press LEFT / RIGHT to select a different tuner type.')
 				print('T2')
+			elif currentconfig == _('IP address or hostname to use.'):
+				self.hinttext = _('Leave empty to use the detected IP address.')
 			elif currentconfig == _('Bouquet to use.'):
 				print('T3')
 				self.hinttext = _('Press LEFT / RIGHT to select a different bouquet.')
@@ -360,6 +362,9 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 		self["button_blue"].show()
 
 	def keySave(self):
+		if getHost() == '0.0.0.0':
+			self.session.open(MessageBox, _("No IP address found. Please enter an IP address or hostname."), type=MessageBox.TYPE_ERROR)
+			return
 		if self.savedval != config.hrtunerproxy.type.value and path.exists('/etc/enigma2/%s.device' % self.savedval):
 			self.session.openWithCallback(self.saveconfirm, MessageBox, text=_("It seems you have already set up another tuner. Your server can only support one tuner type. To use this additional tuner type you will need to setup another server. Do you want to continue creating the files?"), type=MessageBox.TYPE_YESNO)
 		else:
@@ -374,9 +379,10 @@ class HRTunerProxy_Setup(ConfigListScreen, Screen):
 			if config.hrtunerproxy.debug.value:
 				logger.info('Creating files for %s' % type)
 			getdeviceinfo.write_discover(dvbtype=type)
-			if not path.exists('/etc/enigma2/%s.device' % self.savedval):
+			if not path.exists('/etc/enigma2/%s.device' % self.savedval) or self.savedhost != config.hrtunerproxy.host.value:
 				getdeviceinfo.write_device_xml(dvbtype=type)
 				config.hrtunerproxy.type.save()
+			config.hrtunerproxy.host.save()
 			config.hrtunerproxy.bouquets_list[config.hrtunerproxy.type.value].save()
 			config.hrtunerproxy.debug.save()
 			configfile.save()
@@ -419,7 +425,7 @@ def startssdp(dvbtype):
 	device_uuid = discover['DeviceUUID']
 	if config.hrtunerproxy.debug.value:
 		logger.info('Starting SSDP for %s, device_uuid: %s' % (dvbtype, device_uuid))
-	local_ip_address = getIP()
+	local_ip_address = getHost()
 	ssdp = SSDPServer()
 	ssdp.register('local',
 				  'uuid:{}::upnp:rootdevice'.format(device_uuid),
